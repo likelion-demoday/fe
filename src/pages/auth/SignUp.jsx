@@ -33,7 +33,10 @@ const SignUp = () => {
               onChange={(e) => setEmail(e.target.value)}
               onClear={() => setEmail("")}
             />
-            <PasswordInput value={password} onChange={(e) => setPassword(e.target.value)} />
+            <PasswordInput
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
           </div>
         </div>
 

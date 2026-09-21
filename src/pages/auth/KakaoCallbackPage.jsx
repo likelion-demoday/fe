@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import { useSearchParams } from "react-router-dom";
+import { kakaoLogin } from "../../api/auth";
 
 function KakaoCallbackPage() {
   const [searchParams] = useSearchParams();
@@ -12,7 +13,16 @@ function KakaoCallbackPage() {
     isRequested.current = true;
 
     console.log("카카오 인가 코드: ", code);
-    //백엔드 카카오 로그인 API 배포 후 연동
+    const login = async () => {
+      try {
+        const data = await kakaoLogin(code);
+
+        console.log("카카오 로그인 성공:", data);
+      } catch (error) {
+        console.error("카카오 로그인 실패:", error);
+      }
+    };
+    login();
   }, [searchParams]);
 
   return (
