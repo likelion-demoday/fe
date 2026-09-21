@@ -68,13 +68,6 @@ src/
 
 ### 브랜치 이름
 
-```text
-feat/#12-login-page
-fix/#24-modal-scroll
-design/#31-main-page
-refactor/#45-api-structure
-```
-
 | Type | 용도 |
 | --- | --- |
 | `feat` | 기능 구현 |
@@ -84,23 +77,6 @@ refactor/#45-api-structure
 | `docs` | 문서 |
 | `chore` | 설정 / 기타 |
 
-### 작업 순서
-
-```text
-develop 최신화
-    ↓
-작업 브랜치 생성
-    ↓
-Commit & Push
-    ↓
-PR → develop
-    ↓
-Review & Merge
-```
-
-> `main`, `develop`에는 직접 Push하지 않습니다.
-
----
 
 ## 6. Commit
 
@@ -109,21 +85,6 @@ Review & Merge
 ```text
 [Type] : 작업 내용
 ```
-
-### 예시
-
-```text
-[Feat] : 로그인 기능 구현
-[Fix] : 모달 스크롤 오류 수정
-[Design] : 메인 페이지 반응형 적용
-[Refactor] : 사용자 API 함수 분리
-[Docs] : README 수정
-[Chore] : ESLint 설정
-```
-
-- 하나의 커밋에는 하나의 작업
-- 변경 내용을 구체적으로 작성
-
 ---
 
 ## 7. Pull Request
@@ -141,16 +102,9 @@ Review & Merge
 - 로그인 페이지 UI 구현
 - 로그인 API 연결
 
-## 관련 이슈
-- close #12
-
 ## 참고 이미지
 <!-- UI 작업 시 첨부 -->
 ```
-
-- 하나의 PR에는 하나의 작업 단위
-- UI 변경 시 이미지 또는 영상 첨부
-- 관련 Issue 연결
 
 ---
 
