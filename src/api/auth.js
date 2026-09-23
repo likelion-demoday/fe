@@ -1,10 +1,24 @@
 import api from "./axios";
 
 export const kakaoLogin = async (code) => {
-  const response = await api.post("/api/v1/auth/oauth/kakao", {
+  return api.post("/api/v1/auth/oauth/kakao", {
     code,
     redirectUri: "http://localhost:5173/oauth/kakao/callback",
   });
+};
 
-  return response.data;
+export const signup = async ({ email, password, nickname }) => {
+  return api.post("/api/v1/auth/signup", { email, password, nickname });
+};
+
+export const login = async ({ email, password }) => {
+  return api.post("/api/v1/auth/login", { email, password });
+};
+
+export const logout = async (refreshToken) => {
+  return api.post("/api/v1/auth/logout",{refreshToken});
+};
+
+export const reissueToken = async (refreshToken) => {
+  return api.post("/api/v1/auth/reissue", { refreshToken });
 };
