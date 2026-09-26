@@ -1,9 +1,8 @@
 import { useNavigate } from "react-router-dom";
-import MyPageHeader from "../components/feature/mypage/MyPageHeader";
-import MyPageMenu from "../components/feature/mypage/MyPageMenu";
+import MyPageHeader from "../../components/feature/mypage/MyPageHeader";
+import MyPageMenu from "../../components/feature/mypage/MyPageMenu";
 
-// 메뉴별 상세 화면이 준비되면 onMenuSelect로 연결합니다.
-const MyPage = ({ onMenuSelect }) => {
+const MyPage = () => {
   const navigate = useNavigate();
 
   const handleBack = () => {
@@ -15,7 +14,7 @@ const MyPage = ({ onMenuSelect }) => {
     <main className="mx-auto flex h-[844px] w-[390px] flex-col gap-[36px] overflow-y-auto bg-white px-[24px] py-[16px]">
       <MyPageHeader onBack={handleBack} />
 
-      <MyPageMenu onMenuSelect={onMenuSelect} />
+      <MyPageMenu />
     </main>
   );
 };

@@ -1,7 +1,7 @@
 import BackButton from "../../common/BackButton";
 import profileIcon from "../../../assets/icons/profile.svg";
 
-const MyPageHeader = ({ onBack }) => {
+const MyPageHeader = ({ onBack, title = "마이페이지" }) => {
   return (
     <header className="flex flex-col gap-[20px]">
       <div className="flex h-[40px] items-center justify-between">
@@ -16,7 +16,7 @@ const MyPageHeader = ({ onBack }) => {
           />
         </div>
       </div>
-      <h1 className="text-display text-black">마이페이지</h1>
+      <h1 className="text-display text-black">{title}</h1>
     </header>
   );
 };
