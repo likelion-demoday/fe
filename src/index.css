@@ -1,2 +1,118 @@
 @import "tailwindcss";
 
+@layer base {
+  body {
+    font-family: "SUITE", sans-serif;
+    font-weight: 500;
+  }
+}
+
+@layer components {
+  /* 일반 화면: SUITE */
+  .text-display {
+    font-size: 30px;
+    font-weight: 700;
+    line-height: normal;
+    letter-spacing: 0;
+  }
+
+  .text-heading {
+    font-size: 24px;
+    font-weight: 700;
+    line-height: normal;
+    letter-spacing: 0;
+  }
+
+  .text-title-semibold {
+    font-size: 18px;
+    font-weight: 600;
+    line-height: normal;
+    letter-spacing: 0.04em;
+  }
+
+  .text-title-medium {
+    font-size: 18px;
+    font-weight: 500;
+    line-height: normal;
+    letter-spacing: 0.03em;
+  }
+
+  .text-label {
+    font-size: 16px;
+    font-weight: 600;
+    line-height: normal;
+    letter-spacing: 0;
+  }
+
+  .text-label-small {
+    font-size: 12px;
+    font-weight: 500;
+    line-height: normal;
+    letter-spacing: 0;
+  }
+
+  .text-body {
+    font-size: 16px;
+    font-weight: 500;
+    line-height: normal;
+    letter-spacing: 0.02em;
+  }
+
+  /* 피그마의 실제 적용값인 Medium(500) 기준 */
+  .text-caption {
+    font-size: 13px;
+    font-weight: 500;
+    line-height: normal;
+    letter-spacing: 0.03em;
+  }
+
+  /* 분석 리포트: SUIT */
+  .text-report-display,
+  .text-report-heading,
+  .text-report-title,
+  .text-report-body,
+  .text-report-body-small,
+  .text-report-label,
+  .text-report-caption {
+    font-family: "SUIT", sans-serif;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+  }
+
+  .text-report-display {
+    font-size: 30px;
+    line-height: 40px;
+  }
+
+  .text-report-heading {
+    font-size: 24px;
+    line-height: 34px;
+  }
+
+  .text-report-title {
+    font-size: 18px;
+    line-height: 28px;
+  }
+
+  /* 피그마의 실제 적용값인 -2% 기준 */
+  .text-report-body {
+    font-size: 16px;
+    line-height: 26px;
+    letter-spacing: -0.02em;
+  }
+
+  .text-report-body-small {
+    font-size: 14px;
+    line-height: 22px;
+  }
+
+  .text-report-label {
+    font-size: 13px;
+    line-height: 20px;
+  }
+
+  .text-report-caption {
+    font-size: 12px;
+    line-height: 18px;
+  }
+}
