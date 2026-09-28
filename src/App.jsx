@@ -6,6 +6,7 @@ import MyPage from "./pages/mypage/MyPage";
 import Profile from "./pages/mypage/Profile";
 import Notifications from "./pages/mypage/Notifications";
 import Payments from "./pages/mypage/Payments";
+import PurchaseHistoryPage from "./pages/mypage/PurchaseHistoryPage";
 import Recordings from "./pages/mypage/Recordings";
 import Account from "./pages/mypage/Account";
 import Support from "./pages/mypage/Support";
@@ -27,6 +28,7 @@ function App() {
       <Route path="/mypage/profile" element={<Profile />} />
       <Route path="/mypage/notifications" element={<Notifications />} />
       <Route path="/mypage/payments" element={<Payments />} />
+      <Route path="/mypage/payments/history" element={<PurchaseHistoryPage />} />
       <Route path="/mypage/recordings" element={<Recordings />} />
       <Route path="/mypage/account" element={<Account />} />
       <Route path="/mypage/support" element={<Support />} />

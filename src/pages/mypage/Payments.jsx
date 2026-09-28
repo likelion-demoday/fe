@@ -11,7 +11,7 @@ const Payments = ({ remainingPasses = 3, onHistory, onPurchase }) => {
       <MyPageHeader title="이용권 • 결제" onBack={() => navigate("/mypage")} />
       <div className="flex flex-col gap-[12px]">
         <RemainingPasses count={remainingPasses} />
-        <PurchaseHistory onClick={onHistory} />
+        <PurchaseHistory to={onHistory ? undefined : "/mypage/payments/history"} onClick={onHistory} />
         <PurchaseHistory label="이용권 구매하기" onClick={onPurchase} />
       </div>
     </main>
