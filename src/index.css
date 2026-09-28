@@ -9,6 +9,9 @@
   }
   50% {
     transform: scaleY(1);
+
+  }
+}
 @layer base {
   body {
     font-family: "SUITE", sans-serif;
