@@ -1,4 +1,7 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+import { login } from "../../api/auth";
 
 import EmailInput from "../../components/feature/auth/EmailInput";
 import PasswordInput from "../../components/feature/auth/PasswordInput";
@@ -8,9 +11,20 @@ import Button from "../../components/common/Button";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
-  const handleLogin = () => {
-    console.log("로그인 버튼 클릭");
+  const handleLogin = async () => {
+    try {
+      const result = await login({ email, password });
+
+      localStorage.setItem("accessToken", result.accessToken);
+      localStorage.setItem("refreshToken", result.refreshToken);
+      localStorage.setItem("isLogin", true);
+
+      navigate("/home");
+    } catch (error) {
+      console.error("로그인 실패:", error);
+    }
   };
 
   return (
