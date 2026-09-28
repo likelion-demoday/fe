@@ -1,4 +1,7 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+import useAuthStore from "../../store/authStore";
 
 import EmailInput from "../../components/feature/auth/EmailInput";
 import PasswordInput from "../../components/feature/auth/PasswordInput";
@@ -9,13 +12,17 @@ import Button from "../../components/common/Button";
 const SignUp = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+
+  const setSignupData = useAuthStore((state) => state.setAuthData);
 
   const handleBack = () => {
-    console.log("뒤로가기 버튼 클릭");
+    navigate(-1);
   };
 
   const handleSignUp = () => {
-    console.log("회원가입 버튼 클릭");
+    setSignupData({ email, password });
+    navigate("/onboarding/nickname");
   };
 
   return (

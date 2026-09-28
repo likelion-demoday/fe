@@ -1,4 +1,7 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+import useAuthStore from "../../store/authStore";
 
 import TextField from "../../components/common/TextField";
 import BackButton from "../../components/common/BackButton";
@@ -10,20 +13,22 @@ const MAX_LENGTH = 8;
 
 const Nickname = () => {
   const [nickname, setNickname] = useState("");
+  const setAuthData = useAuthStore((state) => state.setAuthData);
+  const navigate = useNavigate();
 
   const isValid = nickname.length >= MIN_LENGTH && nickname.length <= MAX_LENGTH;
 
   const handleBack = () => {
-    console.log("뒤로가기 버튼 클릭");
+    navigate(-1);
   };
 
   const handleNext = () => {
-    console.log("다음 버튼 클릭", nickname);
+    setAuthData({ nickname });
+    navigate("/onboarding/voice");
   };
 
   return (
     <div className="flex min-h-screen flex-col items-start justify-between bg-white">
-      {/* 상단 영역 (기본 마진 16) */}
       <div className="flex w-full flex-col items-center gap-[80px] p-[16px]">
         <div className="flex w-full flex-col items-start">
           <BackButton onClick={handleBack} />
@@ -64,7 +69,6 @@ const Nickname = () => {
         </div>
       </div>
 
-      {/* 하단 영역 (아래 마진 30 고정) */}
       <div className="flex w-full flex-col items-center justify-center gap-[24px] px-[16px] pt-[10px] pb-[30px]">
         <div className="flex items-center justify-center gap-[12px]">
           <span className="size-[8px] rounded-[99px] bg-[#454545]" />

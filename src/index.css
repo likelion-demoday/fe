@@ -1,5 +1,17 @@
 @import "tailwindcss";
 
+
+/* 온보딩 목소리 등록 - 녹음 중 파형 (소리 인식 시 변화) */
+@keyframes voice-wave {
+  0%,
+  100% {
+    transform: scaleY(0.35);
+  }
+  50% {
+    transform: scaleY(1);
+
+  }
+}
 @layer base {
   body {
     font-family: "SUITE", sans-serif;

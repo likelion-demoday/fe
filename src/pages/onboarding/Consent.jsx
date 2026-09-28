@@ -1,6 +1,9 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+import useAuthStore from "../../store/authStore";
+import { signUp } from "../../api/auth";
+
 import BackButton from "../../components/common/BackButton";
 import Button from "../../components/common/Button";
 import circleIcon from "../../assets/icons/check-circle.svg";
@@ -31,6 +34,9 @@ const Divider = () => (
 );
 
 const Consent = () => {
+  const { email, password, nickname } = useAuthStore();
+  const clearAuthData = useAuthStore((state) => state.clearAuthData);
+
   const navigate = useNavigate();
   const [checked, setChecked] = useState({});
 
@@ -53,9 +59,15 @@ const Consent = () => {
     navigate(-1);
   };
 
-  const handleNext = () => {
+  const handleNext = async () => {
     console.log("다음 버튼 클릭", checked);
-    navigate("/home");
+    try {
+      await signUp({ email, password, nickname });
+      clearAuthData();           
+      navigate("/home");      
+    } catch (error) {
+      console.error("회원가입 실패:", error);
+    }
   };
 
   const handleView = (id) => {
@@ -64,7 +76,6 @@ const Consent = () => {
 
   return (
     <div className="flex min-h-screen flex-col items-start justify-between bg-white">
-      {/* 상단 영역 (기본 마진 16) */}
       <div className="flex w-full flex-col items-center gap-[80px] p-[16px]">
         <div className="flex w-full flex-col items-start">
           <BackButton onClick={handleBack} />

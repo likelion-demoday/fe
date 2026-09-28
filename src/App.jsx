@@ -9,6 +9,7 @@ import Login from "./pages/auth/Login";
 import SignUp from "./pages/auth/SignUp";
 //onboarding
 import Nickname from "./pages/onboarding/Nickname";
+import VoiceRegister from "./pages/onboarding/VoiceRegister";
 import Consent from "./pages/onboarding/Consent";
 import KakaoCallbackPage from "./pages/auth/KakaoCallbackPage";
 
@@ -23,6 +24,7 @@ function App() {
       <Route path="/oauth/kakao/callback" element={<KakaoCallbackPage />} />
       <Route path="/signup" element={<SignUp />} />
       <Route path="/onboarding/nickname" element={<Nickname />} />
+      <Route path="/onboarding/voice" element={<VoiceRegister />} />
       <Route path="/onboarding/consent" element={<Consent />} />
     </Routes>
   );
