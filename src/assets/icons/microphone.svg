@@ -1,0 +1,7 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="microphone">
+<rect id="Rectangle" x="15" y="3.33333" width="10" height="20" rx="5" stroke="#FF765B" stroke-width="2.5"/>
+<path id="Rectangle_2" d="M8.33333 16.6667V18.3333C8.33333 24.7767 13.5567 30 20 30C26.4433 30 31.6667 24.7767 31.6667 18.3333V16.6667" stroke="#FF765B" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="Rectangle_3" d="M20 30V36.6667M20 36.6667H15M20 36.6667H25" stroke="#FF765B" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+</svg>
