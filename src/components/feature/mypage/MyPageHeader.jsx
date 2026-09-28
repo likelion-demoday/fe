@@ -5,7 +5,7 @@ const MyPageHeader = ({ onBack, title = "마이페이지", titleClassName = "tex
   return (
     <header className="flex flex-col gap-[20px]">
       <div className="flex h-[40px] items-center justify-between">
-        <div className="flex [&_img]:h-auto [&_img]:w-auto">
+        <div className="mypage-back-press flex [&_img]:h-auto [&_img]:w-auto">
           <BackButton onClick={onBack} />
         </div>
         <div className="relative size-[40px] shrink-0">

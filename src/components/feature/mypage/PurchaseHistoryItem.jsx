@@ -11,7 +11,7 @@ const PurchaseHistoryItem = ({
   onClick,
 }) => {
   const className =
-    "flex w-full cursor-pointer items-center justify-between text-left text-[#262626]";
+    "mypage-press-row mypage-press-padded flex w-full cursor-pointer items-center justify-between text-left text-[#262626]";
   const content = (
     <>
       <span className="flex flex-col items-start justify-center gap-[8px]">

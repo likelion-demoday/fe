@@ -33,7 +33,7 @@ const SavedConversations = ({
             <select
               value={category}
               onChange={(event) => setCategory(event.target.value)}
-              className="cursor-pointer appearance-none rounded-[38px] bg-transparent py-[6px] pr-[35px] pl-[12px] font-['Pretendard','SUITE',sans-serif] text-[14px] leading-normal font-semibold tracking-[-0.28px] text-[#5f6473]"
+              className="active:bg-[#eeeeee] cursor-pointer appearance-none rounded-[38px] bg-transparent py-[6px] pr-[35px] pl-[12px] font-['Pretendard','SUITE',sans-serif] text-[14px] leading-normal font-semibold tracking-[-0.28px] text-[#5f6473]"
             >
               {categories.map((option) => (
                 <option key={option} value={option}>

@@ -2,7 +2,7 @@ import Input from "../../common/Input";
 
 const NotificationSetting = ({ label, checked, onChange }) => {
   return (
-    <label className="flex w-full cursor-pointer items-center justify-between py-[12px]">
+    <label className="mypage-press-row flex w-full cursor-pointer items-center justify-between py-[12px]">
       <span className="text-label text-[#262626]">{label}</span>
       <span className="relative h-[24px] w-[42px] shrink-0">
         <Input
