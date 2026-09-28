@@ -7,7 +7,7 @@ export const kakaoLogin = async (code) => {
   });
 };
 
-export const signup = async ({ email, password, nickname }) => {
+export const signUp = async ({ email, password, nickname }) => {
   return api.post("/api/v1/auth/signup", { email, password, nickname });
 };
 
