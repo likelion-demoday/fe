@@ -6,6 +6,7 @@ import MyPage from "./pages/mypage/MyPage";
 import Profile from "./pages/mypage/Profile";
 import Notifications from "./pages/mypage/Notifications";
 import Payments from "./pages/mypage/Payments";
+import Recordings from "./pages/mypage/Recordings";
 //auth
 import Login from "./pages/auth/Login";
 import SignUp from "./pages/auth/SignUp";
@@ -24,6 +25,7 @@ function App() {
       <Route path="/mypage/profile" element={<Profile />} />
       <Route path="/mypage/notifications" element={<Notifications />} />
       <Route path="/mypage/payments" element={<Payments />} />
+      <Route path="/mypage/recordings" element={<Recordings />} />
       <Route path="/login" element={<Login />} />
       <Route path="/oauth/kakao/callback" element={<KakaoCallbackPage />} />
       <Route path="/signup" element={<SignUp />} />
