@@ -7,7 +7,6 @@ const formatDuration = (totalSeconds) => {
   return minutes > 0 ? `${minutes}분 ${seconds}초` : `${seconds}초`;
 };
 
-// 녹음 종료 시 뜨는 바텀시트 (종료 확인 / 저장 여부 공통)
 const RecordEndSheet = ({ elapsed, title, description, onClose, children }) => {
   return (
     <div className="fixed inset-0 z-50 flex justify-center" role="dialog" aria-modal="true">

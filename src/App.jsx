@@ -22,14 +22,18 @@ function App() {
     <Routes>
       <Route path="/" element={<Splash />} />
       <Route path="/home" element={<Home />} />
+      
       <Route path="/mypage" element={<MyPage />} />
       <Route path="/mypage/profile" element={<Profile />} />
+
       <Route path="/auth/login" element={<Login />} />
       <Route path="/oauth/kakao/callback" element={<KakaoCallbackPage />} />
       <Route path="/auth/signup" element={<SignUp />} />
+
       <Route path="/onboarding/nickname" element={<Nickname />} />
       <Route path="/onboarding/consent" element={<Consent />} />
       <Route path="/onboarding/voice" element={<VoiceRegister />} />
+
       <Route path="/analysis" element={<AnalysisStart />} />
       <Route path="/analysis/partner" element={<AnalysisPartner />} />
       <Route path="/analysis/record" element={<AnalysisRecord />} />
