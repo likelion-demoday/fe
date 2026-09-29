@@ -47,7 +47,7 @@ const MyPageMenu = () => {
               <li key={path}>
                 <Link
                   to={path}
-                  className="flex min-h-[30px] w-full cursor-pointer items-center justify-between text-left text-[#262626] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#595959]"
+                  className="mypage-press-row mypage-press-padded flex min-h-[30px] w-full cursor-pointer items-center justify-between text-left text-[#262626] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#595959]"
                 >
                   <span className="flex items-center gap-[17px]">
                     <img src={icon} alt="" className="shrink-0" />

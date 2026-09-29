@@ -4,6 +4,13 @@ import Splash from "./pages/Splash";
 import Home from "./pages/Home";
 import MyPage from "./pages/mypage/MyPage";
 import Profile from "./pages/mypage/Profile";
+import Notifications from "./pages/mypage/Notifications";
+import Payments from "./pages/mypage/Payments";
+import PurchaseHistoryPage from "./pages/mypage/PurchaseHistoryPage";
+import Recordings from "./pages/mypage/Recordings";
+import SavedConversations from "./pages/mypage/SavedConversations";
+import Account from "./pages/mypage/Account";
+import Support from "./pages/mypage/Support";
 //auth
 import Login from "./pages/auth/Login";
 import SignUp from "./pages/auth/SignUp";
@@ -20,6 +27,19 @@ function App() {
       <Route path="/home" element={<Home />} />
       <Route path="/mypage" element={<MyPage />} />
       <Route path="/mypage/profile" element={<Profile />} />
+      <Route path="/mypage/notifications" element={<Notifications />} />
+      <Route path="/mypage/payments" element={<Payments />} />
+      <Route
+        path="/mypage/payments/history"
+        element={<PurchaseHistoryPage />}
+      />
+      <Route path="/mypage/recordings" element={<Recordings />} />
+      <Route
+        path="/mypage/recordings/conversations"
+        element={<SavedConversations />}
+      />
+      <Route path="/mypage/account" element={<Account />} />
+      <Route path="/mypage/support" element={<Support />} />
       <Route path="/login" element={<Login />} />
       <Route path="/oauth/kakao/callback" element={<KakaoCallbackPage />} />
       <Route path="/signup" element={<SignUp />} />
