@@ -51,7 +51,7 @@ const Login = () => {
             <Button
               text="로그인"
               onClick={handleLogin}
-              className="flex h-[49px] w-full max-w-[358px] items-center justify-center rounded-[12px] bg-[#454545] px-[26px] py-[14px] font-['Pretendard',sans-serif] text-[18px] font-semibold tracking-[-0.36px] text-white"
+              className="flex h-[49px] w-full max-w-[358px] items-center justify-center rounded-[12px] bg-[#262626] px-[26px] py-[14px] font-['Pretendard',sans-serif] text-[18px] font-semibold tracking-[-0.36px] text-white"
             />
             <div className="flex items-center justify-center gap-[16px]">
               <button
@@ -64,6 +64,7 @@ const Login = () => {
               <button
                 type="button"
                 className="font-['SUITE',sans-serif] text-[13px] font-medium tracking-[0.39px] text-[#595959]"
+                onClick={() => navigate("/auth/signup")}
               >
                 회원가입
               </button>
