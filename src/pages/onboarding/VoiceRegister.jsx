@@ -50,7 +50,7 @@ const VoiceRegister = () => {
 
   const handleNext = () => {
     console.log("다음 버튼 클릭");
-    navigate("/home");
+    navigate("/home", { replace: true });
   };
 
   return (
@@ -113,7 +113,7 @@ const VoiceRegister = () => {
           <div className="flex items-center justify-center gap-[12px]">
             <span className="size-[8px] rounded-[99px] bg-[#454545]" />
             <span className="size-[8px] rounded-[99px] bg-[#454545]" />
-            <span className="size-[8px] rounded-[99px] bg-[#d9d9d9]" />
+            <span className="size-[8px] rounded-[99px] bg-[#454545]" />
           </div>
           <Button
             text="다음"

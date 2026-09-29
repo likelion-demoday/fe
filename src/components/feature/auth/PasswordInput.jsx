@@ -6,6 +6,7 @@ import eyeClosedIcon from "../../../assets/icons/eye-closed.svg";
 
 const PasswordInput = ({ value, onChange }) => {
   const [visible, setVisible] = useState(false);
+  const isError = value.length > 0 && value.length < 8;
 
   return (
     <TextField
@@ -15,7 +16,8 @@ const PasswordInput = ({ value, onChange }) => {
       value={value}
       onChange={onChange}
       placeholder="비밀번호를 입력해주세요."
-      helperText="8자 이상으로 입력해주세요."
+      helperText={isError ? "8자 이상으로 입력해주세요." : "8자 이상으로 입력해주세요."}
+      error={isError}
       trailing={
         <button
           type="button"

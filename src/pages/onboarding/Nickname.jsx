@@ -12,7 +12,8 @@ const MIN_LENGTH = 2;
 const MAX_LENGTH = 8;
 
 const Nickname = () => {
-  const [nickname, setNickname] = useState("");
+  const savedNickname = useAuthStore((state) => state.nickname);
+  const [nickname, setNickname] = useState(savedNickname);
   const setAuthData = useAuthStore((state) => state.setAuthData);
   const navigate = useNavigate();
 

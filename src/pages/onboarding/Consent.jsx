@@ -63,11 +63,12 @@ const Consent = () => {
     console.log("다음 버튼 클릭", checked);
     try {
       await signUp({ email, password, nickname });
-      clearAuthData();           
-      navigate("/onboarding/voice");      
     } catch (error) {
+      // TODO: 백엔드 연동 후 실패 시 넘어가지 않도록 처리
       console.error("회원가입 실패:", error);
     }
+    clearAuthData();
+    navigate("/onboarding/voice", { replace: true });
   };
 
   const handleView = (id) => {
@@ -141,7 +142,7 @@ const Consent = () => {
         <div className="flex items-center justify-center gap-[12px]">
           <span className="size-[8px] rounded-[99px] bg-[#454545]" />
           <span className="size-[8px] rounded-[99px] bg-[#454545]" />
-          <span className="size-[8px] rounded-[99px] bg-[#454545]" />
+          <span className="size-[8px] rounded-[99px] bg-[#d9d9d9]" />
         </div>
         <Button
           text="다음"
