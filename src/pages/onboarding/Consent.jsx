@@ -64,7 +64,7 @@ const Consent = () => {
     try {
       await signUp({ email, password, nickname });
       clearAuthData();           
-      navigate("/home");      
+      navigate("/onboarding/voice");      
     } catch (error) {
       console.error("회원가입 실패:", error);
     }

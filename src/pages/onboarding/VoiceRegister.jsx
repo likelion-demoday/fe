@@ -50,7 +50,7 @@ const VoiceRegister = () => {
 
   const handleNext = () => {
     console.log("다음 버튼 클릭");
-    navigate("/onboarding/consent");
+    navigate("/home");
   };
 
   return (

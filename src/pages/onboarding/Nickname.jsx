@@ -24,7 +24,7 @@ const Nickname = () => {
 
   const handleNext = () => {
     setAuthData({ nickname });
-    navigate("/onboarding/voice");
+    navigate("/onboarding/consent");
   };
 
   return (
