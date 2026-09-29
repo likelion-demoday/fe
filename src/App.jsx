@@ -12,6 +12,10 @@ import Nickname from "./pages/onboarding/Nickname";
 import Consent from "./pages/onboarding/Consent";
 import VoiceRegister from "./pages/onboarding/VoiceRegister";
 import KakaoCallbackPage from "./pages/auth/KakaoCallbackPage";
+//analysis
+import AnalysisStart from "./pages/analysis/AnalysisStart";
+import AnalysisPartner from "./pages/analysis/AnalysisPartner";
+import AnalysisRecord from "./pages/analysis/AnalysisRecord";
 
 function App() {
   return (
@@ -26,6 +30,9 @@ function App() {
       <Route path="/onboarding/nickname" element={<Nickname />} />
       <Route path="/onboarding/consent" element={<Consent />} />
       <Route path="/onboarding/voice" element={<VoiceRegister />} />
+      <Route path="/analysis" element={<AnalysisStart />} />
+      <Route path="/analysis/partner" element={<AnalysisPartner />} />
+      <Route path="/analysis/record" element={<AnalysisRecord />} />
     </Routes>
   );
 }
