@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 import AppHeader from "../../components/common/AppHeader";
 import Button from "../../components/common/Button";
+import RecordEndSheet, { SheetButton } from "../../components/feature/analysis/RecordEndSheet";
 import microphoneIcon from "../../assets/icons/microphone.svg";
 
 const MAX_SECONDS = 60 * 60;
@@ -24,9 +25,12 @@ const AnalysisRecord = () => {
   const navigate = useNavigate();
   const { state } = useLocation();
   const [isRecording, setIsRecording] = useState(false);
+  const [isEnded, setIsEnded] = useState(false);
   const [elapsed, setElapsed] = useState(0);
+  // null | "confirm"(종료 확인) | "save"(저장 여부)
+  const [sheet, setSheet] = useState(null);
 
-  const isRunning = isRecording && elapsed < MAX_SECONDS;
+  const isRunning = isRecording && !isEnded && elapsed < MAX_SECONDS;
 
   useEffect(() => {
     if (!isRunning) return;
@@ -37,9 +41,18 @@ const AnalysisRecord = () => {
   }, [isRunning]);
 
   const handleFinish = () => {
+    setSheet(isEnded ? "save" : "confirm");
+  };
+
+  const handleConfirmEnd = () => {
     setIsRecording(false);
+    setIsEnded(true);
+    setSheet("save");
+  };
+
+  const handleSave = (shouldSave) => {
     // TODO: 녹음 파일 업로드 및 분석 요청 API 연동
-    console.log("녹음 끝내기", { partner: state?.partner, elapsed });
+    console.log("녹음 저장 여부", { partner: state?.partner, elapsed, shouldSave });
     navigate("/home");
   };
 
@@ -73,6 +86,7 @@ const AnalysisRecord = () => {
           <button
             type="button"
             onClick={() => setIsRecording((prev) => !prev)}
+            disabled={isEnded}
             aria-label={isRunning ? "녹음 일시정지" : "녹음 시작"}
             aria-pressed={isRunning}
             className={`flex size-[90px] items-center justify-center overflow-clip rounded-[20px] ${
@@ -81,7 +95,14 @@ const AnalysisRecord = () => {
                 : "bg-white shadow-[0px_4px_11.7px_0px_rgba(0,0,0,0.05),0px_0px_47.7px_0px_rgba(0,0,0,0.1)]"
             }`}
           >
-            <img src={microphoneIcon} alt="" className="block size-[40px] max-w-none" />
+            {isRunning ? (
+              <span className="relative size-[40px] overflow-clip">
+                <span className="absolute top-[5px] left-[7px] h-[30px] w-[8px] rounded-[1px] bg-white" />
+                <span className="absolute top-[5px] left-[24px] h-[30px] w-[8px] rounded-[1px] bg-white" />
+              </span>
+            ) : (
+              <img src={microphoneIcon} alt="" className="block size-[40px] max-w-none" />
+            )}
           </button>
         </div>
       </div>
@@ -94,6 +115,28 @@ const AnalysisRecord = () => {
           className="flex w-full items-center justify-center rounded-[16px] bg-[#262626] px-[26px] py-[16px] text-[20px] font-semibold tracking-[0.8px] text-white disabled:bg-[#d9d9d9]"
         />
       </div>
+
+      {sheet === "confirm" && (
+        <RecordEndSheet
+          elapsed={elapsed}
+          title="녹음을 끝내시겠어요?"
+          description="녹음을 종료하면 다시 이어서 녹음할 수 없어요"
+          onClose={() => setSheet(null)}
+        >
+          <SheetButton text="녹음 끝내기" onClick={handleConfirmEnd} />
+        </RecordEndSheet>
+      )}
+      {sheet === "save" && (
+        <RecordEndSheet
+          elapsed={elapsed}
+          title="음성녹음을 저장할까요?"
+          description="저장하지 않으면 녹음은 보고서에 사용된 후 삭제 돼요."
+          onClose={() => setSheet(null)}
+        >
+          <SheetButton text="저장하지 않기" onClick={() => handleSave(false)} />
+          <SheetButton text="저장하기" onClick={() => handleSave(true)} />
+        </RecordEndSheet>
+      )}
     </main>
   );
 };
