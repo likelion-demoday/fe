@@ -1,19 +1,16 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
+import { useMicVolume } from "../../hooks/useMicVolume.js";
+
 import AppHeader from "../../components/common/AppHeader";
 import Button from "../../components/common/Button";
-import RecordEndSheet, { SheetButton } from "../../components/feature/analysis/RecordEndSheet";
+import RecordEndSheet, {
+  SheetButton,
+} from "../../components/feature/analysis/RecordEndSheet";
 import microphoneIcon from "../../assets/icons/microphone.svg";
 
 const MAX_SECONDS = 60 * 60;
-
-// 디자인 기준 막대 높이 (컨테이너 56px, 넘치는 막대는 위아래로 삐져나옴)
-const WAVE_BARS = [
-  56, 26, 56, 26, 120, 56, 68, 90, 56, 30, 68, 32, 56, 90, 26, 183, 120, 56, 12, 32, 30, 90,
-  56, 90, 56, 26, 56, 120, 68, 30, 56, 32, 160, 90, 56, 26, 12, 56, 68, 120, 30, 56, 90, 12,
-  56, 80, 56, 32, 30, 56, 32, 84, 12, 120, 56, 12, 90, 160, 56, 26, 30, 56, 120,
-];
 
 const formatTime = (totalSeconds) => {
   const minutes = String(Math.floor(totalSeconds / 60)).padStart(2, "0");
@@ -27,10 +24,10 @@ const AnalysisRecord = () => {
   const [isRecording, setIsRecording] = useState(false);
   const [isEnded, setIsEnded] = useState(false);
   const [elapsed, setElapsed] = useState(0);
-  // null | "confirm"(종료 확인) | "save"(저장 여부)
   const [sheet, setSheet] = useState(null);
 
   const isRunning = isRecording && !isEnded && elapsed < MAX_SECONDS;
+  const { levels, error } = useMicVolume(isRecording);
 
   useEffect(() => {
     if (!isRunning) return;
@@ -52,9 +49,15 @@ const AnalysisRecord = () => {
 
   const handleSave = (shouldSave) => {
     // TODO: 녹음 파일 업로드 및 분석 요청 API 연동
-    console.log("녹음 저장 여부", { partner: state?.partner, elapsed, shouldSave });
+    console.log("녹음 저장 여부", {
+      partner: state?.partner,
+      elapsed,
+      shouldSave,
+    });
     navigate("/home");
   };
+
+  if (error === "denied") return <p>마이크 권한을 허용해 주세요.</p>;
 
   return (
     <main className="relative mx-auto flex h-[844px] w-[390px] flex-col justify-between overflow-hidden bg-white">
@@ -68,15 +71,13 @@ const AnalysisRecord = () => {
             <p className="text-heading w-full text-center text-black">
               {formatTime(elapsed)} / {formatTime(MAX_SECONDS)}
             </p>
-            <div className="flex h-[56px] w-full items-center gap-[3px]">
-              {WAVE_BARS.map((height, index) => (
+            <div className="flex h-[100px] w-full items-center gap-[3px]">
+              {levels.map((level, index) => (
                 <span
                   key={index}
                   className="w-[2.5px] shrink-0 rounded-[28px] bg-[#ff765b]"
                   style={{
-                    height: `${height}px`,
-                    animation: isRunning ? "voice-wave 0.9s ease-in-out infinite" : undefined,
-                    animationDelay: `${(index % 5) * 0.12}s`,
+                    height: `${Math.max(4, Math.min(100, level * 120))}px`,
                   }}
                 />
               ))}
@@ -101,7 +102,11 @@ const AnalysisRecord = () => {
                 <span className="absolute top-[5px] left-[24px] h-[30px] w-[8px] rounded-[1px] bg-white" />
               </span>
             ) : (
-              <img src={microphoneIcon} alt="" className="block size-[40px] max-w-none" />
+              <img
+                src={microphoneIcon}
+                alt=""
+                className="block size-[40px] max-w-none"
+              />
             )}
           </button>
         </div>
