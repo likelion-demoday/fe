@@ -1,6 +1,9 @@
+import { useState } from "react";
 import { Navigate, useLocation, useNavigate } from "react-router-dom";
 
 import AppHeader from "../../components/common/AppHeader";
+import BottomSheet from "../../components/common/BottomSheet";
+import PurchaseSheet from "../../components/feature/analysis/PurchaseSheet";
 import chevronLeftIcon from "../../assets/icons/chevron-left.svg";
 import relationMainIcon from "../../assets/icons/relation-main-m.svg";
 import relationLoverIcon from "../../assets/icons/relation-lover-m.svg";
@@ -23,17 +26,19 @@ const RELATION_ICONS = {
 
 const RELATIONS_BY_TYPE = {
   daily: {
+    title: "일상 중심",
     gap: "gap-[36px]",
     relations: [
-      { id: "friend", label: "친구 사이", icon: "main" },
-      { id: "lover", label: "연인 사이", icon: "lover" },
+      { id: "friend", label: "친구 사이", productLabel: "친구사이", icon: "main" },
+      { id: "lover", label: "연인 사이", productLabel: "연인사이", icon: "lover" },
     ],
   },
   worry: {
+    title: "갈등 중심",
     gap: "gap-[24px]",
     relations: [
-      { id: "lover", label: "연인 사이", icon: "lover" },
-      { id: "family", label: "부모 • 자녀 사이", icon: "family" },
+      { id: "lover", label: "연인 사이", productLabel: "연인사이", icon: "lover" },
+      { id: "family", label: "부모 • 자녀 사이", productLabel: "부모자녀사이", icon: "family" },
     ],
   },
 };
@@ -42,25 +47,44 @@ const AnalysisRelation = () => {
   const navigate = useNavigate();
   const { state } = useLocation();
   const config = RELATIONS_BY_TYPE[state?.type];
+  // null | "purchase"(구매하기) | "complete"(구매완료)
+  const [sheet, setSheet] = useState(null);
+  const [selected, setSelected] = useState(null);
 
   if (!config) return <Navigate to="/analysis/type" replace state={state} />;
 
+  // TODO: 크레딧/가격 API 연동 전 임시 값 (디자인 기준)
+  const ownedCredit = 2000;
+  const price = 1300;
+
   const handleSelect = (relation) => {
-    console.log("관계 선택", { ...state, relation });
+    setSelected(relation);
+    setSheet("purchase");
+  };
+
+  const handlePurchase = () => {
+    // TODO: 결제 API 연동
+    console.log("분석 구매", { ...state, relation: selected.id, price });
+    setSheet("complete");
+  };
+
+  const handleComplete = () => {
+    // TODO: 분석 요청 후 분석 중 화면으로 이동
+    navigate("/home", { replace: true });
   };
 
   return (
-    <main className="mx-auto flex h-[844px] w-[390px] flex-col items-start gap-[30px] overflow-y-auto bg-white px-[24px] py-[16px]">
+    <main className="relative mx-auto flex h-[844px] w-[390px] flex-col items-start gap-[30px] overflow-y-auto bg-white px-[24px] py-[16px]">
       <AppHeader title="대화 분석" />
 
       <section className="flex w-full flex-col gap-[24px]">
         <h2 className="text-heading text-[#262626]">대화 상대방과 어떤 사이인가요?</h2>
         <div className={`flex w-full flex-col ${config.gap}`}>
-          {config.relations.map(({ id, label, icon }) => (
+          {config.relations.map(({ id, label, productLabel, icon }) => (
             <button
               key={id}
               type="button"
-              onClick={() => handleSelect(id)}
+              onClick={() => handleSelect({ id, label, productLabel })}
               className="flex w-full items-center justify-center gap-[8px] overflow-clip rounded-[16px] border border-[#eee] bg-white px-[42px] py-[50px] shadow-[0px_4px_11.7px_0px_rgba(0,0,0,0.05),0px_0px_47.7px_0px_rgba(0,0,0,0.1)]"
             >
               {RELATION_ICONS[icon]}
@@ -78,6 +102,17 @@ const AnalysisRelation = () => {
         <img src={chevronLeftIcon} alt="" className="block h-[13px] w-[8px] max-w-none shrink-0" />
         <span className="text-body whitespace-nowrap text-[#595959]">뒤로가기</span>
       </button>
+
+      {sheet === "purchase" && (
+        <PurchaseSheet
+          productName={`${config.title}_${selected.productLabel}`}
+          ownedCredit={ownedCredit}
+          price={price}
+          onClose={() => setSheet(null)}
+          onPurchase={handlePurchase}
+        />
+      )}
+      {sheet === "complete" && <BottomSheet title="구매완료!" onClose={handleComplete} />}
     </main>
   );
 };
