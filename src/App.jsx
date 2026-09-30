@@ -26,6 +26,7 @@ import AnalysisRecord from "./pages/analysis/AnalysisRecord";
 import AnalysisType from "./pages/analysis/AnalysisType";
 import AnalysisRelation from "./pages/analysis/AnalysisRelation";
 import AnalysisLoading from "./pages/analysis/AnalysisLoading";
+import AnalysisSpeaker from "./pages/analysis/AnalysisSpeaker";
 
 function App() {
   return (
@@ -64,6 +65,7 @@ function App() {
       <Route path="/analysis/type" element={<AnalysisType />} />
       <Route path="/analysis/relation" element={<AnalysisRelation />} />
       <Route path="/analysis/loading" element={<AnalysisLoading />} />
+      <Route path="/analysis/speaker" element={<AnalysisSpeaker />} />
     </Routes>
   );
 }

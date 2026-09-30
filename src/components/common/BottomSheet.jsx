@@ -2,7 +2,15 @@ import xmarkIcon from "../../assets/icons/xmark.svg";
 import characterImage from "../../assets/images/record-end-character.png";
 
 // 페이지(390x844) 하단에 뜨는 바텀시트. 부모 요소에 relative 필요
-const BottomSheet = ({ title, onClose, footer, children }) => {
+// title: 문자열이면 기본 제목 스타일, 요소면 그대로 렌더링 (예: 입력창)
+const BottomSheet = ({
+  title,
+  onClose,
+  footer,
+  children,
+  headerGap = "gap-[20px]",
+  contentGap = "gap-[10px]",
+}) => {
   return (
     <div className="absolute inset-0 z-50 flex justify-center" role="dialog" aria-modal="true">
       <div
@@ -11,14 +19,18 @@ const BottomSheet = ({ title, onClose, footer, children }) => {
         aria-hidden="true"
       />
       <div className="absolute bottom-0 flex h-[539px] w-full max-w-[390px] flex-col justify-between rounded-t-[32px] bg-white px-[24px] pt-[24px] pb-[30px]">
-        <div className="flex w-full flex-col gap-[20px]">
+        <div className={`flex w-full flex-col ${headerGap}`}>
           <div className="flex w-full justify-end">
             <button type="button" onClick={onClose} aria-label="닫기" className="size-[24px] shrink-0">
               <img src={xmarkIcon} alt="" className="block size-full max-w-none" />
             </button>
           </div>
-          <div className="flex w-full flex-col items-center gap-[10px]">
-            <h2 className="text-display w-full text-center text-black">{title}</h2>
+          <div className={`flex w-full flex-col items-center ${contentGap}`}>
+            {typeof title === "string" ? (
+              <h2 className="text-display w-full text-center text-black">{title}</h2>
+            ) : (
+              title
+            )}
             <div className="relative size-[136px] shrink-0 overflow-hidden">
               <img
                 src={characterImage}

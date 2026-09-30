@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import AppHeader from "../../components/common/AppHeader";
 import BottomSheet, { SheetButton } from "../../components/common/BottomSheet";
@@ -10,6 +10,7 @@ const MOCK_ANALYSIS_MS = 3000;
 
 const AnalysisLoading = () => {
   const navigate = useNavigate();
+  const { state } = useLocation();
   const [isDone, setIsDone] = useState(false);
 
   useEffect(() => {
@@ -17,8 +18,7 @@ const AnalysisLoading = () => {
     return () => clearTimeout(timer);
   }, []);
 
-  // TODO: 리포트 화면 구현 후 이동 경로 변경
-  const goToReport = () => navigate("/home", { replace: true });
+  const goToSpeaker = () => navigate("/analysis/speaker", { replace: true, state });
 
   return (
     <main className="relative mx-auto h-[844px] w-[390px] overflow-hidden bg-white">
@@ -66,8 +66,8 @@ const AnalysisLoading = () => {
       {isDone && (
         <BottomSheet
           title="분석완료!"
-          onClose={goToReport}
-          footer={<SheetButton text="다음" onClick={goToReport} />}
+          onClose={goToSpeaker}
+          footer={<SheetButton text="다음" onClick={goToSpeaker} />}
         />
       )}
     </main>
