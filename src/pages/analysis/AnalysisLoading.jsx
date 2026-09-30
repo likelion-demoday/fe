@@ -1,8 +1,25 @@
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 import AppHeader from "../../components/common/AppHeader";
+import BottomSheet, { SheetButton } from "../../components/common/BottomSheet";
 import characterImage from "../../assets/images/record-end-character.png";
 
+// TODO: 분석 상태 API 연동 전, 일정 시간 뒤 완료된 것으로 처리
+const MOCK_ANALYSIS_MS = 3000;
+
 const AnalysisLoading = () => {
-  // TODO: 분석 상태 API 폴링 후 완료 시 리포트 화면으로 이동
+  const navigate = useNavigate();
+  const [isDone, setIsDone] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsDone(true), MOCK_ANALYSIS_MS);
+    return () => clearTimeout(timer);
+  }, []);
+
+  // TODO: 리포트 화면 구현 후 이동 경로 변경
+  const goToReport = () => navigate("/home", { replace: true });
+
   return (
     <main className="relative mx-auto h-[844px] w-[390px] overflow-hidden bg-white">
       <div className="px-[24px] py-[16px]">
@@ -45,6 +62,14 @@ const AnalysisLoading = () => {
           <p className="text-caption w-full text-[#595959]">화면을 나가도 분석은 계속돼요</p>
         </div>
       </div>
+
+      {isDone && (
+        <BottomSheet
+          title="분석완료!"
+          onClose={goToReport}
+          footer={<SheetButton text="다음" onClick={goToReport} />}
+        />
+      )}
     </main>
   );
 };
