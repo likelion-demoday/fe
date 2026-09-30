@@ -54,14 +54,10 @@ const AnalysisRecord = () => {
       elapsed,
       shouldSave,
     });
-    if (shouldSave) {
-      navigate("/analysis/type", {
-        replace: true,
-        state: { partner: state?.partner, elapsed, shouldSave },
-      });
-      return;
-    }
-    navigate("/home");
+    navigate("/analysis/type", {
+      replace: true,
+      state: { partner: state?.partner, elapsed, shouldSave },
+    });
   };
 
   if (error === "denied") return <p>마이크 권한을 허용해 주세요.</p>;

@@ -1,4 +1,4 @@
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import AppHeader from "../../components/common/AppHeader";
 import dailyIcon from "../../assets/icons/analysis-type-daily.svg";
@@ -43,10 +43,11 @@ const ANALYSIS_TYPES = [
 ];
 
 const AnalysisType = () => {
+  const navigate = useNavigate();
   const { state } = useLocation();
 
   const handleSelect = (type) => {
-    console.log("분석 유형 선택", { ...state, type });
+    navigate("/analysis/relation", { state: { ...state, type } });
   };
 
   return (
