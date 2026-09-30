@@ -16,8 +16,8 @@ import Login from "./pages/auth/Login";
 import SignUp from "./pages/auth/SignUp";
 //onboarding
 import Nickname from "./pages/onboarding/Nickname";
-import VoiceRegister from "./pages/onboarding/VoiceRegister";
 import Consent from "./pages/onboarding/Consent";
+import VoiceRegister from "./pages/onboarding/VoiceRegister";
 import KakaoCallbackPage from "./pages/auth/KakaoCallbackPage";
 
 function App() {
@@ -27,6 +27,7 @@ function App() {
       <Route path="/home" element={<Home />} />
       <Route path="/mypage" element={<MyPage />} />
       <Route path="/mypage/profile" element={<Profile />} />
+      
       <Route path="/mypage/notifications" element={<Notifications />} />
       <Route path="/mypage/payments" element={<Payments />} />
       <Route
@@ -40,12 +41,14 @@ function App() {
       />
       <Route path="/mypage/account" element={<Account />} />
       <Route path="/mypage/support" element={<Support />} />
-      <Route path="/login" element={<Login />} />
+        
       <Route path="/oauth/kakao/callback" element={<KakaoCallbackPage />} />
-      <Route path="/signup" element={<SignUp />} />
+      <Route path="/auth/login" element={<Login />} />
+      <Route path="/auth/signup" element={<SignUp />} />
+        
       <Route path="/onboarding/nickname" element={<Nickname />} />
-      <Route path="/onboarding/voice" element={<VoiceRegister />} />
       <Route path="/onboarding/consent" element={<Consent />} />
+      <Route path="/onboarding/voice" element={<VoiceRegister />} />
     </Routes>
   );
 }

@@ -12,7 +12,8 @@ const MIN_LENGTH = 2;
 const MAX_LENGTH = 8;
 
 const Nickname = () => {
-  const [nickname, setNickname] = useState("");
+  const savedNickname = useAuthStore((state) => state.nickname);
+  const [nickname, setNickname] = useState(savedNickname);
   const setAuthData = useAuthStore((state) => state.setAuthData);
   const navigate = useNavigate();
 
@@ -24,7 +25,7 @@ const Nickname = () => {
 
   const handleNext = () => {
     setAuthData({ nickname });
-    navigate("/onboarding/voice");
+    navigate("/onboarding/consent");
   };
 
   return (
@@ -79,7 +80,7 @@ const Nickname = () => {
           text="다음"
           onClick={handleNext}
           disabled={!isValid}
-          className="flex h-[49px] w-full max-w-[358px] items-center justify-center rounded-[12px] bg-[#454545] px-[26px] py-[14px] font-['Pretendard',sans-serif] text-[18px] font-semibold tracking-[-0.36px] text-white disabled:bg-[#d9d9d9]"
+          className="flex h-[49px] w-full max-w-[358px] items-center justify-center rounded-[12px] bg-[#262626] px-[26px] py-[14px] font-['Pretendard',sans-serif] text-[18px] font-semibold tracking-[-0.36px] text-white disabled:bg-[#d9d9d9]"
         />
       </div>
     </div>

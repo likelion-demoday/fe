@@ -63,11 +63,12 @@ const Consent = () => {
     console.log("다음 버튼 클릭", checked);
     try {
       await signUp({ email, password, nickname });
-      clearAuthData();           
-      navigate("/home");      
     } catch (error) {
+      // TODO: 백엔드 연동 후 실패 시 넘어가지 않도록 처리
       console.error("회원가입 실패:", error);
     }
+    clearAuthData();
+    navigate("/onboarding/voice", { replace: true });
   };
 
   const handleView = (id) => {
@@ -141,13 +142,13 @@ const Consent = () => {
         <div className="flex items-center justify-center gap-[12px]">
           <span className="size-[8px] rounded-[99px] bg-[#454545]" />
           <span className="size-[8px] rounded-[99px] bg-[#454545]" />
-          <span className="size-[8px] rounded-[99px] bg-[#454545]" />
+          <span className="size-[8px] rounded-[99px] bg-[#d9d9d9]" />
         </div>
         <Button
           text="다음"
           onClick={handleNext}
           disabled={!requiredChecked}
-          className="flex h-[49px] w-full max-w-[358px] items-center justify-center rounded-[12px] bg-[#454545] px-[26px] py-[14px] font-['Pretendard',sans-serif] text-[18px] font-semibold tracking-[-0.36px] text-white disabled:bg-[#d9d9d9]"
+          className="flex h-[49px] w-full max-w-[358px] items-center justify-center rounded-[12px] bg-[#262626] px-[26px] py-[14px] font-['Pretendard',sans-serif] text-[18px] font-semibold tracking-[-0.36px] text-white disabled:bg-[#d9d9d9]"
         />
       </div>
     </div>

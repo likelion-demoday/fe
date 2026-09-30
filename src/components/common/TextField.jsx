@@ -12,6 +12,7 @@ const TextField = ({
   value,
   onChange,
   placeholder,
+  error,
   ...rest
 }) => {
   return (
@@ -23,13 +24,14 @@ const TextField = ({
         >
           {label}
         </label>
-        <div className="flex w-full items-center justify-between gap-[8px] border-b-[1.5px] border-[#dfe2ea] pb-[6px]">
+        <div className={`flex w-full items-center justify-between gap-[8px] border-b-[1.5px] ${error ? 'border-[#ff4d4f]' : 'border-[#dfe2ea]'} pb-[6px] `}>
           <Input
             id={id}
             type={type}
             value={value}
             onChange={onChange}
             placeholder={placeholder}
+            error={error}
             className="w-full bg-transparent font-['SUITE',sans-serif] text-[16px] font-semibold text-[#262626] outline-none placeholder:text-[#d9d9d9]"
             {...rest}
           />
@@ -37,7 +39,7 @@ const TextField = ({
         </div>
       </div>
       {helperText && (
-        <p className="w-full font-['SUITE',sans-serif] text-[12px] font-medium text-[#bfbfbf]">
+        <p className={`${error ? 'text-red-500' : 'text-gray-500'} w-full font-['SUITE',sans-serif] text-[12px] font-medium text-[#bfbfbf]`}>
           {helperText}
         </p>
       )}
