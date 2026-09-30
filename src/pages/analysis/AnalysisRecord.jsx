@@ -54,6 +54,13 @@ const AnalysisRecord = () => {
       elapsed,
       shouldSave,
     });
+    if (shouldSave) {
+      navigate("/analysis/type", {
+        replace: true,
+        state: { partner: state?.partner, elapsed, shouldSave },
+      });
+      return;
+    }
     navigate("/home");
   };
 
