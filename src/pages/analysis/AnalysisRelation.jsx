@@ -69,8 +69,11 @@ const AnalysisRelation = () => {
   };
 
   const handleComplete = () => {
-    // TODO: 분석 요청 후 분석 중 화면으로 이동
-    navigate("/home", { replace: true });
+    // TODO: 분석 요청 API 연동
+    navigate("/analysis/loading", {
+      replace: true,
+      state: { ...state, relation: selected.id },
+    });
   };
 
   return (
