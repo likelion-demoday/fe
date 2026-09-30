@@ -57,7 +57,7 @@ const AnalysisRecord = () => {
   };
 
   return (
-    <main className="mx-auto flex min-h-screen w-full max-w-[390px] flex-col justify-between overflow-x-hidden bg-white">
+    <main className="relative mx-auto flex h-[844px] w-[390px] flex-col justify-between overflow-hidden bg-white">
       <div className="flex w-full flex-col items-center gap-[136px]">
         <div className="w-full px-[24px] py-[16px]">
           <AppHeader title="대화 분석" />

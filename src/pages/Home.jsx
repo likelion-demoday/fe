@@ -4,7 +4,7 @@ import CharacterCarousel from "../components/feature/home/CharacterCarousel";
 
 const Home = () => {
   return (
-    <main className="mx-auto flex min-h-screen w-full max-w-[390px] flex-col gap-[20px] overflow-x-hidden bg-white px-[24px] py-[16px]">
+    <main className="mx-auto flex h-[844px] w-[390px] flex-col gap-[20px] overflow-x-hidden overflow-y-auto bg-white px-[24px] py-[16px]">
       <AppHeader />
 
       <div className="flex w-full flex-col gap-[36px]">

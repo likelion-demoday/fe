@@ -9,7 +9,7 @@ const formatDuration = (totalSeconds) => {
 
 const RecordEndSheet = ({ elapsed, title, description, onClose, children }) => {
   return (
-    <div className="fixed inset-0 z-50 flex justify-center" role="dialog" aria-modal="true">
+    <div className="absolute inset-0 z-50 flex justify-center" role="dialog" aria-modal="true">
       <div
         className="absolute inset-0 bg-[rgba(0,0,0,0.3)] backdrop-blur-[2px]"
         onClick={onClose}
