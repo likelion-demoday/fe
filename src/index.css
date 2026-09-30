@@ -20,6 +20,43 @@
 }
 
 @layer components {
+  /* 마이페이지 메뉴의 눌림 배경: 좌우 페이지 여백까지 확장 */
+  .mypage-press-row {
+    position: relative;
+    isolation: isolate;
+  }
+
+  .mypage-press-row::before {
+    content: "";
+    position: absolute;
+    inset: 0 -24px;
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  .mypage-press-padded::before {
+    top: -12px;
+    bottom: -12px;
+  }
+
+  .mypage-press-row:active::before {
+    background-color: #eeeeee;
+  }
+
+  /* 원본 SVG의 흰 배경 위에도 눌림 색상이 보이도록 적용 */
+  .mypage-back-press button::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    pointer-events: none;
+    mix-blend-mode: multiply;
+  }
+
+  .mypage-back-press button:active::after {
+    background-color: #eeeeee;
+  }
+
   /* 일반 화면: SUITE */
   .text-display {
     font-size: 30px;

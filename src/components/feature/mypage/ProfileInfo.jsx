@@ -16,7 +16,7 @@ const ProfileInfo = () => {
           <div className="text-title-semibold text-black">드라이브 가자잇</div>
         </div>
         <Button
-          className="absolute top-0 right-0 flex cursor-pointer items-center gap-[8px] rounded-[6px] text-[#595959]"
+          className="active:bg-[#eeeeee] absolute top-0 right-0 flex cursor-pointer items-center gap-[8px] rounded-[6px] text-[#595959]"
           text={
             <>
               <span className="text-body">수정하기</span>
