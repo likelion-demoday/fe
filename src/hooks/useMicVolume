@@ -1,0 +1,43 @@
+import { useEffect, useRef, useState } from "react";
+
+export function useMicVolume(active) {
+  const [volume, setVolume] = useState(0);
+  const [error, setError] = useState(null);
+  const rafRef = useRef();
+
+  useEffect(() => {
+    if (!active) return;
+    let ctx, stream;
+
+    (async () => {
+      try {
+        stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        ctx = new AudioContext();
+        const analyser = ctx.createAnalyser();
+        analyser.fftSize = 256;
+        ctx.createMediaStreamSource(stream).connect(analyser);
+        const data = new Uint8Array(analyser.fftSize);
+
+        const tick = () => {
+          analyser.getByteTimeDomainData(data);
+          let sum = 0;
+          for (const v of data) sum += ((v - 128) / 128) ** 2;
+          const rms = Math.sqrt(sum / data.length);
+          setVolume(Math.min(1, rms * 4)); // 4는 감도, 조절
+          rafRef.current = requestAnimationFrame(tick);
+        };
+        tick();
+      } catch (e) {
+        setError(e.name === "NotAllowedError" ? "denied" : "unknown");
+      }
+    })();
+
+    return () => {
+      cancelAnimationFrame(rafRef.current);
+      stream?.getTracks().forEach((t) => t.stop());
+      ctx?.close();
+    };
+  }, [active]);
+
+  return { volume, error };
+}
