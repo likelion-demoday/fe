@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Navigate, useLocation, useNavigate } from "react-router-dom";
 
 import AppHeader from "../../components/common/AppHeader";
@@ -43,6 +43,8 @@ const RELATIONS_BY_TYPE = {
   },
 };
 
+const COMPLETE_SHEET_MS = 1500;
+
 const AnalysisRelation = () => {
   const navigate = useNavigate();
   const { state } = useLocation();
@@ -51,9 +53,24 @@ const AnalysisRelation = () => {
   const [sheet, setSheet] = useState(null);
   const [selected, setSelected] = useState(null);
 
+  const goToLoading = useCallback(() => {
+    // TODO: 분석 요청 API 연동
+    navigate("/analysis/loading", {
+      replace: true,
+      state: { ...state, relation: selected?.id },
+    });
+  }, [navigate, state, selected]);
+
+  // 구매완료 모달을 잠깐 보여준 뒤 자동으로 분석 중 화면으로 이동 (X를 누르면 바로 이동)
+  useEffect(() => {
+    if (sheet !== "complete") return;
+    const timer = setTimeout(goToLoading, COMPLETE_SHEET_MS);
+    return () => clearTimeout(timer);
+  }, [sheet, goToLoading]);
+
   if (!config) return <Navigate to="/analysis/type" replace state={state} />;
 
-  // TODO: 크레딧/가격 API 연동 전 임시 값 (디자인 기준)
+
   const ownedCredit = 2000;
   const price = 1300;
 
@@ -63,17 +80,8 @@ const AnalysisRelation = () => {
   };
 
   const handlePurchase = () => {
-    // TODO: 결제 API 연동
     console.log("분석 구매", { ...state, relation: selected.id, price });
     setSheet("complete");
-  };
-
-  const handleComplete = () => {
-    // TODO: 분석 요청 API 연동
-    navigate("/analysis/loading", {
-      replace: true,
-      state: { ...state, relation: selected.id },
-    });
   };
 
   return (
@@ -115,7 +123,7 @@ const AnalysisRelation = () => {
           onPurchase={handlePurchase}
         />
       )}
-      {sheet === "complete" && <BottomSheet title="구매완료!" onClose={handleComplete} />}
+      {sheet === "complete" && <BottomSheet title="구매완료!" onClose={goToLoading} />}
     </main>
   );
 };
