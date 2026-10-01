@@ -5,13 +5,24 @@ const KAKAO_REDIRECT_URI = import.meta.env.VITE_KAKAO_REDIRECT_URI;
 const REST_API_KEY = import.meta.env.VITE_KAKAO_API_KEY;
 const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${KAKAO_REDIRECT_URI}&response_type=code`;
 
+const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+const GOOGLE_REDIRECT_URI = import.meta.env.VITE_GOOGLE_REDIRECT_URI;
+const GOOGLE_AUTH_URL = `https://accounts.google.com/o/oauth2/v2/auth?${new URLSearchParams({
+  client_id: GOOGLE_CLIENT_ID,
+  redirect_uri: GOOGLE_REDIRECT_URI,
+  response_type: "code",
+  scope: "openid email profile",
+})}`;
+
 const SocialLoginButtons = () => {
   const onKakaoClick = () => {
     window.location.href = KAKAO_AUTH_URL;
   };
 
   const onGoogleClick = () => {
-    // TODO: 구글 인증 URL 생성 및 이동
+    const state = crypto.randomUUID();
+    sessionStorage.setItem("googleOAuthState", state);
+    window.location.href = `${GOOGLE_AUTH_URL}&state=${state}`;
   };
 
   return (
