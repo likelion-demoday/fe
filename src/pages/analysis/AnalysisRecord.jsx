@@ -32,13 +32,11 @@ const AnalysisRecord = () => {
 
   const [elapsed, setElapsed] = useState(0);
   const [sheet, setSheet] = useState(null);
-  const [isUploading, setIsUploading] = useState(false);
-  const [uploadError, setUploadError] = useState(null);
 
   const recordingRef = useRef(null);
   const endingRef = useRef(false);
 
-  const { status, error, levels, start, pause, resume, stop } =
+  const { status, error, levels, head, start, pause, resume, stop } =
     useAudioRecorder();
 
   const isRunning = status === "recording";
@@ -64,6 +62,7 @@ const AnalysisRecord = () => {
   useEffect(() => {
     if (elapsed < MAX_SECONDS) return;
     endRecording();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [elapsed]);
 
   const handleMicClick = () => {
@@ -110,7 +109,9 @@ const AnalysisRecord = () => {
               {levels.map((level, index) => (
                 <span
                   key={index}
-                  className="w-[2.5px] shrink-0 rounded-[28px] bg-[#ff765b]"
+                  className={`w-[2.5px] shrink-0 rounded-[28px] ${
+                    index <= head ? "bg-[#ff765b]" : "bg-[#d9d9d9]"
+                  }`}
                   style={{
                     height: `${Math.max(4, Math.min(100, level * 120))}px`,
                   }}
@@ -146,9 +147,9 @@ const AnalysisRecord = () => {
               )}
             </button>
 
-            {(error || uploadError) && (
+            {error && (
               <p className="text-label text-center text-[#ff765b]">
-                {uploadError ?? ERROR_MESSAGES[error]}
+                {ERROR_MESSAGES[error]}
               </p>
             )}
           </div>
@@ -179,17 +180,15 @@ const AnalysisRecord = () => {
           elapsed={elapsed}
           title="음성녹음을 저장할까요?"
           description="저장하지 않으면 녹음은 보고서에 사용된 후 삭제 돼요."
-          onClose={isUploading ? undefined : () => setSheet(null)}
+          onClose={() => setSheet(null)}
         >
           <SheetButton
             text="저장하지 않기"
             onClick={() => handleSave(false)}
-            disabled={isUploading}
           />
           <SheetButton
             text="저장하기"
             onClick={() => handleSave(true)}
-            disabled={isUploading}
           />
         </RecordEndSheet>
       )}

@@ -1,6 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
 const BAR_COUNT = 63;
+const HEAD_INDEX = Math.floor(BAR_COUNT / 2);
+
+const idleBar = () => 0.05 + Math.random() ** 1.5 * 0.45;
+const createIdleLevels = () => Array.from({ length: BAR_COUNT }, idleBar);
 
 const MIME_CANDIDATES = [
   "audio/webm;codecs=opus",
@@ -34,7 +38,9 @@ const toErrorCode = (e) => {
 export function useAudioRecorder() {
   const [status, setStatus] = useState("idle");
   const [error, setError] = useState(null);
-  const [levels, setLevels] = useState(() => Array(BAR_COUNT).fill(0));
+  const [levels, setLevels] = useState(createIdleLevels);
+  const [head, setHead] = useState(-1);
+  const headRef = useRef(-1);
 
   const streamRef = useRef(null);
   const ctxRef = useRef(null);
@@ -42,12 +48,12 @@ export function useAudioRecorder() {
   const recorderRef = useRef(null);
   const chunksRef = useRef([]);
   const rafRef = useRef(0);
-  const volumeRef = useRef(0);
+  const peakRef = useRef(0);
 
   const teardown = useCallback(() => {
     cancelAnimationFrame(rafRef.current);
     rafRef.current = 0;
-    volumeRef.current = 0;
+    peakRef.current = 0;
 
     streamRef.current?.getTracks().forEach((track) => track.stop());
     streamRef.current = null;
@@ -63,10 +69,29 @@ export function useAudioRecorder() {
   useEffect(() => {
     if (status !== "recording") return;
     const id = setInterval(() => {
-      setLevels((prev) => [
-        ...prev.slice(1),
-        volumeRef.current * (0.4 + Math.random() * 0.6),
-      ]);
+      const peak = peakRef.current;
+      peakRef.current = 0;
+
+      const boosted = Math.min(1, peak * 2.2) ** 1.6;
+      const value =
+        0.04 + Math.random() * 0.03 + boosted * (0.5 + Math.random() * 0.5);
+
+      if (headRef.current < HEAD_INDEX) {
+        headRef.current += 1;
+        const at = headRef.current;
+        setHead(at);
+        setLevels((prev) => {
+          const copy = [...prev];
+          copy[at] = value;
+          return copy;
+        });
+      } else {
+        setLevels((prev) => {
+          const next = [...prev.slice(1), idleBar()];
+          next[HEAD_INDEX] = value;
+          return next;
+        });
+      }
     }, 80);
     return () => clearInterval(id);
   }, [status]);
@@ -78,10 +103,12 @@ export function useAudioRecorder() {
     const data = new Uint8Array(analyser.fftSize);
     const tick = () => {
       analyser.getByteTimeDomainData(data);
-      let sum = 0;
-      for (const v of data) sum += ((v - 128) / 128) ** 2;
-      const rms = Math.sqrt(sum / data.length);
-      volumeRef.current = Math.min(1, rms * 8);
+      let peak = 0;
+      for (const v of data) {
+        const amp = Math.abs(v - 128) / 128;
+        if ( amp > peak ) peak = amp;
+      }
+      if (peak > peakRef.current) peakRef.current = peak;
       rafRef.current = requestAnimationFrame(tick);
     };
     tick();
@@ -148,8 +175,7 @@ export function useAudioRecorder() {
     recorder.pause();
     cancelAnimationFrame(rafRef.current);
     rafRef.current = 0;
-    volumeRef.current = 0;
-    setLevels(Array(BAR_COUNT).fill(0));
+    peakRef.current = 0;
     setStatus("paused");
   }, []);
 
@@ -164,7 +190,8 @@ export function useAudioRecorder() {
 
   const stop = useCallback(() => {
     const recorder = recorderRef.current;
-    if (!recorder || recorder.state === "inactive") return Promise.resolve(null);
+    if (!recorder || recorder.state === "inactive")
+      return Promise.resolve(null);
 
     const mimeType = recorder.mimeType || "audio/webm";
 
@@ -173,7 +200,9 @@ export function useAudioRecorder() {
         const blob = new Blob(chunksRef.current, { type: mimeType });
         chunksRef.current = [];
         teardown();
-        setLevels(Array(BAR_COUNT).fill(0));
+        setLevels(createIdleLevels());
+        setHead(-1);
+        headRef.current = -1;
         setStatus("stopped");
         resolve({ blob, mimeType });
       };
@@ -184,7 +213,9 @@ export function useAudioRecorder() {
   const reset = useCallback(() => {
     teardown();
     chunksRef.current = [];
-    setLevels(Array(BAR_COUNT).fill(0));
+    setLevels(createIdleLevels());
+    setHead(-1);
+    headRef.current = -1;
     setError(null);
     setStatus("idle");
   }, [teardown]);
@@ -193,6 +224,7 @@ export function useAudioRecorder() {
     status,
     error,
     levels,
+    head,
     isRecording: status === "recording",
     start,
     pause,
