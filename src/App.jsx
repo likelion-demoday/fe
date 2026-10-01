@@ -19,6 +19,7 @@ import Nickname from "./pages/onboarding/Nickname";
 import Consent from "./pages/onboarding/Consent";
 import VoiceRegister from "./pages/onboarding/VoiceRegister";
 import KakaoCallbackPage from "./pages/auth/KakaoCallbackPage";
+import GoogleCallbackPage from "./pages/auth/GoogleCallbackPage";
 //analysis
 import AnalysisStart from "./pages/analysis/AnalysisStart";
 import AnalysisPartner from "./pages/analysis/AnalysisPartner";
@@ -52,6 +53,7 @@ function App() {
       <Route path="/mypage/support" element={<Support />} />
         
       <Route path="/oauth/kakao/callback" element={<KakaoCallbackPage />} />
+      <Route path="/oauth/google/callback" element={<GoogleCallbackPage />} />
       <Route path="/auth/login" element={<Login />} />
       <Route path="/auth/signup" element={<SignUp />} />
         
