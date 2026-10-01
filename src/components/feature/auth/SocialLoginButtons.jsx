@@ -1,13 +1,17 @@
 import GoogleIcon from "../../common/icons/GoogleIcon";
 import kakaoIcon from "../../../assets/icons/kakao.svg";
 
-const REDIRECT_URI = import.meta.env.VITE_KAKAO_REDIRECT_URI;
+const KAKAO_REDIRECT_URI = import.meta.env.VITE_KAKAO_REDIRECT_URI;
 const REST_API_KEY = import.meta.env.VITE_KAKAO_API_KEY;
-const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
+const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${KAKAO_REDIRECT_URI}&response_type=code`;
 
-const SocialLoginButtons = ({onGoogleClick}) => {
+const SocialLoginButtons = () => {
   const onKakaoClick = () => {
     window.location.href = KAKAO_AUTH_URL;
+  };
+
+  const onGoogleClick = () => {
+    // TODO: 구글 인증 URL 생성 및 이동
   };
 
   return (
