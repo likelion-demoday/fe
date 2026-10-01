@@ -1,4 +1,7 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+import { login } from "../../api/auth";
 
 import EmailInput from "../../components/feature/auth/EmailInput";
 import PasswordInput from "../../components/feature/auth/PasswordInput";
@@ -8,9 +11,20 @@ import Button from "../../components/common/Button";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
-  const handleLogin = () => {
-    console.log("로그인 버튼 클릭");
+  const handleLogin = async () => {
+    try {
+      const result = await login({ email, password });
+
+      localStorage.setItem("accessToken", result.accessToken);
+      localStorage.setItem("refreshToken", result.refreshToken);
+      localStorage.setItem("isLogin", true);
+
+      navigate("/home");
+    } catch (error) {
+      console.error("로그인 실패:", error);
+    }
   };
 
   return (
@@ -37,7 +51,7 @@ const Login = () => {
             <Button
               text="로그인"
               onClick={handleLogin}
-              className="flex h-[49px] w-full max-w-[358px] items-center justify-center rounded-[12px] bg-[#454545] px-[26px] py-[14px] font-['Pretendard',sans-serif] text-[18px] font-semibold tracking-[-0.36px] text-white"
+              className="flex h-[49px] w-full max-w-[358px] items-center justify-center rounded-[12px] bg-[#262626] px-[26px] py-[14px] font-['Pretendard',sans-serif] text-[18px] font-semibold tracking-[-0.36px] text-white"
             />
             <div className="flex items-center justify-center gap-[16px]">
               <button
@@ -50,6 +64,7 @@ const Login = () => {
               <button
                 type="button"
                 className="font-['SUITE',sans-serif] text-[13px] font-medium tracking-[0.39px] text-[#595959]"
+                onClick={() => navigate("/auth/signup")}
               >
                 회원가입
               </button>

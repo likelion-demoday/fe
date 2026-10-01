@@ -1,2 +1,202 @@
 @import "tailwindcss";
 
+
+/* 온보딩 목소리 등록 - 녹음 중 파형 (소리 인식 시 변화) */
+@keyframes voice-wave {
+  0%,
+  100% {
+    transform: scaleY(0.35);
+  }
+  50% {
+    transform: scaleY(1);
+
+  }
+}
+/* 대화 분석 로딩 - 캐릭터 둥실 + 그림자 */
+@keyframes analysis-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-14px);
+  }
+}
+
+@keyframes analysis-shadow {
+  0%,
+  100% {
+    transform: scaleX(1);
+    opacity: 0.35;
+  }
+  50% {
+    transform: scaleX(0.75);
+    opacity: 0.2;
+  }
+}
+
+/* 대화 분석 로딩 - "..." 점 깜빡임 */
+@keyframes analysis-dot {
+  0%,
+  20% {
+    opacity: 0;
+  }
+  40%,
+  100% {
+    opacity: 1;
+  }
+}
+
+@layer base {
+  body {
+    font-family: "SUITE", sans-serif;
+    font-weight: 500;
+  }
+}
+
+@layer components {
+  /* 마이페이지 메뉴의 눌림 배경: 좌우 페이지 여백까지 확장 */
+  .mypage-press-row {
+    position: relative;
+    isolation: isolate;
+  }
+
+  .mypage-press-row::before {
+    content: "";
+    position: absolute;
+    inset: 0 -24px;
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  .mypage-press-padded::before {
+    top: -12px;
+    bottom: -12px;
+  }
+
+  .mypage-press-row:active::before {
+    background-color: #eeeeee;
+  }
+
+  /* 원본 SVG의 흰 배경 위에도 눌림 색상이 보이도록 적용 */
+  .mypage-back-press button::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    pointer-events: none;
+    mix-blend-mode: multiply;
+  }
+
+  .mypage-back-press button:active::after {
+    background-color: #eeeeee;
+  }
+
+  /* 일반 화면: SUITE */
+  .text-display {
+    font-size: 30px;
+    font-weight: 700;
+    line-height: normal;
+    letter-spacing: 0;
+  }
+
+  .text-heading {
+    font-size: 24px;
+    font-weight: 700;
+    line-height: normal;
+    letter-spacing: 0;
+  }
+
+  .text-title-semibold {
+    font-size: 18px;
+    font-weight: 600;
+    line-height: normal;
+    letter-spacing: 0.04em;
+  }
+
+  .text-title-medium {
+    font-size: 18px;
+    font-weight: 500;
+    line-height: normal;
+    letter-spacing: 0.03em;
+  }
+
+  .text-label {
+    font-size: 16px;
+    font-weight: 600;
+    line-height: normal;
+    letter-spacing: 0;
+  }
+
+  .text-label-small {
+    font-size: 12px;
+    font-weight: 500;
+    line-height: normal;
+    letter-spacing: 0;
+  }
+
+  .text-body {
+    font-size: 16px;
+    font-weight: 500;
+    line-height: normal;
+    letter-spacing: 0.02em;
+  }
+
+  /* 피그마의 실제 적용값인 Medium(500) 기준 */
+  .text-caption {
+    font-size: 13px;
+    font-weight: 500;
+    line-height: normal;
+    letter-spacing: 0.03em;
+  }
+
+  /* 분석 리포트: SUIT */
+  .text-report-display,
+  .text-report-heading,
+  .text-report-title,
+  .text-report-body,
+  .text-report-body-small,
+  .text-report-label,
+  .text-report-caption {
+    font-family: "SUIT", sans-serif;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+  }
+
+  .text-report-display {
+    font-size: 30px;
+    line-height: 40px;
+  }
+
+  .text-report-heading {
+    font-size: 24px;
+    line-height: 34px;
+  }
+
+  .text-report-title {
+    font-size: 18px;
+    line-height: 28px;
+  }
+
+  /* 피그마의 실제 적용값인 -2% 기준 */
+  .text-report-body {
+    font-size: 16px;
+    line-height: 26px;
+    letter-spacing: -0.02em;
+  }
+
+  .text-report-body-small {
+    font-size: 14px;
+    line-height: 22px;
+  }
+
+  .text-report-label {
+    font-size: 13px;
+    line-height: 20px;
+  }
+
+  .text-report-caption {
+    font-size: 12px;
+    line-height: 18px;
+  }
+}

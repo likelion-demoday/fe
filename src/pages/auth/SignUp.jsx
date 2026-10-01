@@ -1,4 +1,7 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+import useAuthStore from "../../store/authStore";
 
 import EmailInput from "../../components/feature/auth/EmailInput";
 import PasswordInput from "../../components/feature/auth/PasswordInput";
@@ -9,13 +12,19 @@ import Button from "../../components/common/Button";
 const SignUp = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const isPasswordValid = password.length > 0 && password.length >= 8;
+
+  const navigate = useNavigate();
+
+  const setSignupData = useAuthStore((state) => state.setAuthData);
 
   const handleBack = () => {
-    console.log("뒤로가기 버튼 클릭");
+    navigate(-1);
   };
 
   const handleSignUp = () => {
-    console.log("회원가입 버튼 클릭");
+    setSignupData({ email, password });
+    navigate("/onboarding/nickname");
   };
 
   return (
@@ -33,7 +42,10 @@ const SignUp = () => {
               onChange={(e) => setEmail(e.target.value)}
               onClear={() => setEmail("")}
             />
-            <PasswordInput value={password} onChange={(e) => setPassword(e.target.value)} />
+            <PasswordInput
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
           </div>
         </div>
 
@@ -41,7 +53,8 @@ const SignUp = () => {
           <Button
             text="회원가입"
             onClick={handleSignUp}
-            className="flex h-[49px] w-full max-w-[358px] items-center justify-center rounded-[12px] bg-[#454545] px-[26px] py-[14px] font-['Pretendard',sans-serif] text-[18px] font-semibold tracking-[-0.36px] text-white"
+            disabled={!isPasswordValid}
+            className="flex h-[49px] w-full max-w-[358px] items-center justify-center rounded-[12px] bg-[#262626] px-[26px] py-[14px] font-['Pretendard',sans-serif] text-[18px] font-semibold tracking-[-0.36px] text-white disabled:bg-[#d9d9d9]"
           />
           <SocialLoginButtons />
         </div>
