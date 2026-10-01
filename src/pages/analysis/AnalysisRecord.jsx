@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
-import { useMicVolume } from "../../hooks/useMicVolume.js";
+import { useAudioRecorder } from "../../hooks/useAudioRecorder.js";
 
 import AppHeader from "../../components/common/AppHeader";
 import Button from "../../components/common/Button";
@@ -12,6 +12,14 @@ import microphoneIcon from "../../assets/icons/microphone.svg";
 
 const MAX_SECONDS = 60 * 60;
 
+const ERROR_MESSAGES = {
+  denied: "마이크 권한을 허용해 주세요.",
+  notfound: "사용할 수 있는 마이크를 찾지 못했어요.",
+  busy: "다른 앱이 마이크를 사용하고 있어요.",
+  unsupported: "이 브라우저에서는 녹음을 지원하지 않아요.",
+  unknown: "녹음을 시작할 수 없어요. 잠시 후 다시 시도해 주세요.",
+};
+
 const formatTime = (totalSeconds) => {
   const minutes = String(Math.floor(totalSeconds / 60)).padStart(2, "0");
   const seconds = String(totalSeconds % 60).padStart(2, "0");
@@ -21,13 +29,20 @@ const formatTime = (totalSeconds) => {
 const AnalysisRecord = () => {
   const navigate = useNavigate();
   const { state } = useLocation();
-  const [isRecording, setIsRecording] = useState(false);
-  const [isEnded, setIsEnded] = useState(false);
+
   const [elapsed, setElapsed] = useState(0);
   const [sheet, setSheet] = useState(null);
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadError, setUploadError] = useState(null);
 
-  const isRunning = isRecording && !isEnded && elapsed < MAX_SECONDS;
-  const { levels, error } = useMicVolume(isRecording);
+  const recordingRef = useRef(null);
+  const endingRef = useRef(false);
+
+  const { status, error, levels, start, pause, resume, stop } =
+    useAudioRecorder();
+
+  const isRunning = status === "recording";
+  const isEnded = status === "stopped";
 
   useEffect(() => {
     if (!isRunning) return;
@@ -37,30 +52,47 @@ const AnalysisRecord = () => {
     return () => clearInterval(timer);
   }, [isRunning]);
 
+  const endRecording = async () => {
+    if (endingRef.current) return;
+    endingRef.current = true;
+
+    const result = await stop();
+    if (result) recordingRef.current = result;
+    setSheet("save");
+  };
+
+  useEffect(() => {
+    if (elapsed < MAX_SECONDS) return;
+    endRecording();
+  }, [elapsed]);
+
+  const handleMicClick = () => {
+    if (status === "idle") return start();
+    if (status === "recording") return pause();
+    if (status === "paused") return resume();
+  };
+
   const handleFinish = () => {
     setSheet(isEnded ? "save" : "confirm");
   };
 
-  const handleConfirmEnd = () => {
-    setIsRecording(false);
-    setIsEnded(true);
-    setSheet("save");
-  };
-
   const handleSave = (shouldSave) => {
-    // TODO: 녹음 파일 업로드 및 분석 요청 API 연동
-    console.log("녹음 저장 여부", {
+    const recording = recordingRef.current;
+
+    console.log("녹음 결과", {
       partner: state?.partner,
       elapsed,
       shouldSave,
+      size: recording?.blob.size,
+      mimeType: recording?.mimeType,
+      url: recording ? URL.createObjectURL(recording.blob) : null,
     });
+
     navigate("/analysis/type", {
       replace: true,
       state: { partner: state?.partner, elapsed, shouldSave },
     });
   };
-
-  if (error === "denied") return <p>마이크 권한을 허용해 주세요.</p>;
 
   return (
     <main className="relative mx-auto flex h-[844px] w-[390px] flex-col justify-between overflow-hidden bg-white">
@@ -87,31 +119,39 @@ const AnalysisRecord = () => {
             </div>
           </div>
 
-          <button
-            type="button"
-            onClick={() => setIsRecording((prev) => !prev)}
-            disabled={isEnded}
-            aria-label={isRunning ? "녹음 일시정지" : "녹음 시작"}
-            aria-pressed={isRunning}
-            className={`flex size-[90px] items-center justify-center overflow-clip rounded-[20px] ${
-              isRunning
-                ? "bg-[#ffb0a0] shadow-[0px_0px_30px_0px_rgba(255,118,91,0.3)]"
-                : "bg-white shadow-[0px_4px_11.7px_0px_rgba(0,0,0,0.05),0px_0px_47.7px_0px_rgba(0,0,0,0.1)]"
-            }`}
-          >
-            {isRunning ? (
-              <span className="relative size-[40px] overflow-clip">
-                <span className="absolute top-[5px] left-[7px] h-[30px] w-[8px] rounded-[1px] bg-white" />
-                <span className="absolute top-[5px] left-[24px] h-[30px] w-[8px] rounded-[1px] bg-white" />
-              </span>
-            ) : (
-              <img
-                src={microphoneIcon}
-                alt=""
-                className="block size-[40px] max-w-none"
-              />
+          <div className="flex flex-col items-center gap-[16px]">
+            <button
+              type="button"
+              onClick={handleMicClick}
+              disabled={isEnded}
+              aria-label={isRunning ? "녹음 일시정지" : "녹음 시작"}
+              aria-pressed={isRunning}
+              className={`flex size-[90px] items-center justify-center overflow-clip rounded-[20px] ${
+                isRunning
+                  ? "bg-[#ffb0a0] shadow-[0px_0px_30px_0px_rgba(255,118,91,0.3)]"
+                  : "bg-white shadow-[0px_4px_11.7px_0px_rgba(0,0,0,0.05),0px_0px_47.7px_0px_rgba(0,0,0,0.1)]"
+              }`}
+            >
+              {isRunning ? (
+                <span className="relative size-[40px] overflow-clip">
+                  <span className="absolute top-[5px] left-[7px] h-[30px] w-[8px] rounded-[1px] bg-white" />
+                  <span className="absolute top-[5px] left-[24px] h-[30px] w-[8px] rounded-[1px] bg-white" />
+                </span>
+              ) : (
+                <img
+                  src={microphoneIcon}
+                  alt=""
+                  className="block size-[40px] max-w-none"
+                />
+              )}
+            </button>
+
+            {(error || uploadError) && (
+              <p className="text-label text-center text-[#ff765b]">
+                {uploadError ?? ERROR_MESSAGES[error]}
+              </p>
             )}
-          </button>
+          </div>
         </div>
       </div>
 
@@ -131,7 +171,7 @@ const AnalysisRecord = () => {
           description="녹음을 종료하면 다시 이어서 녹음할 수 없어요"
           onClose={() => setSheet(null)}
         >
-          <SheetButton text="녹음 끝내기" onClick={handleConfirmEnd} />
+          <SheetButton text="녹음 끝내기" onClick={endRecording} />
         </RecordEndSheet>
       )}
       {sheet === "save" && (
@@ -139,10 +179,18 @@ const AnalysisRecord = () => {
           elapsed={elapsed}
           title="음성녹음을 저장할까요?"
           description="저장하지 않으면 녹음은 보고서에 사용된 후 삭제 돼요."
-          onClose={() => setSheet(null)}
+          onClose={isUploading ? undefined : () => setSheet(null)}
         >
-          <SheetButton text="저장하지 않기" onClick={() => handleSave(false)} />
-          <SheetButton text="저장하기" onClick={() => handleSave(true)} />
+          <SheetButton
+            text="저장하지 않기"
+            onClick={() => handleSave(false)}
+            disabled={isUploading}
+          />
+          <SheetButton
+            text="저장하기"
+            onClick={() => handleSave(true)}
+            disabled={isUploading}
+          />
         </RecordEndSheet>
       )}
     </main>

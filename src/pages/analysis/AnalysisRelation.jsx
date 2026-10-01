@@ -61,7 +61,6 @@ const AnalysisRelation = () => {
     });
   }, [navigate, state, selected]);
 
-  // 구매완료 모달을 잠깐 보여준 뒤 자동으로 분석 중 화면으로 이동 (X를 누르면 바로 이동)
   useEffect(() => {
     if (sheet !== "complete") return;
     const timer = setTimeout(goToLoading, COMPLETE_SHEET_MS);
