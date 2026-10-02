@@ -59,6 +59,10 @@ const AnalysisRecord = () => {
     setSheet("save");
   };
 
+  const replayRecording = () => {
+    
+  }
+
   useEffect(() => {
     if (elapsed < MAX_SECONDS) return;
     endRecording();
@@ -172,6 +176,7 @@ const AnalysisRecord = () => {
           description="녹음을 종료하면 다시 이어서 녹음할 수 없어요"
           onClose={() => setSheet(null)}
         >
+          <SheetButton text="녹음 들어보기" onClick={replayRecording} />
           <SheetButton text="녹음 끝내기" onClick={endRecording} />
         </RecordEndSheet>
       )}
