@@ -188,6 +188,23 @@ export function useAudioRecorder() {
     setStatus("recording");
   }, [runMeter]);
 
+  const snapShot = useCallback(() => {
+    const recorder = recorderRef.current;
+    if (!recorder || recorder.state === "inactive") return null;
+    Promise.resolve(null);
+
+    const mineType = recorder.mineType || "audio/webm";
+
+    return new Promise((resolve) => {
+      const handle = () => {
+        recorder.removeEventListener("dataavailable", handle);
+        resolve({blob: new Blob(chunksRef.current, { type: mineType }), mineType});
+      };
+      recorder.addEventListener("dataavailable", handle);
+      recorder.requestData();
+    });
+  }, []);
+
   const stop = useCallback(() => {
     const recorder = recorderRef.current;
     if (!recorder || recorder.state === "inactive")
@@ -231,5 +248,6 @@ export function useAudioRecorder() {
     resume,
     stop,
     reset,
+    snapShot,
   };
 }
