@@ -14,7 +14,7 @@ const MAX_SECONDS = 60 * 60;
 
 const WAVE_HEIGHT = 183;
 const WAVE_MIN_HEIGHT = 4;
-const WAVE_GAIN = 1.0;
+const WAVE_GAIN = 1.08;
 
 const ERROR_MESSAGES = {
   denied: "마이크 권한을 허용해 주세요.",
@@ -36,11 +36,12 @@ const AnalysisRecord = () => {
 
   const [elapsed, setElapsed] = useState(0);
   const [sheet, setSheet] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState(null);
 
   const recordingRef = useRef(null);
   const endingRef = useRef(false);
 
-  const { status, error, levels, head, start, pause, resume, stop } =
+  const { status, error, levels, head, start, pause, resume, stop, snapShot } =
     useAudioRecorder();
 
   const isRunning = status === "recording";
@@ -63,15 +64,38 @@ const AnalysisRecord = () => {
     setSheet("save");
   };
 
-  const replayRecording = () => {
-    console.log("녹음 재생");
-  }
+  const replayRecording = async () => {
+    pause();
+    const result = await snapShot();
+    if (!result) return;
+
+    setPreviewUrl((prev) => {
+      if (prev) URL.revokeObjectURL(prev); // 전에거 메모리 해제
+      return URL.createObjectURL(result.blob);
+    });
+  };
+
+  const closeConfirmSheet = () => {
+    setSheet(null);
+
+    setPreviewUrl((prev) => {
+      if (prev) URL.revokeObjectURL(prev);
+      return null;
+    });
+  };
 
   useEffect(() => {
     if (elapsed < MAX_SECONDS) return;
     endRecording();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [elapsed]);
+
+  useEffect(() => {
+    //언마운트 시 URL 해제
+    return () => {
+      if (previewUrl) URL.revokeObjectURL(previewUrl);
+    };
+  }, [previewUrl]);
 
   const handleMicClick = () => {
     if (status === "idle") return start();
@@ -181,7 +205,11 @@ const AnalysisRecord = () => {
           elapsed={elapsed}
           title="녹음을 끝내시겠어요?"
           description="녹음을 종료하면 다시 이어서 녹음할 수 없어요"
-          onClose={() => setSheet(null)}
+          preview={
+            previewUrl && <audio key={previewUrl} src={previewUrl} autoPlay />
+          }
+
+          onClose={closeConfirmSheet}
         >
           <SheetButton text="녹음 들어보기" onClick={replayRecording} />
           <SheetButton text="녹음 끝내기" onClick={endRecording} />
@@ -194,14 +222,7 @@ const AnalysisRecord = () => {
           description="저장하지 않으면 녹음은 보고서에 사용된 후 삭제 돼요."
           onClose={() => setSheet(null)}
         >
-          <SheetButton
-            text="저장하지 않기"
-            onClick={() => handleSave(false)}
-          />
-          <SheetButton
-            text="저장하기"
-            onClick={() => handleSave(true)}
-          />
+          <SheetButton text="다음" onClick={() => handleSave(true)} />
         </RecordEndSheet>
       )}
     </main>
