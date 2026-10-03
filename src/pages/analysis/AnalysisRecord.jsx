@@ -104,6 +104,7 @@ const AnalysisRecord = () => {
   };
 
   const handleFinish = () => {
+    if (isRunning) pause();
     setSheet(isEnded ? "save" : "confirm");
   };
 
