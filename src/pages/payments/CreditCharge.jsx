@@ -5,7 +5,6 @@ import Button from "../../components/common/Button";
 import CreditBalance from "../../components/feature/payments/CreditBalance";
 import CreditProductCard from "../../components/feature/payments/CreditProductCard";
 import chevronLeft from "../../assets/icons/chevron-left.svg";
-import statusBar from "../../assets/icons/profile-status-bar.svg";
 
 // 메뉴들
 const CREDIT_PRODUCTS = [
@@ -21,9 +20,6 @@ const CreditCharge = ({ balance = 12480, onPurchase }) => {
 
   return (
     <main className="relative mx-auto flex min-h-[844px] w-full max-w-[390px] flex-col bg-white">
-      <div className="h-[49px] shrink-0 overflow-hidden">
-        <img src={statusBar} alt="" className="block max-w-none" />
-      </div>
       <div className="flex flex-col gap-[20px] px-[24px] pt-[16px]">
         <AppHeader title="크레딧 충전" />
         <Button
