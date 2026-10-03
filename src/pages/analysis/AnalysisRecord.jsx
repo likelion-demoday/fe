@@ -12,6 +12,10 @@ import microphoneIcon from "../../assets/icons/microphone.svg";
 
 const MAX_SECONDS = 60 * 60;
 
+const WAVE_HEIGHT = 183;
+const WAVE_MIN_HEIGHT = 4;
+const WAVE_GAIN = 1.0;
+
 const ERROR_MESSAGES = {
   denied: "마이크 권한을 허용해 주세요.",
   notfound: "사용할 수 있는 마이크를 찾지 못했어요.",
@@ -109,7 +113,7 @@ const AnalysisRecord = () => {
             <p className="text-heading w-full text-center text-black">
               {formatTime(elapsed)} / {formatTime(MAX_SECONDS)}
             </p>
-            <div className="flex h-[100px] w-full items-center gap-[3px]">
+            <div className="flex h-[183px] w-full items-center gap-[3px]">
               {levels.map((level, index) => (
                 <span
                   key={index}
@@ -117,7 +121,10 @@ const AnalysisRecord = () => {
                     index <= head ? "bg-[#ff765b]" : "bg-[#d9d9d9]"
                   }`}
                   style={{
-                    height: `${Math.max(4, Math.min(100, level * 120))}px`,
+                    height: `${Math.max(
+                      WAVE_MIN_HEIGHT,
+                      Math.min(WAVE_HEIGHT, level * WAVE_HEIGHT * WAVE_GAIN),
+                    )}px`,
                   }}
                 />
               ))}
