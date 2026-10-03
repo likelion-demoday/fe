@@ -127,9 +127,9 @@ const AnalysisRecord = () => {
 
   return (
     <main className="relative mx-auto flex h-[844px] w-[390px] flex-col justify-between overflow-hidden bg-white">
-      <div className="flex w-full flex-col items-center gap-[136px]">
+      <div className="flex w-full flex-col items-center gap-[96px]">
         <div className="w-full px-[24px] py-[16px]">
-          <AppHeader title="대화 분석" />
+          <AppHeader title="대화 분석" onBack={() => navigate(-1)} />
         </div>
 
         <div className="flex w-[343.5px] flex-col items-center gap-[93px]">

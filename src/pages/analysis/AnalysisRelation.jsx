@@ -3,8 +3,8 @@ import { Navigate, useLocation, useNavigate } from "react-router-dom";
 
 import AppHeader from "../../components/common/AppHeader";
 import BottomSheet from "../../components/common/BottomSheet";
+import TextBackButton from "../../components/common/TextBackButton";
 import PurchaseSheet from "../../components/feature/analysis/PurchaseSheet";
-import chevronLeftIcon from "../../assets/icons/chevron-left.svg";
 import relationMainIcon from "../../assets/icons/relation-main-m.svg";
 import relationLoverIcon from "../../assets/icons/relation-lover-m.svg";
 import relationFamilyIcon from "../../assets/icons/relation-family-m.svg";
@@ -104,14 +104,7 @@ const AnalysisRelation = () => {
         </div>
       </section>
 
-      <button
-        type="button"
-        onClick={() => navigate(-1)}
-        className="flex items-center justify-center gap-[8px] rounded-[6px]"
-      >
-        <img src={chevronLeftIcon} alt="" className="block h-[13px] w-[8px] max-w-none shrink-0" />
-        <span className="text-body whitespace-nowrap text-[#595959]">뒤로가기</span>
-      </button>
+      <TextBackButton onClick={() => navigate(-1)} />
 
       {sheet === "purchase" && (
         <PurchaseSheet
