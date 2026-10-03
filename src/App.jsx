@@ -7,6 +7,7 @@ import MyPage from "./pages/mypage/MyPage";
 import Profile from "./pages/mypage/Profile";
 import Notifications from "./pages/mypage/Notifications";
 import Payments from "./pages/mypage/Payments";
+import CreditCharge from "./pages/payments/CreditCharge";
 import PurchaseHistoryPage from "./pages/mypage/PurchaseHistoryPage";
 import Recordings from "./pages/mypage/Recordings";
 import SavedConversations from "./pages/mypage/SavedConversations";
@@ -53,6 +54,7 @@ function App() {
         />
         <Route path="/mypage/account" element={<Account />} />
         <Route path="/mypage/support" element={<Support />} />
+        <Route path="/payments" element={<CreditCharge />} />
       </Route>
 
       <Route path="/oauth/kakao/callback" element={<KakaoCallbackPage />} />
