@@ -113,6 +113,7 @@ const AnalysisRelation = () => {
           price={price}
           onClose={() => setSheet(null)}
           onPurchase={handlePurchase}
+          onCharge={() => navigate("/mypage/payments")}
         />
       )}
       {sheet === "complete" && <BottomSheet title="구매완료!" onClose={goToLoading} />}
