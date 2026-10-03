@@ -11,7 +11,7 @@ export const googleLogin = async (code) => {
 export const kakaoLogin = async (code) => {
   return api.post("/api/v1/auth/oauth/kakao", {
     code,
-    redirectUri: "http://localhost:5173/oauth/kakao/callback",
+    redirectUri: import.meta.env.VITE_KAKAO_REDIRECT_URI,
   });
 };
 
