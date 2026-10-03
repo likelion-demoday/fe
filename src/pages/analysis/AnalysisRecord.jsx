@@ -60,7 +60,7 @@ const AnalysisRecord = () => {
   };
 
   const replayRecording = () => {
-    
+    console.log("녹음 재생");
   }
 
   useEffect(() => {

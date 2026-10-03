@@ -39,7 +39,7 @@ const TextField = ({
         </div>
       </div>
       {helperText && (
-        <p className={`${error ? 'text-red-500' : 'text-gray-500'} w-full font-['SUITE',sans-serif] text-[12px] font-medium text-[#bfbfbf]`}>
+        <p className={`${error ? 'text-red-500' : 'text-gray-500'} w-full font-['SUITE',sans-serif] text-[12px] font-medium`}>
           {helperText}
         </p>
       )}
