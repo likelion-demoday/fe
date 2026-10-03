@@ -1,7 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import profileIcon from "../../assets/icons/profile.svg";
+import TextBackButton from "./TextBackButton";
 
-const AppHeader = ({ title }) => {
+const AppHeader = ({ title, onBack }) => {
   const navigate = useNavigate();
 
   return (
@@ -22,6 +23,7 @@ const AppHeader = ({ title }) => {
         </button>
       </div>
       {title && <h1 className="text-display text-black">{title}</h1>}
+      {onBack && <TextBackButton onClick={onBack} />}
     </header>
   );
 };

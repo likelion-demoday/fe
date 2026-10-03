@@ -11,6 +11,9 @@ import clipRight2 from "../../assets/icons/voice-clip-right-2.svg";
 // TODO: 사용자 닉네임 API 연동 전 임시 값
 const USER_NAME = "OOO";
 
+// 상대방 호칭 최대 글자 수
+const PARTNER_NAME_MAX = 7;
+
 // 보고서에서 상대방을 부를 이름을 묻는 문구
 const PARTNER_LABELS = {
   friend: "친구를",
@@ -120,7 +123,7 @@ const AnalysisSpeaker = () => {
   };
 
   return (
-    <main className="relative mx-auto flex h-[844px] w-[390px] flex-col gap-[30px] overflow-y-auto bg-white px-[24px] py-[16px]">
+    <main className="relative mx-auto flex h-[844px] w-[390px] flex-col gap-[30px] overflow-y-auto no-scrollbar bg-white px-[24px] py-[16px]">
       <AppHeader title="대화 분석" />
 
       <section className="flex w-full flex-col gap-[36px]">
@@ -151,18 +154,29 @@ const AnalysisSpeaker = () => {
         <BottomSheet
           title={
             isEditing ? (
-              <input
-                ref={inputRef}
-                value={partnerName}
-                onChange={(e) => setPartnerName(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" && partnerName.trim()) handleSubmit();
-                }}
-                placeholder="입력하기"
-                maxLength={10}
-                aria-label="상대방 호칭"
-                className="text-display w-full bg-transparent text-center text-[#262626] outline-none placeholder:text-[#d9d9d9]"
-              />
+              <div className="relative w-full">
+                <input
+                  ref={inputRef}
+                  value={partnerName}
+                  onChange={(e) => setPartnerName(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" && partnerName.trim()) handleSubmit();
+                  }}
+                  placeholder="입력하기"
+                  maxLength={PARTNER_NAME_MAX}
+                  aria-label="상대방 호칭"
+                  aria-describedby="partner-name-limit"
+                  className="text-display w-full bg-transparent text-center text-[#262626] outline-none placeholder:text-[#d9d9d9]"
+                />
+                {partnerName.length >= PARTNER_NAME_MAX && (
+                  <p
+                    id="partner-name-limit"
+                    className="text-label-small absolute top-[-19px] left-[195px] whitespace-nowrap text-[#ff765b]"
+                  >
+                    최대 {PARTNER_NAME_MAX}자까지 가능해요
+                  </p>
+                )}
+              </div>
             ) : (
               <div className="h-[37px]" />
             )
