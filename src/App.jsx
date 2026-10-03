@@ -1,4 +1,5 @@
 import { Routes, Route } from "react-router-dom";
+import ProtectedRoute from "./components/common/ProtectedRoute";
 
 import Splash from "./pages/Splash";
 import Home from "./pages/Home";
@@ -19,6 +20,7 @@ import Nickname from "./pages/onboarding/Nickname";
 import Consent from "./pages/onboarding/Consent";
 import VoiceRegister from "./pages/onboarding/VoiceRegister";
 import KakaoCallbackPage from "./pages/auth/KakaoCallbackPage";
+import GoogleCallbackPage from "./pages/auth/GoogleCallbackPage";
 //analysis
 import AnalysisStart from "./pages/analysis/AnalysisStart";
 import AnalysisPartner from "./pages/analysis/AnalysisPartner";
@@ -33,28 +35,31 @@ function App() {
     <Routes>
       <Route path="/" element={<Splash />} />
       <Route path="/home" element={<Home />} />
-      
-      <Route path="/mypage" element={<MyPage />} />
-      <Route path="/mypage/profile" element={<Profile />} />
-      
-      <Route path="/mypage/notifications" element={<Notifications />} />
-      <Route path="/mypage/payments" element={<Payments />} />
-      <Route
-        path="/mypage/payments/history"
-        element={<PurchaseHistoryPage />}
-      />
-      <Route path="/mypage/recordings" element={<Recordings />} />
-      <Route
-        path="/mypage/recordings/conversations"
-        element={<SavedConversations />}
-      />
-      <Route path="/mypage/account" element={<Account />} />
-      <Route path="/mypage/support" element={<Support />} />
-        
+
+      <Route element={<ProtectedRoute />}>
+        <Route path="/mypage" element={<MyPage />} />
+        <Route path="/mypage/profile" element={<Profile />} />
+
+        <Route path="/mypage/notifications" element={<Notifications />} />
+        <Route path="/mypage/payments" element={<Payments />} />
+        <Route
+          path="/mypage/payments/history"
+          element={<PurchaseHistoryPage />}
+        />
+        <Route path="/mypage/recordings" element={<Recordings />} />
+        <Route
+          path="/mypage/recordings/conversations"
+          element={<SavedConversations />}
+        />
+        <Route path="/mypage/account" element={<Account />} />
+        <Route path="/mypage/support" element={<Support />} />
+      </Route>
+
       <Route path="/oauth/kakao/callback" element={<KakaoCallbackPage />} />
+      <Route path="/oauth/google/callback" element={<GoogleCallbackPage />} />
       <Route path="/auth/login" element={<Login />} />
       <Route path="/auth/signup" element={<SignUp />} />
-        
+
       <Route path="/onboarding/nickname" element={<Nickname />} />
       <Route path="/onboarding/consent" element={<Consent />} />
       <Route path="/onboarding/voice" element={<VoiceRegister />} />
