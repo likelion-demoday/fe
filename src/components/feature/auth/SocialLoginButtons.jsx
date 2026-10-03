@@ -10,7 +10,7 @@ const GOOGLE_REDIRECT_URI = import.meta.env.VITE_GOOGLE_REDIRECT_URI;
 const GOOGLE_AUTH_URL = `https://accounts.google.com/o/oauth2/v2/auth?${new URLSearchParams({
   client_id: GOOGLE_CLIENT_ID,
   redirect_uri: GOOGLE_REDIRECT_URI,
-  response_type: "code",
+  response_type: "id_token",
   scope: "openid email profile",
 })}`;
 
@@ -21,8 +21,10 @@ const SocialLoginButtons = () => {
 
   const onGoogleClick = () => {
     const state = crypto.randomUUID();
+    const nonce = crypto.randomUUID();
     sessionStorage.setItem("googleOAuthState", state);
-    window.location.href = `${GOOGLE_AUTH_URL}&state=${state}`;
+    sessionStorage.setItem("googleOAuthNonce", nonce);
+    window.location.href = `${GOOGLE_AUTH_URL}&${new URLSearchParams({ state, nonce })}`;
   };
 
   return (

@@ -1,11 +1,7 @@
 import api from "./axios";
 
-// TODO: 백엔드 구글 로그인 API 경로 및 요청 형식 확인
-export const googleLogin = async (code) => {
-  return api.post("/api/v1/auth/oauth/google", {
-    code,
-    redirectUri: import.meta.env.VITE_GOOGLE_REDIRECT_URI,
-  });
+export const googleLogin = async (idToken) => {
+  return api.post("/api/v1/auth/oauth/google", { idToken });
 };
 
 export const kakaoLogin = async (code) => {
@@ -24,7 +20,7 @@ export const login = async ({ email, password }) => {
 };
 
 export const logout = async (refreshToken) => {
-  return api.post("/api/v1/auth/logout",{refreshToken});
+  return api.post("/api/v1/auth/logout", { refreshToken });
 };
 
 export const reissueToken = async (refreshToken) => {
