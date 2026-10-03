@@ -193,12 +193,12 @@ export function useAudioRecorder() {
     if (!recorder || recorder.state === "inactive") return null;
     Promise.resolve(null);
 
-    const mineType = recorder.mineType || "audio/webm";
+    const mimeType = recorder.mimeType || "audio/webm";
 
     return new Promise((resolve) => {
       const handle = () => {
         recorder.removeEventListener("dataavailable", handle);
-        resolve({blob: new Blob(chunksRef.current, { type: mineType }), mineType});
+        resolve({blob: new Blob(chunksRef.current, { type: mimeType }), mimeType});
       };
       recorder.addEventListener("dataavailable", handle);
       recorder.requestData();
