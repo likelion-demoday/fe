@@ -13,6 +13,7 @@ import CreditChargeFailure from "./pages/payments/CreditChargeFailure";
 import PurchaseHistoryPage from "./pages/mypage/PurchaseHistoryPage";
 import Recordings from "./pages/mypage/Recordings";
 import SavedConversations from "./pages/mypage/SavedConversations";
+import ReportArchive from "./pages/mypage/ReportArchive";
 import Account from "./pages/mypage/Account";
 import Support from "./pages/mypage/Support";
 //auth
@@ -53,6 +54,10 @@ function App() {
         <Route
           path="/mypage/recordings/conversations"
           element={<SavedConversations />}
+        />
+        <Route
+          path="/mypage/recordings/reports"
+          element={<ReportArchive />}
         />
         <Route path="/mypage/account" element={<Account />} />
         <Route path="/mypage/support" element={<Support />} />
