@@ -3,8 +3,8 @@ import { Navigate, useLocation, useNavigate } from "react-router-dom";
 
 import AppHeader from "../../components/common/AppHeader";
 import BottomSheet from "../../components/common/BottomSheet";
+import TextBackButton from "../../components/common/TextBackButton";
 import PurchaseSheet from "../../components/feature/analysis/PurchaseSheet";
-import chevronLeftIcon from "../../assets/icons/chevron-left.svg";
 import relationMainIcon from "../../assets/icons/relation-main-m.svg";
 import relationLoverIcon from "../../assets/icons/relation-lover-m.svg";
 import relationFamilyIcon from "../../assets/icons/relation-family-m.svg";
@@ -61,7 +61,6 @@ const AnalysisRelation = () => {
     });
   }, [navigate, state, selected]);
 
-  // 구매완료 모달을 잠깐 보여준 뒤 자동으로 분석 중 화면으로 이동 (X를 누르면 바로 이동)
   useEffect(() => {
     if (sheet !== "complete") return;
     const timer = setTimeout(goToLoading, COMPLETE_SHEET_MS);
@@ -85,7 +84,7 @@ const AnalysisRelation = () => {
   };
 
   return (
-    <main className="relative mx-auto flex h-[844px] w-[390px] flex-col items-start gap-[30px] overflow-y-auto bg-white px-[24px] py-[16px]">
+    <main className="relative mx-auto flex h-[844px] w-[390px] flex-col items-start gap-[30px] overflow-y-auto no-scrollbar bg-white px-[24px] py-[16px]">
       <AppHeader title="대화 분석" />
 
       <section className="flex w-full flex-col gap-[24px]">
@@ -105,14 +104,7 @@ const AnalysisRelation = () => {
         </div>
       </section>
 
-      <button
-        type="button"
-        onClick={() => navigate(-1)}
-        className="flex items-center justify-center gap-[8px] rounded-[6px]"
-      >
-        <img src={chevronLeftIcon} alt="" className="block h-[13px] w-[8px] max-w-none shrink-0" />
-        <span className="text-body whitespace-nowrap text-[#595959]">뒤로가기</span>
-      </button>
+      <TextBackButton onClick={() => navigate(-1)} />
 
       {sheet === "purchase" && (
         <PurchaseSheet
@@ -121,6 +113,7 @@ const AnalysisRelation = () => {
           price={price}
           onClose={() => setSheet(null)}
           onPurchase={handlePurchase}
+          onCharge={() => navigate("/mypage/payments")}
         />
       )}
       {sheet === "complete" && <BottomSheet title="구매완료!" onClose={goToLoading} />}

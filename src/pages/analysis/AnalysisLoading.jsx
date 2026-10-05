@@ -25,8 +25,7 @@ const AnalysisLoading = () => {
       <div className="px-[24px] py-[16px]">
         <AppHeader />
       </div>
-
-      {/* 로딩 모션: 캐릭터가 둥실 떠오르고 아래 그림자가 함께 줄었다 늘어남 */}
+ 
       <div className="absolute top-[262px] left-1/2 flex -translate-x-1/2 flex-col items-center" aria-hidden="true">
         <div
           className="relative size-[136px] overflow-hidden"
