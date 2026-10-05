@@ -4,6 +4,7 @@ import AppHeader from "../../components/common/AppHeader";
 import Button from "../../components/common/Button";
 import CreditBalance from "../../components/feature/payments/CreditBalance";
 import CreditProductCard from "../../components/feature/payments/CreditProductCard";
+import CreditPaymentSheet from "../../components/feature/payments/CreditPaymentSheet";
 import chevronLeft from "../../assets/icons/chevron-left.svg";
 
 // 메뉴들
@@ -14,9 +15,10 @@ const CREDIT_PRODUCTS = [
   { credits: 11000, price: 10000 },
 ];
 
-const CreditCharge = ({ balance = 12480, onPurchase }) => {
+const CreditCharge = ({ balance = 12480, onPurchase, onViewAgreement }) => {
   const navigate = useNavigate();
   const [selectedProduct, setSelectedProduct] = useState(null);
+  const [paymentOpen, setPaymentOpen] = useState(false);
 
   return (
     <main className="relative mx-auto flex min-h-[844px] w-full max-w-[390px] flex-col bg-white">
@@ -55,10 +57,18 @@ const CreditCharge = ({ balance = 12480, onPurchase }) => {
         <Button
           text="결제하기"
           disabled={!selectedProduct}
-          onClick={() => onPurchase?.(selectedProduct)}
+          onClick={() => setPaymentOpen(true)}
           className="flex w-full items-center justify-center rounded-[16px] bg-[#262626] px-[26px] py-[16px] text-[20px] leading-[normal] font-semibold tracking-[0.04em] text-white enabled:cursor-pointer disabled:cursor-not-allowed"
         />
       </footer>
+      {paymentOpen && selectedProduct && (
+        <CreditPaymentSheet
+          product={selectedProduct}
+          onClose={() => setPaymentOpen(false)}
+          onPurchase={() => onPurchase?.(selectedProduct)}
+          onViewAgreement={onViewAgreement}
+        />
+      )}
     </main>
   );
 };
