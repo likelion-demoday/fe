@@ -2,6 +2,7 @@ import { Fragment } from "react";
 import { useNavigate } from "react-router-dom";
 import MyPageHeader from "../../components/feature/mypage/MyPageHeader";
 import PurchaseHistoryItem from "../../components/feature/mypage/PurchaseHistoryItem";
+import ArchiveEmptyState from "../../components/feature/mypage/ArchiveEmptyState";
 import divider from "../../assets/icons/purchase-history-divider.svg";
 
 import { mockPurchases } from "../../mocks/purchases";
@@ -16,18 +17,32 @@ const PurchaseHistoryPage = ({ purchases = mockPurchases, onSelect }) => {
         titleClassName="text-heading"
         onBack={() => navigate("/mypage/payments")}
       />
-      <div className="flex flex-col gap-[26px]">
-        {purchases.map(({ id, ...purchase }, index) => (
-          <Fragment key={id}>
-            {index > 0 && (
-              <div className="relative h-0">
-                <img src={divider} alt="" className="absolute -top-px left-0" />
-              </div>
-            )}
-            <PurchaseHistoryItem {...purchase} onClick={() => onSelect?.(id)} />
-          </Fragment>
-        ))}
-      </div>
+      {purchases.length === 0 ? (
+        <ArchiveEmptyState
+          message="아직 구매내역이 없어요"
+          className="mt-[157px]"
+        />
+      ) : (
+        <div className="flex flex-col gap-[26px]">
+          {purchases.map(({ id, ...purchase }, index) => (
+            <Fragment key={id}>
+              {index > 0 && (
+                <div className="relative h-0">
+                  <img
+                    src={divider}
+                    alt=""
+                    className="absolute -top-px left-0"
+                  />
+                </div>
+              )}
+              <PurchaseHistoryItem
+                {...purchase}
+                onClick={() => onSelect?.(id)}
+              />
+            </Fragment>
+          ))}
+        </div>
+      )}
     </main>
   );
 };

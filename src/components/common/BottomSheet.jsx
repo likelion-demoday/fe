@@ -10,6 +10,7 @@ const BottomSheet = ({
   children,
   headerGap = "gap-[20px]",
   contentGap = "gap-[10px]",
+  showCharacter = true,
 }) => {
   return (
     <div className="absolute inset-0 z-50 flex justify-center" role="dialog" aria-modal="true">
@@ -21,7 +22,7 @@ const BottomSheet = ({
       <div className="absolute bottom-0 flex h-[539px] w-full max-w-[390px] flex-col justify-between rounded-t-[32px] bg-white px-[24px] pt-[24px] pb-[30px]">
         <div className={`flex w-full flex-col ${headerGap}`}>
           <div className="flex w-full justify-end">
-            <button type="button" onClick={onClose} aria-label="닫기" className="size-[24px] shrink-0">
+            <button type="button" onClick={onClose} aria-label="닫기" className="size-[24px] shrink-0 cursor-pointer">
               <img src={xmarkIcon} alt="" className="block size-full max-w-none" />
             </button>
           </div>
@@ -31,13 +32,13 @@ const BottomSheet = ({
             ) : (
               title
             )}
-            <div className="relative size-[136px] shrink-0 overflow-hidden">
+            {showCharacter && <div className="relative size-[136px] shrink-0 overflow-hidden">
               <img
                 src={characterImage}
                 alt=""
                 className="pointer-events-none absolute top-[-4.41%] left-[-4.41%] size-[108.82%] max-w-none"
               />
-            </div>
+            </div>}
             {children}
           </div>
         </div>
