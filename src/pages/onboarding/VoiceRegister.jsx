@@ -109,7 +109,7 @@ const VoiceRegister = () => {
           )}
         </button>
 
-        <div className="flex flex-col items-center gap-[24px]">
+        <div className="flex w-full flex-col items-center gap-[24px]">
           <div className="flex items-center justify-center gap-[12px]">
             <span className="size-[8px] rounded-[99px] bg-[#454545]" />
             <span className="size-[8px] rounded-[99px] bg-[#454545]" />
@@ -119,7 +119,7 @@ const VoiceRegister = () => {
             text="다음"
             onClick={handleNext}
             disabled={!hasRecorded}
-            className="flex w-full max-w-[358px] items-center justify-center rounded-[16px] bg-[#262626] px-[26px] py-[16px] font-['SUITE',sans-serif] text-[20px] font-semibold tracking-[0.8px] text-white disabled:bg-[#d9d9d9]"
+            className="flex h-[49px] w-full max-w-[358px] items-center justify-center rounded-[12px] bg-[#262626] px-[26px] py-[14px] font-['Pretendard',sans-serif] text-[18px] font-semibold tracking-[-0.36px] text-white disabled:bg-[#d9d9d9]"
           />
         </div>
       </div>
