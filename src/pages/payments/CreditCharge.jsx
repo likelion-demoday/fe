@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+// import { requestNicePay } from "../../api/payment";
 import AppHeader from "../../components/common/AppHeader";
 import Button from "../../components/common/Button";
 import CreditBalance from "../../components/feature/payments/CreditBalance";
@@ -21,7 +22,12 @@ const CreditCharge = ({ balance = 12480, onViewAgreement }) => {
   const [paymentOpen, setPaymentOpen] = useState(false);
 
   const handlePurchase = (product) => {
-    // TODO: product.credits, product.price를 사용해 구매 로직 구현
+    try {
+      console.log("선택한 상품:", product);
+      //백엔드 요청보내고 requestNicePay 호출하기
+    } catch (error) {
+      console.log("결제 요청 실패:", error);
+    }
   };
 
   return (
