@@ -54,7 +54,7 @@ const SignUp = () => {
             text="회원가입"
             onClick={handleSignUp}
             disabled={!isPasswordValid}
-            className="flex w-[358px] items-center justify-center rounded-[16px] bg-[#262626] px-[26px] py-[16px] font-['SUITE',sans-serif] text-[20px] leading-[25px] font-semibold tracking-[0.8px] text-white disabled:bg-[#d9d9d9]"
+            className="flex h-[49px] w-[358px] items-center justify-center rounded-[12px] bg-[#262626] px-[26px] py-[14px] font-['Pretendard',sans-serif] text-[18px] font-semibold tracking-[-0.36px] text-white disabled:bg-[#d9d9d9]"
           />
           <SocialLoginButtons />
         </div>
