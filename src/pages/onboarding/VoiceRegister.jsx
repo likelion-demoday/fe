@@ -54,7 +54,7 @@ const VoiceRegister = () => {
   };
 
   return (
-    <div className="flex min-h-screen flex-col items-start justify-between bg-[#fafafa]">
+    <div className="mx-auto flex h-[844px] w-[390px] overflow-y-auto no-scrollbar flex-col items-start justify-between bg-[#fafafa]">
       <div className="flex w-full flex-col items-center gap-[80px] p-[16px]">
         <div className="flex w-full flex-col items-start">
           <BackButton onClick={handleBack} />
