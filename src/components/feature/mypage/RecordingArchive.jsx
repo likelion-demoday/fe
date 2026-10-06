@@ -4,18 +4,25 @@ import MyPageHeader from "./MyPageHeader";
 import SavedConversationItem from "./SavedConversationItem";
 import divider from "../../../assets/icons/purchase-history-divider.svg";
 import chevronDown from "../../../assets/icons/conversation-chevron-down.svg";
+import ArchiveEmptyState from "./ArchiveEmptyState";
 
 const RecordingArchive = ({
   title,
   items,
   initialCategory = "전체",
+  emptyMessage = "아직 저장된 대화가 없어요",
   onSelect,
 }) => {
   const navigate = useNavigate();
-  const [category, setCategory] = useState(initialCategory);
+  const [category, setCategory] = useState(
+    items.length === 0 ? "친구관계" : initialCategory,
+  );
   const categories = [
     "전체",
-    ...new Set(items.map((item) => item.category).filter(Boolean)),
+    ...new Set([
+      ...(category === "전체" ? [] : [category]),
+      ...items.map((item) => item.category).filter(Boolean),
+    ]),
   ];
   const filteredConversations = items.filter(
     (item) => category === "전체" || item.category === category,
@@ -50,25 +57,36 @@ const RecordingArchive = ({
             />
           </div>
         </div>
-        <div className="flex flex-col gap-[26px]">
-          {filteredConversations.map(({ id, ...conversation }, index) => (
-            <Fragment key={id}>
-              {index > 0 && (
-                <div className="relative h-0">
-                  <img
-                    src={divider}
-                    alt=""
-                    className="absolute -top-px left-0"
-                  />
-                </div>
-              )}
-              <SavedConversationItem
-                {...conversation}
-                onClick={() => onSelect?.(id)}
-              />
-            </Fragment>
-          ))}
-        </div>
+        {filteredConversations.length === 0 ? (
+          <ArchiveEmptyState
+            className="mt-[152px]"
+            message={
+              items.length === 0
+                ? emptyMessage
+                : "해당 분류에 저장된 항목이 없어요"
+            }
+          />
+        ) : (
+          <div className="flex flex-col gap-[26px]">
+            {filteredConversations.map(({ id, ...conversation }, index) => (
+              <Fragment key={id}>
+                {index > 0 && (
+                  <div className="relative h-0">
+                    <img
+                      src={divider}
+                      alt=""
+                      className="absolute -top-px left-0"
+                    />
+                  </div>
+                )}
+                <SavedConversationItem
+                  {...conversation}
+                  onClick={() => onSelect?.(id)}
+                />
+              </Fragment>
+            ))}
+          </div>
+        )}
       </div>
     </main>
   );
