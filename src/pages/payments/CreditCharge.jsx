@@ -15,10 +15,14 @@ const CREDIT_PRODUCTS = [
   { credits: 11000, price: 10000 },
 ];
 
-const CreditCharge = ({ balance = 12480, onPurchase, onViewAgreement }) => {
+const CreditCharge = ({ balance = 12480, onViewAgreement }) => {
   const navigate = useNavigate();
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [paymentOpen, setPaymentOpen] = useState(false);
+
+  const handlePurchase = (product) => {
+    // TODO: product.credits, product.price를 사용해 구매 로직 구현
+  };
 
   return (
     <main className="relative mx-auto flex min-h-[844px] w-full max-w-[390px] flex-col bg-white">
@@ -65,7 +69,7 @@ const CreditCharge = ({ balance = 12480, onPurchase, onViewAgreement }) => {
         <CreditPaymentSheet
           product={selectedProduct}
           onClose={() => setPaymentOpen(false)}
-          onPurchase={() => onPurchase?.(selectedProduct)}
+          onPurchase={() => handlePurchase(selectedProduct)}
           onViewAgreement={onViewAgreement}
         />
       )}
