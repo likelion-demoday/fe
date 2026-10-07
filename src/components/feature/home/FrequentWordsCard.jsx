@@ -5,7 +5,7 @@ import useBubblePhysics from "../../../hooks/useBubblePhysics";
 
 const AREA_WIDTH = 290;
 const AREA_HEIGHT = 154;
-const BOUNCE_CEILING = -64;
+const BOUNCE_CEILING = -20;
 
 const BUBBLES = [
   {

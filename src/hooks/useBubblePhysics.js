@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef } from "react";
 
-const GRAVITY = 1300; 
-const WALL_BOUNCE = 0.45;
+const GRAVITY = 2300; 
+const WALL_BOUNCE = 0.2;
 const BUBBLE_BOUNCE = 0.45;
 const AIR_DAMPING = 0.995;
 const FLOOR_FRICTION = 0.9;
@@ -10,10 +10,18 @@ const MAX_FRAME_SEC = 1 / 30;
 const SLEEP_SPEED = 8; 
 const SLEEP_AFTER_SEC = 0.6;
 
-const KICK_UP_MIN = 520;
-const KICK_UP_RANGE = 220;
-const KICK_SIDE = 320;
+const KICK_UP_MIN = 300;
+const KICK_UP_RANGE = 110;
+const KICK_SIDE = 150;
 const NEIGHBOR_JOLT_RATIO = 0.45;
+
+
+const INTRO_DROP = 50; 
+const INTRO_BOUNCE = 8; 
+const INTRO_DURATION_MS = 650;
+const INTRO_STAGGER_MS = 90;
+const EASE_IN = "cubic-bezier(0.55, 0, 1, 0.45)";
+const EASE_OUT = "cubic-bezier(0, 0.55, 0.45, 1)";
 
 const prefersReducedMotion = () =>
   window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -93,6 +101,7 @@ const useBubblePhysics = (bubbles, width, height, top = 0) => {
   const bodiesRef = useRef(null);
   const frameRef = useRef(null);
   const restTimeRef = useRef(0);
+  const introAnimationsRef = useRef([]);
 
   if (bodiesRef.current === null) {
     bodiesRef.current = bubbles.map(({ x, y, size }) => ({
@@ -114,6 +123,9 @@ const useBubblePhysics = (bubbles, width, height, top = 0) => {
   const kick = useCallback(
     (index) => {
       if (prefersReducedMotion()) return;
+
+      introAnimationsRef.current.forEach((animation) => animation.cancel());
+      introAnimationsRef.current = [];
 
       bodiesRef.current.forEach((body, i) => {
         const ratio = i === index ? 1 : NEIGHBOR_JOLT_RATIO;
@@ -145,12 +157,31 @@ const useBubblePhysics = (bubbles, width, height, top = 0) => {
     [width, height, top, render],
   );
 
-  useEffect(
-    () => () => {
+  useEffect(() => {
+    if (prefersReducedMotion()) return undefined;
+
+    const toTransform = (body, offsetY) =>
+      `translate(${body.x - body.r}px, ${body.y - body.r - offsetY}px)`;
+
+    introAnimationsRef.current = bodiesRef.current.flatMap((body, index) => {
+      const el = elementsRef.current[index];
+      if (!el) return [];
+      return el.animate(
+        [
+          { transform: toTransform(body, INTRO_DROP), opacity: 0, easing: EASE_IN },
+          { transform: toTransform(body, 0), opacity: 1, offset: 0.6, easing: EASE_OUT },
+          { transform: toTransform(body, INTRO_BOUNCE), opacity: 1, offset: 0.8, easing: EASE_IN },
+          { transform: toTransform(body, 0), opacity: 1 },
+        ],
+        { duration: INTRO_DURATION_MS, delay: INTRO_STAGGER_MS * index, fill: "backwards" },
+      );
+    });
+
+    return () => {
+      introAnimationsRef.current.forEach((animation) => animation.cancel());
       if (frameRef.current !== null) cancelAnimationFrame(frameRef.current);
-    },
-    [],
-  );
+    };
+  }, []);
 
   const setElement = useCallback(
     (index) => (el) => {
