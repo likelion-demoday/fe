@@ -20,13 +20,13 @@ const AnalysisStart = () => {
   const handleFileChange = (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    // TODO: 녹음 파일 업로드 API 연동
+    
     console.log("녹음 파일 선택", file);
   };
 
   return (
     <main className="mx-auto flex h-[844px] w-[390px] flex-col gap-[30px] overflow-y-auto no-scrollbar bg-white px-[24px] py-[16px]">
-      <AppHeader title="대화 분석" />
+      <AppHeader title="대화 분석" onLogoClick={()=>navigate("/home")}/>
 
       <div className="flex w-full flex-col gap-[60px]">
         <div className="flex w-full flex-col items-end gap-[8px]">
