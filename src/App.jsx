@@ -38,9 +38,18 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<Splash />} />
-      <Route path="/home" element={<Home />} />
 
       <Route element={<ProtectedRoute />}>
+        <Route path="/home" element={<Home />} />
+
+        <Route path="/analysis" element={<AnalysisStart />} />
+        <Route path="/analysis/partner" element={<AnalysisPartner />} />
+        <Route path="/analysis/record" element={<AnalysisRecord />} />
+        <Route path="/analysis/type" element={<AnalysisType />} />
+        <Route path="/analysis/relation" element={<AnalysisRelation />} />
+        <Route path="/analysis/loading" element={<AnalysisLoading />} />
+        <Route path="/analysis/speaker" element={<AnalysisSpeaker />} />
+
         <Route path="/mypage" element={<MyPage />} />
         <Route path="/mypage/profile" element={<Profile />} />
 
@@ -74,14 +83,6 @@ function App() {
       <Route path="/onboarding/nickname" element={<Nickname />} />
       <Route path="/onboarding/consent" element={<Consent />} />
       <Route path="/onboarding/voice" element={<VoiceRegister />} />
-
-      <Route path="/analysis" element={<AnalysisStart />} />
-      <Route path="/analysis/partner" element={<AnalysisPartner />} />
-      <Route path="/analysis/record" element={<AnalysisRecord />} />
-      <Route path="/analysis/type" element={<AnalysisType />} />
-      <Route path="/analysis/relation" element={<AnalysisRelation />} />
-      <Route path="/analysis/loading" element={<AnalysisLoading />} />
-      <Route path="/analysis/speaker" element={<AnalysisSpeaker />} />
     </Routes>
   );
 }

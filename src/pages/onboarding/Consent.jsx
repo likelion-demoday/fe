@@ -17,25 +17,33 @@ const AGREEMENTS = [
   { id: "marketing", label: "[선택] 마케팅 정보 수신 동의", required: false },
 ];
 
-
 const CheckCircle = ({ checked }) => {
   if (checked) {
     return <span className="size-[20px] shrink-0 rounded-full bg-[#454545]" />;
   }
   return (
     <span className="relative size-[20px] shrink-0">
-      <img src={circleIcon} alt="" className="absolute inset-0 block size-full max-w-none" />
+      <img
+        src={circleIcon}
+        alt=""
+        className="absolute inset-0 block size-full max-w-none"
+      />
     </span>
   );
 };
 
 const Divider = () => (
-  <img src={dividerIcon} alt="" className="block h-px w-full max-w-none shrink-0" />
+  <img
+    src={dividerIcon}
+    alt=""
+    className="block h-px w-full max-w-none shrink-0"
+  />
 );
 
 const Consent = () => {
   const { email, password, nickname } = useAuthStore();
   const clearAuthData = useAuthStore((state) => state.clearAuthData);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const navigate = useNavigate();
   const [checked, setChecked] = useState({});
@@ -60,15 +68,17 @@ const Consent = () => {
   };
 
   const handleNext = async () => {
-    console.log("다음 버튼 클릭", checked);
     try {
       await signUp({ email, password, nickname });
+      clearAuthData();
+      navigate("/home", { replace: true });
     } catch (error) {
-      // TODO: 백엔드 연동 후 실패 시 넘어가지 않도록 처리
-      console.error("회원가입 실패:", error);
+      if (error.code === "AUTH409_1") {
+        setErrorMessage("이미 가입된 이메일입니다.");
+      } else {
+        setErrorMessage(error.message);
+      }
     }
-    clearAuthData();
-    navigate("/onboarding/voice", { replace: true });
   };
 
   const handleView = (id) => {
@@ -76,7 +86,7 @@ const Consent = () => {
   };
 
   return (
-    <div className="flex min-h-screen flex-col items-start justify-between bg-white">
+    <div className="mx-auto flex h-[844px] w-[390px] overflow-y-auto no-scrollbar flex-col items-start justify-between bg-white">
       <div className="flex w-full flex-col items-center gap-[80px] p-[16px]">
         <div className="flex w-full flex-col items-start">
           <BackButton onClick={handleBack} />
@@ -85,7 +95,9 @@ const Consent = () => {
         <div className="flex w-full flex-col items-start gap-[60px] px-[16px]">
           <h1 className="font-['SUITE',sans-serif] text-[24px] font-bold whitespace-nowrap text-black">
             <span className="block leading-normal">서비스 이용을 위해</span>
-            <span className="block leading-normal">아래의 정보 활용에 동의해주세요</span>
+            <span className="block leading-normal">
+              아래의 정보 활용에 동의해주세요
+            </span>
           </h1>
 
           <div className="flex w-full flex-col items-start gap-[16px]">
@@ -142,14 +154,17 @@ const Consent = () => {
         <div className="flex items-center justify-center gap-[12px]">
           <span className="size-[8px] rounded-[99px] bg-[#454545]" />
           <span className="size-[8px] rounded-[99px] bg-[#454545]" />
-          <span className="size-[8px] rounded-[99px] bg-[#d9d9d9]" />
+          <span className="size-[8px] rounded-[99px] bg-[#454545]" />
         </div>
-        <Button
-          text="다음"
-          onClick={handleNext}
-          disabled={!requiredChecked}
-          className="flex h-[49px] w-full max-w-[358px] items-center justify-center rounded-[12px] bg-[#262626] px-[26px] py-[14px] font-['Pretendard',sans-serif] text-[18px] font-semibold tracking-[-0.36px] text-white disabled:bg-[#d9d9d9]"
-        />
+        <div className="flex w-full max-w-[358px] flex-col items-start gap-[4px]">
+          {errorMessage && <p className="...">{errorMessage}</p>}
+          <Button
+            text="다음"
+            onClick={handleNext}
+            disabled={!requiredChecked}
+            className="flex h-[49px] w-full max-w-[358px] items-center justify-center rounded-[12px] bg-[#262626] px-[26px] py-[14px] font-['Pretendard',sans-serif] text-[18px] font-semibold tracking-[-0.36px] text-white disabled:bg-[#d9d9d9]"
+          />
+        </div>
       </div>
     </div>
   );
