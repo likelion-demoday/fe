@@ -1,6 +1,8 @@
 import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
+import { uploadRecording } from "../../api/recording";
+
 import AppHeader from "../../components/common/AppHeader";
 import ActionCard from "../../components/feature/analysis/ActionCard";
 import microphoneSpeakingIcon from "../../assets/icons/microphone-speaking.svg";
@@ -17,11 +19,18 @@ const AnalysisStart = () => {
   const navigate = useNavigate();
   const fileInputRef = useRef(null);
 
-  const handleFileChange = (e) => {
+  const handleFileChange = async (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
     
-    console.log("녹음 파일 선택", file);
+    try {
+      const result = await uploadRecording(file);
+      navigate('/analysis/record', { state: { recordingId: result.recordingId } });
+    } catch (error) {
+      alert(error.message);
+    } finally {
+      e.target.value ="";
+    }
   };
 
   return (
