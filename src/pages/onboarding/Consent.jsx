@@ -71,7 +71,7 @@ const Consent = () => {
     try {
       await signUp({ email, password, nickname });
       clearAuthData();
-      navigate("/onboarding/voice", { replace: true });
+      navigate("/home", { replace: true });
     } catch (error) {
       if (error.code === "AUTH409_1") {
         setErrorMessage("이미 가입된 이메일입니다.");
@@ -154,7 +154,7 @@ const Consent = () => {
         <div className="flex items-center justify-center gap-[12px]">
           <span className="size-[8px] rounded-[99px] bg-[#454545]" />
           <span className="size-[8px] rounded-[99px] bg-[#454545]" />
-          <span className="size-[8px] rounded-[99px] bg-[#d9d9d9]" />
+          <span className="size-[8px] rounded-[99px] bg-[#454545]" />
         </div>
         <div className="flex w-full max-w-[358px] flex-col items-start gap-[4px]">
           {errorMessage && <p className="...">{errorMessage}</p>}
