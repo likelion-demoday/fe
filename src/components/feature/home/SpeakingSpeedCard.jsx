@@ -49,7 +49,7 @@ const formatPercent = (value) => {
   return `${rounded > 0 ? "+" : ""}${rounded}%`;
 };
 
-// active: 캐러셀에서 이 카드가 보이는지 여부 (처음 보일 때 게이지가 채워짐)
+
 const SpeakingSpeedCard = ({ diffPercent = 12, active = true, onDetail }) => {
   const progress = useRevealProgress(active, ANIMATION_DURATION_MS);
   const angle = toGaugeAngle(diffPercent) * progress;

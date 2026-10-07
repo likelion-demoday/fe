@@ -3,6 +3,7 @@ import { useState } from "react";
 import FrequentWordsCard from "./FrequentWordsCard";
 import SpeakingSpeedCard from "./SpeakingSpeedCard";
 import ProfanityRateCard from "./ProfanityRateCard";
+import HabitHistoryCard from "./HabitHistoryCard";
 
 const TOTAL_CARDS = 4;
 const SLIDE_GAP = 24;
@@ -11,6 +12,7 @@ const SLIDES = [
   { id: "frequent-words", render: () => <FrequentWordsCard /> },
   { id: "speaking-speed", render: (active) => <SpeakingSpeedCard active={active} /> },
   { id: "profanity-rate", render: () => <ProfanityRateCard /> },
+  { id: "habit-history", render: () => <HabitHistoryCard /> },
 ];
 
 const HabitSummaryCarousel = () => {

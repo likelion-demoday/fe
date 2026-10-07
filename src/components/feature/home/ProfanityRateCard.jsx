@@ -10,7 +10,7 @@ import emoji4On from "../../../assets/icons/profanity-emoji-4-on.svg";
 import emoji5Off from "../../../assets/icons/profanity-emoji-5-off.svg";
 import emoji5On from "../../../assets/icons/profanity-emoji-5-on.svg";
 
-// 디자인 구간: ~1% / ~5% / ~8% / ~10% / 10%~ (구간 상한 이하이면 해당 이모지 강조)
+
 const LEVELS = [
   { max: 1, off: emoji1Off, on: emoji1On },
   { max: 5, off: emoji2Off, on: emoji2On },
@@ -19,7 +19,7 @@ const LEVELS = [
   { max: Infinity, off: emoji5Off, on: emoji5On },
 ];
 
-// 이모지 47px + 간격 5px, 퍼센트 문구는 강조된 이모지 중앙 위에 표시
+
 const EMOJI_STEP = 52;
 const EMOJI_CENTER = 23.5;
 
