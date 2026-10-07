@@ -139,7 +139,7 @@ export function useAudioRecorder() {
 
       const recorder = new MediaRecorder(
         stream,
-        mimeType ? { mimeType } : undefined,
+        { mimeType },
       );
       recorder.ondataavailable = (event) => {
         if (event.data.size > 0) chunksRef.current.push(event.data);
@@ -190,7 +190,7 @@ export function useAudioRecorder() {
     if (!recorder || recorder.state === "inactive") return null;
     Promise.resolve(null);
 
-    const mimeType = recorder.mimeType || "audio/webm";
+    const mimeType = recorder.mimeType || "audio/mp4";
 
     return new Promise((resolve) => {
       const handle = () => {
@@ -207,7 +207,7 @@ export function useAudioRecorder() {
     if (!recorder || recorder.state === "inactive")
       return Promise.resolve(null);
 
-    const mimeType = recorder.mimeType || "audio/webm";
+    const mimeType = recorder.mimeType || "audio/mp4";
 
     return new Promise((resolve) => {
       recorder.onstop = () => {
