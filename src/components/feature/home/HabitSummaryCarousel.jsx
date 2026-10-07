@@ -12,7 +12,7 @@ const SLIDES = [
   { id: "frequent-words", render: () => <FrequentWordsCard /> },
   { id: "speaking-speed", render: (active) => <SpeakingSpeedCard active={active} /> },
   { id: "profanity-rate", render: () => <ProfanityRateCard /> },
-  { id: "habit-history", render: () => <HabitHistoryCard /> },
+  { id: "habit-history", render: (active) => <HabitHistoryCard active={active} /> },
 ];
 
 const HabitSummaryCarousel = () => {

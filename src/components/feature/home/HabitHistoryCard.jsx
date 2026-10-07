@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 import chevronRightIcon from "../../../assets/icons/chevron-right.svg";
 import areaImage from "../../../assets/icons/habit-history-area.svg";
 import lineImage from "../../../assets/icons/habit-history-line.svg";
@@ -11,7 +13,31 @@ const POINTS = [
   { left: 259, top: 29 },
 ];
 
-const HabitHistoryCard = ({ onDetail }) => {
+// 처음 보일 때 선이 왼쪽→오른쪽으로 그려지고, 선이 지나가는 순간 점이 튀어나옴
+const DRAW_DURATION_MS = 900;
+const DRAW_EASING = "cubic-bezier(0.33, 1, 0.68, 1)";
+const DOT_POP_MS = 300;
+const DOT_POP_EASING = "cubic-bezier(0.34, 1.56, 0.64, 1)";
+const LINE_LEFT = 26;
+const LINE_WIDTH = 237;
+
+const revealStyle = (revealed) => ({
+  clipPath: revealed ? "inset(-2px -2px -2px -2px)" : "inset(-2px 100% -2px -2px)",
+  transition: `clip-path ${DRAW_DURATION_MS}ms ${DRAW_EASING}, opacity ${DRAW_DURATION_MS}ms ease-out`,
+});
+
+
+const dotDelay = (left) => {
+  const progress = Math.min(1, Math.max(0, (left + 4 - LINE_LEFT) / LINE_WIDTH));
+  const time = 1 - Math.cbrt(1 - progress);
+  return Math.max(0, time * DRAW_DURATION_MS - DOT_POP_MS / 2);
+};
+
+
+const HabitHistoryCard = ({ active = true, onDetail }) => {
+  const [revealed, setRevealed] = useState(active);
+  if (active && !revealed) setRevealed(true);
+
   return (
     <section className="flex h-full w-full flex-col items-center gap-[16px] rounded-[16px] border border-[#eee] bg-white px-[24px] pt-[16px] pb-[44px] drop-shadow-[0px_4px_5.85px_rgba(0,0,0,0.05)] drop-shadow-[0px_0px_23.85px_rgba(0,0,0,0.1)]">
       <div className="flex w-full flex-col">
@@ -33,7 +59,8 @@ const HabitHistoryCard = ({ onDetail }) => {
         <img
           src={areaImage}
           alt=""
-          className="absolute top-[32.5px] left-[26.5px] block h-[120.5px] w-[237px] max-w-none"
+          className="absolute top-[32.5px] left-[26.5px] block h-[120.5px] w-[237px] max-w-none motion-reduce:transition-none"
+          style={{ ...revealStyle(revealed), opacity: revealed ? 1 : 0 }}
         />
 
         {/* 축 */}
@@ -51,11 +78,19 @@ const HabitHistoryCard = ({ onDetail }) => {
             key={left}
             src={dotImage}
             alt=""
-            className="absolute block size-[8px] max-w-none"
-            style={{ left, top }}
+            className="absolute block size-[8px] max-w-none motion-reduce:transition-none"
+            style={{
+              left,
+              top,
+              transform: revealed ? "scale(1)" : "scale(0)",
+              transition: `transform ${DOT_POP_MS}ms ${DOT_POP_EASING} ${dotDelay(left)}ms`,
+            }}
           />
         ))}
-        <div className="absolute top-[32.5px] left-[26px] h-[60px] w-[237px]">
+        <div
+          className="absolute top-[32.5px] left-[26px] h-[60px] w-[237px] motion-reduce:transition-none"
+          style={revealStyle(revealed)}
+        >
           <img src={lineImage} alt="" className="absolute inset-[-0.77%_0_-0.74%_0] block size-full max-w-none" />
         </div>
       </div>
