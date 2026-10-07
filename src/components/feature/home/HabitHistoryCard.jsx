@@ -13,7 +13,7 @@ const POINTS = [
   { left: 259, top: 29 },
 ];
 
-// 처음 보일 때 선이 왼쪽→오른쪽으로 그려지고, 선이 지나가는 순간 점이 튀어나옴
+
 const DRAW_DURATION_MS = 900;
 const DRAW_EASING = "cubic-bezier(0.33, 1, 0.68, 1)";
 const DOT_POP_MS = 300;

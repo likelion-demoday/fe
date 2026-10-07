@@ -1,28 +1,46 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import FrequentWordsCard from "./FrequentWordsCard";
 import SpeakingSpeedCard from "./SpeakingSpeedCard";
 import ProfanityRateCard from "./ProfanityRateCard";
 import HabitHistoryCard from "./HabitHistoryCard";
 
+import { getAnalysisSummary } from "../../../api/analysis";
+
 const TOTAL_CARDS = 4;
 const SLIDE_GAP = 24;
 
 const SLIDES = [
-  { id: "frequent-words", render: () => <FrequentWordsCard /> },
-  { id: "speaking-speed", render: (active) => <SpeakingSpeedCard active={active} /> },
-  { id: "profanity-rate", render: (active) => <ProfanityRateCard active={active} /> },
-  { id: "habit-history", render: (active) => <HabitHistoryCard active={active} /> },
+  { id: "frequent-words", render: (active, summary) => <FrequentWordsCard active={active} summary={summary} /> },
+  { id: "speaking-speed", render: (active, summary) => <SpeakingSpeedCard active={active} summary={summary} /> },
+  { id: "profanity-rate", render: (active, summary) => <ProfanityRateCard active={active} summary={summary} /> },
+  { id: "habit-history", render: (active, summary) => <HabitHistoryCard active={active} summary={summary} /> },
 ];
 
 const HabitSummaryCarousel = () => {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [summary, setSummary] = useState(null);
 
   const handleScroll = (e) => {
     const { scrollLeft, clientWidth } = e.currentTarget;
     const step = clientWidth - 48 + SLIDE_GAP;
     setActiveIndex(Math.round(scrollLeft / step));
   };
+
+  useEffect(()=> {
+    const fetchSummary = async () => {
+      try {
+        const result = await getAnalysisSummary();
+        setSummary(result);
+      } catch (error) {
+        console.error(error.message);
+      }
+    }
+
+    fetchSummary();
+  },[])
+
+  if (!summary) return null;
 
   return (
     <div className="relative w-full">
