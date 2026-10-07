@@ -1,8 +1,5 @@
 import Input from "./Input";
 
-/**
- * 밑줄 스타일 입력 필드 (라벨 + 입력 + 우측 액션 + 안내 문구)
- */
 const TextField = ({
   id,
   label,
