@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import { useAudioRecorder } from "../../hooks/useAudioRecorder.js";
+import { uploadRecording } from "../../api/recording.js";
 
 import AppHeader from "../../components/common/AppHeader";
 import Button from "../../components/common/Button";
@@ -91,7 +92,6 @@ const AnalysisRecord = () => {
   }, [elapsed]);
 
   useEffect(() => {
-    //언마운트 시 URL 해제
     return () => {
       if (previewUrl) URL.revokeObjectURL(previewUrl);
     };
@@ -108,23 +108,26 @@ const AnalysisRecord = () => {
     setSheet(isEnded ? "save" : "confirm");
   };
 
-  const handleSave = (shouldSave) => {
-    const recording = recordingRef.current;
+  const handleSave = async () => {
+  const recording = recordingRef.current;
+  if (!recording) return;
 
-    console.log("녹음 결과", {
-      partner: state?.partner,
-      elapsed,
-      shouldSave,
-      size: recording?.blob.size,
-      mimeType: recording?.mimeType,
-      url: recording ? URL.createObjectURL(recording.blob) : null,
-    });
+  const ext = recording.mimeType.includes("mp4") ? "mp4" : "webm";
+  const file = new File([recording.blob], `recording.${ext}`, {
+    type: recording.mimeType,
+  });
+
+  try {
+    const { recordingId } = await uploadRecording(file);
 
     navigate("/analysis/type", {
       replace: true,
-      state: { partner: state?.partner, elapsed, shouldSave },
+      state: { partner: state?.partner, elapsed, recordingId },
     });
-  };
+  } catch (e) {
+    alert(e.message ?? "업로드에 실패했어요. 다시 시도해 주세요.");
+  }
+};
 
   return (
     <main className="relative mx-auto flex h-[844px] w-[390px] flex-col justify-between overflow-hidden bg-white">
