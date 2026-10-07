@@ -1,30 +1,54 @@
 import chevronRightIcon from "../../../assets/icons/chevron-right.svg";
 import bubbleLine from "../../../assets/icons/home-bubble-line.svg";
+import useBubblePhysics from "../../../hooks/useBubblePhysics";
+
+
+const AREA_WIDTH = 290;
+const AREA_HEIGHT = 154;
+const BOUNCE_CEILING = -64;
 
 const BUBBLES = [
   {
     word: "맛있다",
     count: 12,
-    className: "top-[5px] left-[143px] size-[149px]",
+    x: 143,
+    y: 5,
+    size: 149,
     background: "linear-gradient(154.74deg, #ff765b 13.04%, #ff8d77 84.85%)",
   },
   {
     word: "엥?",
-    className: "top-[49px] left-[38px] size-[105px] text-[18px] font-semibold tracking-[0.72px] text-[#fff1ef]",
+    x: 38,
+    y: 49,
+    size: 105,
+    className: "text-[18px] font-semibold tracking-[0.72px] text-[#fff1ef]",
     background: "linear-gradient(205.65deg, #ff8d77 14.97%, #ffb0a0 85.04%)",
   },
   {
     word: "아니",
-    className: "top-[13px] left-[106px] size-[47px] bg-[#ffe2d8] text-label-small text-white",
+    x: 106,
+    y: 13,
+    size: 47,
+    className: "bg-[#ffe2d8] text-label-small text-white",
   },
   {
     word: "존*",
-    className: "top-[7px] left-0 size-[65px] text-label text-[#fff1ef]",
+    x: 0,
+    y: 7,
+    size: 65,
+    className: "text-label text-[#fff1ef]",
     background: "linear-gradient(191.13deg, #ffb0a0 8.22%, #fad5c9 89.67%)",
   },
 ];
 
 const FrequentWordsCard = ({ onDetail }) => {
+  const { setElement, kick } = useBubblePhysics(
+    BUBBLES,
+    AREA_WIDTH,
+    AREA_HEIGHT,
+    BOUNCE_CEILING,
+  );
+
   return (
     <section className="flex w-full flex-col items-center h-full gap-[20px] rounded-[16px] border border-[#eee] bg-white px-[24px] pt-[16px] pb-[48px] drop-shadow-[0px_4px_5.85px_rgba(0,0,0,0.05)] drop-shadow-[0px_0px_23.85px_rgba(0,0,0,0.1)]">
       <div className="flex w-full flex-col gap-[4px]">
@@ -48,11 +72,19 @@ const FrequentWordsCard = ({ onDetail }) => {
             <img src={bubbleLine} alt="" className="absolute inset-[-909.08%_0] block max-w-none" />
           </div>
         </div>
-        {BUBBLES.map(({ word, count, className, background }) => (
+        {BUBBLES.map(({ word, count, x, y, size, className = "", background }, index) => (
           <div
             key={word}
-            className={`absolute flex flex-col items-center justify-center rounded-full border border-white text-center ${className}`}
-            style={background ? { backgroundImage: background } : undefined}
+            ref={setElement(index)}
+            onPointerEnter={(e) => e.pointerType === "mouse" && kick(index)}
+            onPointerDown={() => kick(index)}
+            className={`absolute top-0 left-0 flex cursor-pointer flex-col items-center justify-center rounded-full border border-white text-center select-none will-change-transform ${className}`}
+            style={{
+              width: size,
+              height: size,
+              transform: `translate(${x}px, ${y}px)`,
+              backgroundImage: background,
+            }}
           >
             {count ? (
               <>
