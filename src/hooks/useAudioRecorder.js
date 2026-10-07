@@ -7,16 +7,13 @@ const idleBar = () => 0.05 + Math.random() ** 1.5 * 0.45;
 const createIdleLevels = () => Array.from({ length: BAR_COUNT }, idleBar);
 
 const MIME_CANDIDATES = [
-  "audio/webm;codecs=opus",
-  "audio/webm",
-  "audio/mp4",
-  "audio/mpeg",
+  "audio/mp4"
 ];
 
 const pickMimeType = () => {
   if (typeof MediaRecorder === "undefined") return null;
   return (
-    MIME_CANDIDATES.find((type) => MediaRecorder.isTypeSupported(type)) ?? ""
+    MIME_CANDIDATES.find((type) => MediaRecorder.isTypeSupported(type)) ?? null
   );
 };
 
