@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 
 import AppHeader from "../components/common/AppHeader";
-import FrequentWordsCard from "../components/feature/home/FrequentWordsCard";
+import HabitSummaryCarousel from "../components/feature/home/HabitSummaryCarousel";
 import CharacterCarousel from "../components/feature/home/CharacterCarousel";
 import { SheetButton } from "../components/feature/analysis/RecordEndSheet";
 
@@ -15,7 +15,7 @@ const Home = () => {
       <div className="flex w-full flex-col gap-[36px]">
         <section className="flex w-full flex-col gap-[12px]">
           <h2 className="text-heading text-black">대화 습관 요약</h2>
-          <FrequentWordsCard />
+          <HabitSummaryCarousel />
         </section>
 
         <section className="flex w-full flex-col gap-[12px]">

@@ -1,7 +1,6 @@
 import chevronRightIcon from "../../../assets/icons/chevron-right.svg";
 import bubbleLine from "../../../assets/icons/home-bubble-line.svg";
 
-// 버블 위치/크기는 디자인 기준 고정값 (290 x 154 영역)
 const BUBBLES = [
   {
     word: "맛있다",
@@ -27,7 +26,7 @@ const BUBBLES = [
 
 const FrequentWordsCard = ({ onDetail }) => {
   return (
-    <section className="flex w-full flex-col items-center gap-[20px] rounded-[16px] border border-[#eee] bg-white px-[24px] pt-[16px] pb-[20px] drop-shadow-[0px_4px_5.85px_rgba(0,0,0,0.05)] drop-shadow-[0px_0px_23.85px_rgba(0,0,0,0.1)]">
+    <section className="flex w-full flex-col items-center h-full gap-[20px] rounded-[16px] border border-[#eee] bg-white px-[24px] pt-[16px] pb-[48px] drop-shadow-[0px_4px_5.85px_rgba(0,0,0,0.05)] drop-shadow-[0px_0px_23.85px_rgba(0,0,0,0.1)]">
       <div className="flex w-full flex-col gap-[4px]">
         <p className="text-caption text-[#bfbfbf]">최근 n회 분석 기준</p>
         <div className="flex w-full items-center justify-between">
@@ -65,12 +64,6 @@ const FrequentWordsCard = ({ onDetail }) => {
             )}
           </div>
         ))}
-      </div>
-
-      <div className="flex items-center gap-[12px]">
-        <span className="size-[8px] rounded-[99px] bg-[#454545]" />
-        <span className="size-[8px] rounded-[99px] bg-[#d9d9d9]" />
-        <span className="size-[8px] rounded-[99px] bg-[#d9d9d9]" />
       </div>
     </section>
   );
