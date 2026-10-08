@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
+import { getRecordingStatus } from "../../api/recording";
+
 import AppHeader from "../../components/common/AppHeader";
 import BottomSheet, { SheetButton } from "../../components/common/BottomSheet";
 import characterImage from "../../assets/images/record-end-character.png";
 
-// TODO: 분석 상태 API 연동 전, 일정 시간 뒤 완료된 것으로 처리
-const MOCK_ANALYSIS_MS = 3000;
+const POLLING_MS = 3000;
 
 const AnalysisLoading = () => {
   const navigate = useNavigate();
@@ -14,9 +15,39 @@ const AnalysisLoading = () => {
   const [isDone, setIsDone] = useState(false);
 
   useEffect(() => {
-    const timer = setTimeout(() => setIsDone(true), MOCK_ANALYSIS_MS);
-    return () => clearTimeout(timer);
-  }, []);
+    const recordingId = state?.recordingId;
+    if (!recordingId) return;
+
+    let timer;
+    let cancelled = false;
+
+    const poll = async () => {
+      try {
+        const { step } = await getRecordingStatus(recordingId);
+        if (cancelled) return;
+
+        if (step === "SPEAKER_SELECTION_REQUIRED") {
+          setIsDone(true);
+          return;
+        }
+        if (step === "FAILED") {
+          alert("분석에 실패했어요. 다시 시도해 주세요.");
+          navigate("/home", { replace: true });
+          return;
+        }
+      } catch {
+        // 일시적인 오류는 다음 주기에 다시 시도
+      }
+      if (!cancelled) timer = setTimeout(poll, POLLING_MS);
+    };
+
+    poll();
+
+    return () => {
+      cancelled = true;
+      clearTimeout(timer);
+    };
+  }, [state?.recordingId, navigate]);
 
   const goToSpeaker = () => navigate("/analysis/speaker", { replace: true, state });
 
