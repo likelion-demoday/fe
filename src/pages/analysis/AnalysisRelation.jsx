@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
 import { Navigate, useLocation, useNavigate } from "react-router-dom";
 
+import { selectRecordingType } from "../../api/recording";
+
 import AppHeader from "../../components/common/AppHeader";
 import BottomSheet from "../../components/common/BottomSheet";
 import TextBackButton from "../../components/common/TextBackButton";
@@ -43,18 +45,21 @@ const RELATIONS_BY_TYPE = {
   },
 };
 
+const RELATIONSHIP_TYPES = {
+  daily: { friend: "FRIEND_DAILY", lover: "COUPLE_DAILY" },
+  worry: { lover: "COUPLE_CONFLICT", family: "PARENT_CHILD_CONFLICT" },
+};
+
 const COMPLETE_SHEET_MS = 1500;
 
 const AnalysisRelation = () => {
   const navigate = useNavigate();
   const { state } = useLocation();
   const config = RELATIONS_BY_TYPE[state?.type];
-  // null | "purchase"(구매하기) | "complete"(구매완료)
   const [sheet, setSheet] = useState(null);
   const [selected, setSelected] = useState(null);
 
   const goToLoading = useCallback(() => {
-    // TODO: 분석 요청 API 연동
     navigate("/analysis/loading", {
       replace: true,
       state: { ...state, relation: selected?.id },
@@ -78,9 +83,15 @@ const AnalysisRelation = () => {
     setSheet("purchase");
   };
 
-  const handlePurchase = () => {
-    console.log("분석 구매", { ...state, relation: selected.id, price });
-    setSheet("complete");
+  const handlePurchase = async () => {
+    const relationshipType = RELATIONSHIP_TYPES[state.type][selected.id];
+
+    try {
+      await selectRecordingType(state.recordingId, relationshipType);
+      setSheet("complete");
+    } catch (e) {
+      alert(e.message ?? "요청에 실패했어요. 다시 시도해 주세요.");
+    }
   };
 
   return (

@@ -1,4 +1,4 @@
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom"; 
 
 import AppHeader from "../../components/common/AppHeader";
 import dailyIcon from "../../assets/icons/analysis-type-daily.svg";
