@@ -4,14 +4,22 @@ import { useEffect, useRef } from "react";
 const ReportSectionTabs = ({ sections, selected, onSelect }) => {
   const listRef = useRef(null);
   const tabRefs = useRef({});
+  const spacerRef = useRef(null);
 
   useEffect(() => {
+    const list = listRef.current;
     const tab = tabRefs.current[selected];
-    if (listRef.current && tab) {
-      // offsetLeft는 목록 기준 위치(왼쪽 패딩 포함). 선택된 제목을 본문 왼쪽 줄에 맞춤
-      const paddingLeft = parseFloat(getComputedStyle(listRef.current).paddingLeft);
-      listRef.current.scrollTo({ left: tab.offsetLeft - paddingLeft, behavior: "smooth" });
-    }
+    if (!list || !tab || !spacerRef.current) return;
+
+    // offsetLeft는 목록 기준 위치(왼쪽 패딩 포함). 선택된 제목을 본문 왼쪽 줄에 맞춤
+    const target = tab.offsetLeft - parseFloat(getComputedStyle(list).paddingLeft);
+
+    // 뒤쪽 제목도 왼쪽까지 올 수 있도록 부족한 스크롤 길이만큼 끝에 여백 추가
+    spacerRef.current.style.width = "0px";
+    const maxScroll = list.scrollWidth - list.clientWidth;
+    spacerRef.current.style.width = `${Math.max(0, target - maxScroll)}px`;
+
+    list.scrollTo({ left: target, behavior: "smooth" });
   }, [selected]);
 
   return (
@@ -43,6 +51,7 @@ const ReportSectionTabs = ({ sections, selected, onSelect }) => {
           </button>
         );
       })}
+      <span ref={spacerRef} className="shrink-0" aria-hidden="true" />
     </div>
   );
 };

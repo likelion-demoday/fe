@@ -1,8 +1,11 @@
 import { Fragment } from "react";
 
-const CARD_SHADOW = "shadow-[0px_4px_11.7px_0px_rgba(0,0,0,0.05),0px_0px_47.7px_0px_rgba(0,0,0,0.1)]";
-const DIVIDER_GRADIENT =
-  "linear-gradient(90deg, rgba(238,238,238,0) 0%, #eee 5%, #eee 95%, rgba(238,238,238,0) 100%)";
+import {
+  CARD_SHADOW,
+  DIVIDER_GRADIENT,
+  KeywordPill,
+  ReportSection as Section,
+} from "../../components/feature/report/ReportBlocks";
 
 const escapeRegExp = (text) => text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
@@ -20,23 +23,6 @@ const HighlightedText = ({ text, keywords = [] }) => {
     ),
   );
 };
-
-const KeywordPill = ({ label, highlighted = false }) => (
-  <span
-    className={`flex shrink-0 items-center justify-center rounded-[12px] border border-[#eee] bg-white px-[12px] py-[4px] text-[14px] leading-[22px] font-semibold tracking-[0.28px] whitespace-nowrap drop-shadow-[0px_2px_3px_rgba(0,0,0,0.05)] drop-shadow-[0px_0px_5.7px_rgba(0,0,0,0.05)] ${
-      highlighted ? "text-[#ff765b]" : "text-[#595959]"
-    }`}
-  >
-    {label}
-  </span>
-);
-
-const Section = ({ title, children }) => (
-  <section className="flex w-full flex-col items-start gap-[8px]">
-    <h2 className="text-[24px] leading-[34px] font-bold tracking-[0.48px] text-[#262626]">{title}</h2>
-    {children}
-  </section>
-);
 
 const StatBox = ({ label, value }) => (
   <div className="flex w-[101px] flex-col items-center gap-[4px] overflow-clip rounded-[12px] bg-white px-[12px] py-[16px] whitespace-nowrap shadow-[0px_2px_6px_0px_rgba(0,0,0,0.05),0px_0px_11.4px_0px_rgba(0,0,0,0.05)]">

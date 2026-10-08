@@ -65,4 +65,48 @@ export const mockReportDetail = {
     ],
     stats: { recordingTime: "28:41", turns: 182, topicCount: 4 },
   },
+  // position: 막대가 채워지는 정도(0~100), range: 막대 양끝 라벨
+  // "나(me)"는 디자인 값, "친구(partner)"는 화자 전환 확인용 임시 값
+  style: {
+    me: {
+      rhythm: [
+        { label: "발화 비중", value: "72%", position: 72, range: ["0%", "100%"] },
+        { label: "평균 발화 길이", value: "14.2초", position: 64, range: ["짧음", "긺"] },
+        { label: "평균 발화 속도", value: "+12%", position: 62, range: ["느림", "빠름"] },
+      ],
+      rhythmSummary: {
+        title: "설명은 길고 말은 빨라요",
+        description: "바보자쉭님보다 2.5배 이상으로 발화량이 많고 발화가 길어요.",
+      },
+      expressions: [
+        { category: "필러 표현", items: [{ word: "약간", count: 12 }, { word: "근데", count: 7 }, { word: "아니", count: 2 }] },
+        { category: "강조 표현", items: [{ word: "진짜", count: 10 }, { word: "완전", count: 5 }, { word: "너무", count: 3 }] },
+        { category: "단어", items: [{ word: "민지", count: 21 }, { word: "치킨", count: 8 }, { word: "고양이", count: 3 }] },
+      ],
+      expressionSummary: {
+        title: "획일화된 표현을 사용해요",
+        description: "약간, 진짜와 같이 한개의 표현만 반복해서 사용하는 경향이 있어요.",
+      },
+    },
+    partner: {
+      rhythm: [
+        { label: "발화 비중", value: "28%", position: 28, range: ["0%", "100%"] },
+        { label: "평균 발화 길이", value: "5.6초", position: 30, range: ["짧음", "긺"] },
+        { label: "평균 발화 속도", value: "-4%", position: 46, range: ["느림", "빠름"] },
+      ],
+      rhythmSummary: {
+        title: "짧게 받아주며 들어줘요",
+        description: "오늘따라왠지님의 이야기를 짧은 반응으로 받아주며 대화를 이어가요.",
+      },
+      expressions: [
+        { category: "필러 표현", items: [{ word: "음", count: 6 }, { word: "그니까", count: 3 }] },
+        { category: "강조 표현", items: [{ word: "대박", count: 9 }, { word: "완전", count: 4 }] },
+        { category: "단어", items: [{ word: "치킨", count: 7 }, { word: "여행", count: 4 }] },
+      ],
+      expressionSummary: {
+        title: "감탄 표현이 많아요",
+        description: "대박, 완전처럼 상대의 말에 크게 반응하는 표현을 자주 써요.",
+      },
+    },
+  },
 };
