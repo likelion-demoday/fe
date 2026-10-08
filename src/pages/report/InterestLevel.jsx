@@ -1,0 +1,116 @@
+import { useState } from "react";
+
+import {
+  CARD_SHADOW,
+  KeywordPill,
+  ReportSection,
+  SummaryCard,
+} from "../../components/feature/report/ReportBlocks";
+
+const SCORE_COLORS = { me: "text-[#ff765b]", partner: "text-[#6d8cff]" };
+const DETAIL_CARD =
+  "flex w-full flex-col items-start rounded-[20px] border border-[#eee] bg-white p-[20px] drop-shadow-[0px_0px_10px_rgba(0,0,0,0.07)] drop-shadow-[0px_4px_3px_rgba(0,0,0,0.05)]";
+
+// 화자 선택 카드: 이름 + 관심도 점수. 선택하지 않은 쪽은 흐리게
+const SpeakerScoreSelector = ({ speakers, scores, selected, onSelect }) => (
+  <div className="flex items-start gap-[16px]" role="tablist" aria-label="화자 선택">
+    {["me", "partner"].map((key) => (
+      <button
+        key={key}
+        type="button"
+        role="tab"
+        aria-selected={selected === key}
+        onClick={() => onSelect(key)}
+        className={`flex shrink-0 flex-col items-end gap-[12px] overflow-clip rounded-[20px] border border-[#eee] bg-white px-[18px] py-[20px] whitespace-nowrap transition-opacity ${CARD_SHADOW} ${
+          selected === key ? "opacity-100" : "opacity-30"
+        }`}
+      >
+        <span className="text-[20px] font-bold text-[#454545]">{speakers[key].nickname}</span>
+        <span className={`font-['SUITE',sans-serif] text-[30px] font-bold ${SCORE_COLORS[key]}`}>{scores[key]}%</span>
+      </button>
+    ))}
+  </div>
+);
+
+const InterestItem = ({ title, count, description, examples }) => (
+  <div className="flex w-full flex-col items-start gap-[8px]">
+    <div className="flex w-full items-center justify-between whitespace-nowrap">
+      <p className="text-[16px] font-bold tracking-[-0.32px] text-[#2d3038]">{title}</p>
+      <p className="text-[14px] leading-[20px] font-medium tracking-[-0.14px] text-[#ff765b]">총 {count}회</p>
+    </div>
+    <p className="text-[12px] leading-[18px] font-medium tracking-[0.24px] break-keep text-[#6b6b6b]">{description}</p>
+    <div className="flex flex-wrap items-start gap-x-[16px] gap-y-[8px]">
+      {/* 첫 번째 예시를 대표 예시로 강조 */}
+      {examples.map((example, index) => (
+        <KeywordPill key={example} label={example} highlighted={index === 0} />
+      ))}
+    </div>
+  </div>
+);
+
+// 그룹 제목 + 상세 카드 + 요약 카드
+const InterestGroup = ({ title, summary, children }) => (
+  <div className="flex w-full flex-col items-start gap-[8px]">
+    <p className="text-[20px] font-bold whitespace-nowrap text-[#454545]">{title}</p>
+    <div className="flex w-full flex-col gap-[12px]">
+      {children}
+      <SummaryCard {...summary} />
+    </div>
+  </div>
+);
+
+// 관심도: 화자별 관심 점수 · 관심을 보인 방식(맞장구, 질문, 호감 표현)
+const InterestLevel = ({ report }) => {
+  const [speaker, setSpeaker] = useState("me");
+  const scores = { me: report.interest.me.score, partner: report.interest.partner.score };
+  const { summary, groups, affection } = report.interest[speaker];
+
+  return (
+    <div className="flex w-full flex-col items-start gap-[30px] font-['SUIT',sans-serif]">
+      <div className="flex w-full flex-col items-start gap-[10px]">
+        <SpeakerScoreSelector
+          speakers={report.speakers}
+          scores={scores}
+          selected={speaker}
+          onSelect={setSpeaker}
+        />
+        <SummaryCard {...summary} />
+      </div>
+
+      <ReportSection title="관심을 보인 방식">
+        <div className="flex w-full flex-col items-start gap-[30px]">
+          {groups.map(({ title, items, summary: groupSummary }) => (
+            <InterestGroup key={title} title={title} summary={groupSummary}>
+              <div className={`${DETAIL_CARD} gap-[30px]`}>
+                {items.map((item) => (
+                  <InterestItem key={item.title} {...item} />
+                ))}
+              </div>
+            </InterestGroup>
+          ))}
+
+          <InterestGroup title="호감 표현" summary={affection.summary}>
+            <div className={`${DETAIL_CARD} gap-[12px]`}>
+              <p className="text-[12px] leading-[18px] font-medium tracking-[0.24px] text-[#6b6b6b]">
+                대화에서 직접 드러난 표현만 세었어요
+              </p>
+              <div className="grid w-full grid-cols-2 gap-[10px] text-[14px] leading-[22px] font-semibold tracking-[0.28px] whitespace-nowrap">
+                {affection.items.map(({ label, count }) => (
+                  <div
+                    key={label}
+                    className="flex items-center justify-between rounded-[12px] bg-white px-[12px] py-[8px] drop-shadow-[0px_2px_3px_rgba(0,0,0,0.05)] drop-shadow-[0px_0px_5.7px_rgba(0,0,0,0.05)]"
+                  >
+                    <span className="text-[#2d3038]">{label}</span>
+                    <span className="text-[#ff765b]">{count}회</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </InterestGroup>
+        </div>
+      </ReportSection>
+    </div>
+  );
+};
+
+export default InterestLevel;

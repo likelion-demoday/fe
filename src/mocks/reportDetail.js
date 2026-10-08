@@ -109,4 +109,93 @@ export const mockReportDetail = {
       },
     },
   },
+  // examples: 실제로 한 말 예시 (첫 번째가 대표 예시)
+  // "나(me)"는 디자인 값, "친구(partner)"는 화자 전환 확인용 임시 값
+  interest: {
+    me: {
+      score: 87,
+      summary: {
+        title: "질문으로 상대에게 관심을 보여요",
+        description: "대화비중이 높지 않지만 상대보다 3.2배 많이 질문했어요.",
+      },
+      groups: [
+        {
+          title: "맞장구 • 공감",
+          items: [
+            { title: "짧게 받아주기", count: 31, description: "짧은 말로 상대의 발화를 끊지 않고 이어줬어요.", examples: ["응", "맞아", "아 진짜?"] },
+            { title: "상대 말 반복하기", count: 12, description: "상대의 말을 다시 짚어주며 듣고 있음을 보여줬어요.", examples: ["아 스타벅스 갔구나", "오 교수님이 불렀다고?", "아 햄버거 먹었구나"] },
+            { title: "상황 이해 표현", count: 6, description: "상대의 상황을 이해한다는 뜻을 말로 표현했어요.", examples: ["응 그렇긴 하네", "맞아"] },
+          ],
+          summary: {
+            title: "주로 바보자쉭님의 말을 반복해요",
+            description: "바보자쉭님이 자신의 이야기를 잘 듣고 있다고 느낄 수 있지만, 부담스럽게 느껴질 수도 있어요.",
+          },
+        },
+        {
+          title: "질문",
+          items: [
+            { title: "이어묻기", count: 21, description: "상대의 다음 이야기가 이어지도록 자연스럽게 물었어요.", examples: ["오 그래서?", "그럼 어떡해?", "아 진짜?"] },
+            { title: "감정묻기", count: 8, description: "상대가 그때 어떻게 느꼈는지 직접 물었어요.", examples: ["아 스타벅스 갔구나", "오 교수님이 불렀다고?", "아 햄버거 먹었구나"] },
+          ],
+          summary: {
+            title: "바보자쉭님의 감정을 고려해요",
+            description: "바보자쉭님이 겪은 일을 말하면 오늘따라왠지님은 감정을 자주 물어봐요.",
+          },
+        },
+      ],
+      affection: {
+        items: [
+          { label: "칭찬", count: 2 },
+          { label: "응원", count: 2 },
+          { label: "챙기는 말", count: 2 },
+          { label: "친근한 호칭", count: 2 },
+          { label: "직접적인 호감", count: 2 },
+          { label: "반가움", count: 2 },
+        ],
+        summary: {
+          title: "바보자쉭님의 감정을 고려해요",
+          description: "바보자쉭님이 겪은 일을 말하면 오늘따라왠지님은 감정을 자주 물어봐요.",
+        },
+      },
+    },
+    partner: {
+      score: 21,
+      summary: {
+        title: "짧은 맞장구로 관심을 보여요",
+        description: "질문은 적지만 상대의 말에 빠르게 반응하며 대화를 이어가요.",
+      },
+      groups: [
+        {
+          title: "맞장구 • 공감",
+          items: [
+            { title: "짧게 받아주기", count: 18, description: "짧은 말로 상대의 발화를 끊지 않고 이어줬어요.", examples: ["헐", "대박", "그치"] },
+          ],
+          summary: {
+            title: "짧고 빠르게 반응해요",
+            description: "오늘따라왠지님의 이야기에 짧은 감탄으로 바로 반응해요.",
+          },
+        },
+        {
+          title: "질문",
+          items: [
+            { title: "이어묻기", count: 4, description: "상대의 다음 이야기가 이어지도록 자연스럽게 물었어요.", examples: ["그래서 어떻게 됐어?"] },
+          ],
+          summary: {
+            title: "질문보다 반응이 많아요",
+            description: "새로 묻기보다 상대의 이야기에 반응하는 쪽이 많아요.",
+          },
+        },
+      ],
+      affection: {
+        items: [
+          { label: "반가움", count: 3 },
+          { label: "칭찬", count: 1 },
+        ],
+        summary: {
+          title: "반가움을 자주 표현해요",
+          description: "오늘따라왠지님의 이야기에 반가움을 드러내는 표현이 많아요.",
+        },
+      },
+    },
+  },
 };
