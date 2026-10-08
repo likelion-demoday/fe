@@ -25,7 +25,7 @@ const AnalysisStart = () => {
     
     try {
       const result = await uploadRecording(file);
-      navigate('/analysis/record', { state: { recordingId: result.recordingId } });
+      navigate("/analysis/type", { state: { recordingId: result.recordingId } });
     } catch (error) {
       alert(error.message);
     } finally {
@@ -53,7 +53,7 @@ const AnalysisStart = () => {
           <ActionCard
             icon={<img src={microphoneSpeakingIcon} alt="" className="size-[24px] shrink-0" />}
             label="새로 녹음 시작하기"
-            onClick={() => navigate("/analysis/type")}
+            onClick={() => navigate("/analysis/record")}
           />
           <ActionCard
             icon={<img src={attachmentIcon} alt="" className="size-[24px] shrink-0" />}
