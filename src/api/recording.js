@@ -39,3 +39,7 @@ export const getRecordingStatus = async (recordingId) => {
 export const deleteRecording = async (recordingId) => {
   return api.delete(`/api/v1/recordings/${recordingId}`);
 };
+
+export const payRecording = async (recordingId) => {
+  return api.post(`/api/v1/recordings/${recordingId}/payment`);
+};
