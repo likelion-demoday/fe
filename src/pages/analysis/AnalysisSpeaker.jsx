@@ -1,5 +1,7 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+
+import { getSpeakerSamples, mapSpeakers } from "../../api/recording";
 
 import AppHeader from "../../components/common/AppHeader";
 import BottomSheet, { SheetButton } from "../../components/common/BottomSheet";
@@ -8,23 +10,21 @@ import clipLeft2 from "../../assets/icons/voice-clip-left-2.svg";
 import clipRight1 from "../../assets/icons/voice-clip-right-1.svg";
 import clipRight2 from "../../assets/icons/voice-clip-right-2.svg";
 
-// TODO: 사용자 닉네임 API 연동 전 임시 값
+
 const USER_NAME = "OOO";
 
-// 상대방 호칭 최대 글자 수
+
 const PARTNER_NAME_MAX = 7;
 
-// 보고서에서 상대방을 부를 이름을 묻는 문구
+
 const PARTNER_LABELS = {
   friend: "친구를",
   lover: "연인을",
   family: "상대방을",
 };
 
-// 화자별 음성 클립 말풍선 (디자인 기준 190x40 슬롯, SVG는 그림자 포함 크기)
-const SPEAKERS = [
+const SPEAKER_LAYOUTS = [
   {
-    id: 1,
     align: "left",
     clips: [
       { src: clipLeft1, inset: "inset-[-50%_-10.53%_-50%_-15.79%]" },
@@ -32,7 +32,6 @@ const SPEAKERS = [
     ],
   },
   {
-    id: 2,
     align: "right",
     clips: [
       { src: clipRight1, inset: "inset-[-50%_-15.79%_-50%_-10.53%]" },
@@ -41,7 +40,21 @@ const SPEAKERS = [
   },
 ];
 
-const SpeakerRow = ({ speaker, onSelect }) => {
+
+const toSpeakers = (apiSpeakers) =>
+  apiSpeakers.slice(0, SPEAKER_LAYOUTS.length).map(({ speakerLabel, samples }, index) => {
+    const layout = SPEAKER_LAYOUTS[index];
+    return {
+      id: index + 1,
+      label: speakerLabel,
+      align: layout.align,
+      clips: layout.clips
+        .slice(0, samples.length)
+        .map((clip, clipIndex) => ({ ...clip, ...samples[clipIndex] })),
+    };
+  });
+
+const SpeakerRow = ({ speaker, onSelect, onPlay }) => {
   const card = (
     <button
       type="button"
@@ -54,12 +67,11 @@ const SpeakerRow = ({ speaker, onSelect }) => {
 
   const clips = (
     <div className="flex w-[190px] shrink-0 flex-col justify-center gap-[16px]">
-      {speaker.clips.map(({ src, inset }, index) => (
+      {speaker.clips.map(({ src, inset, startMs, endMs }, index) => (
         <button
           key={src}
           type="button"
-          // TODO: 화자별 음성 클립 재생
-          onClick={() => console.log("음성 클립 재생", speaker.id, index)}
+          onClick={() => onPlay(startMs, endMs)}
           aria-label={`화자 ${speaker.id} 음성 ${index + 1} 듣기`}
           className="relative h-[40px] w-full"
         >
@@ -90,14 +102,47 @@ const AnalysisSpeaker = () => {
   const navigate = useNavigate();
   const { state } = useLocation();
   const inputRef = useRef(null);
+  const audioRef = useRef(null);
+  const clipEndRef = useRef(null);
 
   // null | "confirm"(화자 확인) | "name"(상대방 호칭 입력)
   const [sheet, setSheet] = useState(null);
   const [speakerId, setSpeakerId] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [partnerName, setPartnerName] = useState("");
+  const [speakers, setSpeakers] = useState([]);
+  const [audioUrl, setAudioUrl] = useState(null);
+  const [submitting, setSubmitting] = useState(false);
 
   const partnerLabel = PARTNER_LABELS[state?.relation] ?? "상대방을";
+  const recordingId = state?.recordingId;
+
+  useEffect(() => {
+    if (!recordingId) return;
+    getSpeakerSamples(recordingId)
+      .then((result) => {
+        setSpeakers(toSpeakers(result.speakers ?? []));
+        setAudioUrl(result.audioUrl);
+      })
+      .catch((e) => alert(e.message ?? "화자 정보를 불러오지 못했어요."));
+  }, [recordingId]);
+
+  // 클립 구간(startMs~endMs)만 재생
+  const playClip = (startMs, endMs) => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    clipEndRef.current = endMs / 1000;
+    audio.currentTime = startMs / 1000;
+    audio.play();
+  };
+
+  const handleTimeUpdate = () => {
+    const audio = audioRef.current;
+    if (clipEndRef.current !== null && audio.currentTime >= clipEndRef.current) {
+      audio.pause();
+      clipEndRef.current = null;
+    }
+  };
 
   const handleSelectSpeaker = (id) => {
     setSpeakerId(id);
@@ -116,10 +161,22 @@ const AnalysisSpeaker = () => {
     setPartnerName("");
   };
 
-  const handleSubmit = () => {
-    // TODO: 화자/호칭 저장 API 연동 후 리포트 화면으로 이동
-    console.log("화자 선택 완료", { ...state, speakerId, partnerName: partnerName.trim() });
-    navigate("/home", { replace: true });
+  const handleSubmit = async () => {
+    const selected = speakers.find(({ id }) => id === speakerId);
+    if (!selected || submitting) return;
+
+    setSubmitting(true);
+    try {
+      await mapSpeakers(recordingId, {
+        selfSpeakerLabel: selected.label,
+        partnerNickname: partnerName.trim(),
+      });
+      // TODO: 리포트 화면 생기면 그쪽으로 이동
+      navigate("/home", { replace: true });
+    } catch (e) {
+      alert(e.message ?? "요청에 실패했어요. 다시 시도해 주세요.");
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -129,11 +186,18 @@ const AnalysisSpeaker = () => {
       <section className="flex w-full flex-col gap-[36px]">
         <h2 className="text-heading text-[#262626]">{USER_NAME}님의 목소리를 골라주세요</h2>
         <div className="flex w-full flex-col gap-[140px]">
-          {SPEAKERS.map((speaker) => (
-            <SpeakerRow key={speaker.id} speaker={speaker} onSelect={handleSelectSpeaker} />
+          {speakers.map((speaker) => (
+            <SpeakerRow
+              key={speaker.id}
+              speaker={speaker}
+              onSelect={handleSelectSpeaker}
+              onPlay={playClip}
+            />
           ))}
         </div>
       </section>
+
+      {audioUrl && <audio ref={audioRef} src={audioUrl} preload="auto" onTimeUpdate={handleTimeUpdate} />}
 
       {sheet === "confirm" && (
         <BottomSheet
