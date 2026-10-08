@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
 import { Navigate, useLocation, useNavigate } from "react-router-dom";
 
-import { selectRecordingType } from "../../api/recording";
+import { payRecording, selectRecordingType } from "../../api/recording";
+import { getCreditPrices, getMyCredits } from "../../api/credit";
 
 import AppHeader from "../../components/common/AppHeader";
 import BottomSheet from "../../components/common/BottomSheet";
@@ -50,6 +51,9 @@ const RELATIONSHIP_TYPES = {
   worry: { lover: "COUPLE_CONFLICT", family: "PARENT_CHILD_CONFLICT" },
 };
 
+// type → 크레딧 가격 키 (/credits/prices의 analysis)
+const PRICE_KEYS = { daily: "daily", worry: "conflict" };
+
 const COMPLETE_SHEET_MS = 1500;
 
 const AnalysisRelation = () => {
@@ -58,11 +62,25 @@ const AnalysisRelation = () => {
   const config = RELATIONS_BY_TYPE[state?.type];
   const [sheet, setSheet] = useState(null);
   const [selected, setSelected] = useState(null);
+  const [ownedCredit, setOwnedCredit] = useState(0);
+  const [price, setPrice] = useState(0);
+  const [paying, setPaying] = useState(false);
 
+  useEffect(() => {
+    if (!config) return;
+    Promise.all([getMyCredits(), getCreditPrices()])
+      .then(([credits, prices]) => {
+        setOwnedCredit(credits.balance ?? 0);
+        setPrice(prices.analysis?.[PRICE_KEYS[state.type]] ?? 0);
+      })
+      .catch((e) => alert(e.message ?? "크레딧 정보를 불러오지 못했어요."));
+  }, [config, state?.type]);
+
+  // 결제 후 전사(음성 → 텍스트) 완료까지 로딩 화면에서 대기
   const goToLoading = useCallback(() => {
     navigate("/analysis/loading", {
       replace: true,
-      state: { ...state, relation: selected?.id },
+      state: { ...state, relation: selected?.id, phase: "transcribing" },
     });
   }, [navigate, state, selected]);
 
@@ -75,22 +93,24 @@ const AnalysisRelation = () => {
   if (!config) return <Navigate to="/analysis/type" replace state={state} />;
 
 
-  const ownedCredit = 2000;
-  const price = 1300;
-
   const handleSelect = (relation) => {
     setSelected(relation);
     setSheet("purchase");
   };
 
   const handlePurchase = async () => {
+    if (paying) return;
     const relationshipType = RELATIONSHIP_TYPES[state.type][selected.id];
 
+    setPaying(true);
     try {
       await selectRecordingType(state.recordingId, relationshipType);
+      await payRecording(state.recordingId);
       setSheet("complete");
     } catch (e) {
       alert(e.message ?? "요청에 실패했어요. 다시 시도해 주세요.");
+    } finally {
+      setPaying(false);
     }
   };
 
