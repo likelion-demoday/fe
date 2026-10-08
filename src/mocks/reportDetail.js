@@ -198,4 +198,42 @@ export const mockReportDetail = {
       },
     },
   },
+  // axes: 표현 지표(value·position 0~100), examples가 있으면 실제 쓴 단어 칩 표시
+  // "나(me)"는 디자인 값, "친구(partner)"는 화자 전환 확인용 임시 값
+  expression: {
+    me: {
+      score: 87,
+      summary: {
+        title: "욕은 적지만 필터링이 없는 편이에요",
+        description: "비속어는 많지 않지만 생각을 돌려 말하지 않고 그대로 표현해요.",
+      },
+      axes: [
+        { label: "비속어", value: 91, description: "비속어를 사용하는 정도", examples: ["씨*", "미친", "또라이"] },
+        { label: "직설력", value: 88, description: "의견을 돌려말하지 않는 정도" },
+        { label: "표현 강도", value: 80, description: "부정 평가를 할 때 강한 단어를 사용하는 정도" },
+        { label: "완충 표현", value: 72, description: "말의 강도를 낮추는 말을 사용하는 정도" },
+      ],
+      contexts: [
+        { title: "공격대상", description: "상대에게 직접적으로 하는 평가가 종종 보여요." },
+        { title: "장난 맥락", description: "직설적인 농담과 평가가 섞여 있어요." },
+        { title: "회복 표현", description: "세게 말한 뒤 의미를 다시 풀어줘요." },
+      ],
+    },
+    partner: {
+      score: 21,
+      summary: {
+        title: "부드럽게 말하는 편이에요",
+        description: "강한 표현은 적고, 말끝을 부드럽게 흐리는 경우가 많아요.",
+      },
+      axes: [
+        { label: "비속어", value: 12, description: "비속어를 사용하는 정도", examples: ["미친"] },
+        { label: "직설력", value: 35, description: "의견을 돌려말하지 않는 정도" },
+        { label: "표현 강도", value: 20, description: "부정 평가를 할 때 강한 단어를 사용하는 정도" },
+        { label: "완충 표현", value: 81, description: "말의 강도를 낮추는 말을 사용하는 정도" },
+      ],
+      contexts: [
+        { title: "장난 맥락", description: "강한 표현은 대부분 장난스러운 흐름에서 나왔어요." },
+      ],
+    },
+  },
 };

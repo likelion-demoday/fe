@@ -1,36 +1,14 @@
 import { useState } from "react";
 
 import {
-  CARD_SHADOW,
   KeywordPill,
   ReportSection,
+  SpeakerScoreSelector,
   SummaryCard,
 } from "../../components/feature/report/ReportBlocks";
 
-const SCORE_COLORS = { me: "text-[#ff765b]", partner: "text-[#6d8cff]" };
 const DETAIL_CARD =
   "flex w-full flex-col items-start rounded-[20px] border border-[#eee] bg-white p-[20px] drop-shadow-[0px_0px_10px_rgba(0,0,0,0.07)] drop-shadow-[0px_4px_3px_rgba(0,0,0,0.05)]";
-
-// 화자 선택 카드: 이름 + 관심도 점수. 선택하지 않은 쪽은 흐리게
-const SpeakerScoreSelector = ({ speakers, scores, selected, onSelect }) => (
-  <div className="flex items-start gap-[16px]" role="tablist" aria-label="화자 선택">
-    {["me", "partner"].map((key) => (
-      <button
-        key={key}
-        type="button"
-        role="tab"
-        aria-selected={selected === key}
-        onClick={() => onSelect(key)}
-        className={`flex shrink-0 flex-col items-end gap-[12px] overflow-clip rounded-[20px] border border-[#eee] bg-white px-[18px] py-[20px] whitespace-nowrap transition-opacity ${CARD_SHADOW} ${
-          selected === key ? "opacity-100" : "opacity-30"
-        }`}
-      >
-        <span className="text-[20px] font-bold text-[#454545]">{speakers[key].nickname}</span>
-        <span className={`font-['SUITE',sans-serif] text-[30px] font-bold ${SCORE_COLORS[key]}`}>{scores[key]}%</span>
-      </button>
-    ))}
-  </div>
-);
 
 const InterestItem = ({ title, count, description, examples }) => (
   <div className="flex w-full flex-col items-start gap-[8px]">

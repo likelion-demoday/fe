@@ -8,6 +8,7 @@ import OverviewSection from "../../components/feature/report/OverviewSection";
 import ConversationInformation from "./ConversationInformation";
 import ConversationStyle from "./ConversationStyle";
 import InterestLevel from "./InterestLevel";
+import BadLevel from "./BadLevel";
 import dailyIcon from "../../assets/icons/analysis-type-daily-s.svg";
 import relationMainIcon from "../../assets/icons/relation-main-s.svg";
 import { mockReportDetail } from "../../mocks/reportDetail";
@@ -18,7 +19,7 @@ const SECTIONS = [
   { key: "info", label: "대화 정보" },
   { key: "style", label: "대화 방식" },
   { key: "interest", label: "관심도" },
-  { key: "expression", label: "표독력", disabled: true },
+  { key: "expression", label: "표독력" },
   { key: "extra", label: "추가 분석", disabled: true },
 ];
 
@@ -28,6 +29,7 @@ const SECTION_CONTENT = {
   info: { Component: ConversationInformation, gap: "gap-[20px]" },
   style: { Component: ConversationStyle, gap: "gap-[20px]" },
   interest: { Component: InterestLevel, gap: "gap-[20px]" },
+  expression: { Component: BadLevel, gap: "gap-[20px]" },
 };
 
 const TagChip = ({ icon, label }) => (

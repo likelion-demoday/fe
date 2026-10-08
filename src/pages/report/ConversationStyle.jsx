@@ -5,27 +5,13 @@ import {
   DIVIDER_GRADIENT,
   KeywordPill,
   ReportSection,
+  SpectrumBar,
   SummaryCard,
 } from "../../components/feature/report/ReportBlocks";
+import { SPEAKER_TONES } from "../../constants/report";
 
 // 디자인 주석: 5회 초과 사용한 표현은 강조
 const HIGHLIGHT_OVER = 5;
-
-// 디자인: 채워진 막대 끝보다 약 2% 앞에서 연한 배경 막대가 시작
-const TRACK_OVERLAP = 2.05;
-
-const SPEAKER_TONES = {
-  me: {
-    text: "text-[#ff765b]",
-    track: "from-white to-[#fff1ef]",
-    fill: "from-[#ffe2d8] to-[#ff8d77]",
-  },
-  partner: {
-    text: "text-[#6d8cff]",
-    track: "from-white to-[#f0f4ff]",
-    fill: "from-[#c3d0ff] to-[#6d8cff]",
-  },
-};
 
 const SpeakerSelector = ({ speakers, selected, onSelect }) => (
   <div className="flex w-full items-center justify-center gap-[16px]" role="tablist" aria-label="화자 선택">
@@ -47,22 +33,6 @@ const SpeakerSelector = ({ speakers, selected, onSelect }) => (
     ))}
   </div>
 );
-
-const SpectrumBar = ({ position, tone }) => {
-  const fill = Math.min(100, Math.max(0, position));
-  return (
-    <div className="relative h-[10px] w-full drop-shadow-[0px_0px_5.7px_rgba(0,0,0,0.05)]">
-      <div
-        className={`absolute inset-y-0 right-0 rounded-r-[8px] bg-gradient-to-r to-[58.173%] ${tone.track}`}
-        style={{ left: `${Math.max(0, fill - TRACK_OVERLAP)}%` }}
-      />
-      <div
-        className={`absolute inset-y-0 left-0 rounded-[35px] bg-gradient-to-r ${tone.fill}`}
-        style={{ width: `${fill}%` }}
-      />
-    </div>
-  );
-};
 
 const ExpressionPill = ({ word, count }) => {
   const highlighted = count > HIGHLIGHT_OVER;
