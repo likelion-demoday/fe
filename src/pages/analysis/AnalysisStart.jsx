@@ -53,7 +53,7 @@ const AnalysisStart = () => {
           <ActionCard
             icon={<img src={microphoneSpeakingIcon} alt="" className="size-[24px] shrink-0" />}
             label="새로 녹음 시작하기"
-            onClick={() => navigate("/analysis/partner")}
+            onClick={() => navigate("/analysis/type")}
           />
           <ActionCard
             icon={<img src={attachmentIcon} alt="" className="size-[24px] shrink-0" />}
