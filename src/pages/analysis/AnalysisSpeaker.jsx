@@ -171,8 +171,10 @@ const AnalysisSpeaker = () => {
         selfSpeakerLabel: selected.label,
         partnerNickname: partnerName.trim(),
       });
-      // TODO: 리포트 화면 생기면 그쪽으로 이동
-      navigate("/home", { replace: true });
+      navigate("/analysis/loading", {
+        replace: true,
+        state: { ...state, phase: "analyzing" },
+      });
     } catch (e) {
       alert(e.message ?? "요청에 실패했어요. 다시 시도해 주세요.");
       setSubmitting(false);

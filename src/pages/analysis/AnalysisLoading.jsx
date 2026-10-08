@@ -9,10 +9,12 @@ import characterImage from "../../assets/images/record-end-character.png";
 
 const POLLING_MS = 3000;
 
+// phase: "transcribing"(전사 대기 → 화자 선택) | "analyzing"(분석 대기 → 분석완료)
 const AnalysisLoading = () => {
   const navigate = useNavigate();
   const { state } = useLocation();
   const [isDone, setIsDone] = useState(false);
+  const isAnalyzing = state?.phase === "analyzing";
 
   useEffect(() => {
     const recordingId = state?.recordingId;
@@ -26,7 +28,11 @@ const AnalysisLoading = () => {
         const { step } = await getRecordingStatus(recordingId);
         if (cancelled) return;
 
-        if (step === "SPEAKER_SELECTION_REQUIRED") {
+        if (!isAnalyzing && step === "SPEAKER_SELECTION_REQUIRED") {
+          navigate("/analysis/speaker", { replace: true, state });
+          return;
+        }
+        if (isAnalyzing && step === "COMPLETED") {
           setIsDone(true);
           return;
         }
@@ -47,9 +53,11 @@ const AnalysisLoading = () => {
       cancelled = true;
       clearTimeout(timer);
     };
-  }, [state?.recordingId, navigate]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state?.recordingId, isAnalyzing, navigate]);
 
-  const goToSpeaker = () => navigate("/analysis/speaker", { replace: true, state });
+  // TODO: 보고서 화면 생기면 그쪽으로 이동
+  const goToHome = () => navigate("/home", { replace: true });
 
   return (
     <main className="relative mx-auto h-[844px] w-[390px] overflow-hidden bg-white">
@@ -96,8 +104,8 @@ const AnalysisLoading = () => {
       {isDone && (
         <BottomSheet
           title="분석완료!"
-          onClose={goToSpeaker}
-          footer={<SheetButton text="다음" onClick={goToSpeaker} />}
+          onClose={goToHome}
+          footer={<SheetButton text="다음" onClick={goToHome} />}
         />
       )}
     </main>
