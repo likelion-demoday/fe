@@ -12,11 +12,14 @@ const RecordingArchive = ({
   initialCategory = "전체",
   emptyMessage = "아직 저장된 대화가 없어요",
   onSelect,
+  loading = false,
+  error = "",
+  hasNext = false,
+  onLoadMore,
+  onRetry,
 }) => {
   const navigate = useNavigate();
-  const [category, setCategory] = useState(
-    items.length === 0 ? "친구관계" : initialCategory,
-  );
+  const [category, setCategory] = useState(initialCategory);
   const categories = [
     "전체",
     ...new Set([
@@ -57,15 +60,27 @@ const RecordingArchive = ({
             />
           </div>
         </div>
+        {loading && <p role="status">목록을 불러오는 중...</p>}
+        {error && (
+          <div>
+            <p role="alert">{error}</p>
+            <button type="button" onClick={onRetry} disabled={loading}>
+              다시 시도
+            </button>
+          </div>
+        )}
         {filteredConversations.length === 0 ? (
-          <ArchiveEmptyState
-            className="mt-[152px]"
-            message={
-              items.length === 0
-                ? emptyMessage
-                : "해당 분류에 저장된 항목이 없어요"
-            }
-          />
+          !loading &&
+          !error && (
+            <ArchiveEmptyState
+              className="mt-[152px]"
+              message={
+                items.length === 0
+                  ? emptyMessage
+                  : "해당 분류에 저장된 항목이 없어요"
+              }
+            />
+          )
         ) : (
           <div className="flex flex-col gap-[26px]">
             {filteredConversations.map(({ id, ...conversation }, index) => (
@@ -81,11 +96,21 @@ const RecordingArchive = ({
                 )}
                 <SavedConversationItem
                   {...conversation}
-                  onClick={() => onSelect?.(id)}
+                  onClick={onSelect ? () => onSelect(id) : undefined}
                 />
               </Fragment>
             ))}
           </div>
+        )}
+        {hasNext && !error && (
+          <button
+            type="button"
+            onClick={onLoadMore}
+            disabled={loading}
+            className="mt-[20px] rounded-[12px] border border-[#eee] py-[12px] disabled:opacity-50"
+          >
+            더 보기
+          </button>
         )}
       </div>
     </main>
