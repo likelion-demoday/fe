@@ -7,16 +7,13 @@ const idleBar = () => 0.05 + Math.random() ** 1.5 * 0.45;
 const createIdleLevels = () => Array.from({ length: BAR_COUNT }, idleBar);
 
 const MIME_CANDIDATES = [
-  "audio/webm;codecs=opus",
-  "audio/webm",
-  "audio/mp4",
-  "audio/mpeg",
+  "audio/mp4"
 ];
 
 const pickMimeType = () => {
   if (typeof MediaRecorder === "undefined") return null;
   return (
-    MIME_CANDIDATES.find((type) => MediaRecorder.isTypeSupported(type)) ?? ""
+    MIME_CANDIDATES.find((type) => MediaRecorder.isTypeSupported(type)) ?? null
   );
 };
 
@@ -142,7 +139,7 @@ export function useAudioRecorder() {
 
       const recorder = new MediaRecorder(
         stream,
-        mimeType ? { mimeType } : undefined,
+        { mimeType },
       );
       recorder.ondataavailable = (event) => {
         if (event.data.size > 0) chunksRef.current.push(event.data);
@@ -193,7 +190,7 @@ export function useAudioRecorder() {
     if (!recorder || recorder.state === "inactive") return null;
     Promise.resolve(null);
 
-    const mimeType = recorder.mimeType || "audio/webm";
+    const mimeType = recorder.mimeType || "audio/mp4";
 
     return new Promise((resolve) => {
       const handle = () => {
@@ -210,7 +207,7 @@ export function useAudioRecorder() {
     if (!recorder || recorder.state === "inactive")
       return Promise.resolve(null);
 
-    const mimeType = recorder.mimeType || "audio/webm";
+    const mimeType = recorder.mimeType || "audio/mp4";
 
     return new Promise((resolve) => {
       recorder.onstop = () => {
