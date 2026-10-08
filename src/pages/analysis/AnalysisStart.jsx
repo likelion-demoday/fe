@@ -63,7 +63,7 @@ const AnalysisStart = () => {
           <input
             ref={fileInputRef}
             type="file"
-            accept="audio/*"
+            accept=".m4a,.mp3,audio/mp4,audio/mpeg"
             className="hidden"
             onChange={handleFileChange}
           />
