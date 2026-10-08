@@ -10,7 +10,6 @@ import {
 } from "../../components/feature/report/ReportBlocks";
 import { SPEAKER_TONES } from "../../constants/report";
 
-// 디자인 주석: 5회 초과 사용한 표현은 강조
 const HIGHLIGHT_OVER = 5;
 
 const SpeakerSelector = ({ speakers, selected, onSelect }) => (
@@ -50,7 +49,7 @@ const ExpressionPill = ({ word, count }) => {
   );
 };
 
-// 대화 방식: 화자별 말하는 리듬 · 자주 쓰는 표현
+
 const ConversationStyle = ({ report }) => {
   const [speaker, setSpeaker] = useState("me");
   const { rhythm, rhythmSummary, expressions, expressionSummary } = report.style[speaker];

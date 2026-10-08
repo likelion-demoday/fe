@@ -61,13 +61,13 @@ function App() {
           path="/mypage/payments/history"
           element={<PurchaseHistoryPage />}
         />
-        <Route path="/mypage/recordings" element={<Recordings />} />
+        <Route path="/recordings" element={<Recordings />} />
         <Route
-          path="/mypage/recordings/conversations"
+          path="/recordings/conversations"
           element={<SavedConversations />}
         />
         <Route
-          path="/mypage/recordings/reports"
+          path="/recordings/reports"
           element={<ReportArchive />}
         />
         <Route path="/mypage/account" element={<Account />} />
