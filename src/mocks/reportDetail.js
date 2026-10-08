@@ -43,4 +43,26 @@ export const mockReportDetail = {
       description: "오랫동안 오늘따라왠지님이 말하면 일곱글자닉네임이 엄청난 리액션으로 받아줘요.",
     },
   },
+  // keywords: 설명 문장 안에서 강조할 단어
+  info: {
+    commonInterests: ["여행", "공연", "취업"],
+    longestTopic: {
+      title: "여행 계획",
+      duration: "8분 12초",
+      description: "서로 경험을 덧붙이며 이야기해 주제가 끊기지 않고 이어졌어요.",
+    },
+    timeline: [
+      { time: "11:30", title: "근황 공유", description: "학교와 알바 얘기로 가볍게 대화를 시작했어요.", keywords: ["학교", "알바"] },
+      { time: "15:30", title: "공통 관심사", description: "여행과 공연 이야기가 이어지며 서로 질문이 많아졌어요.", keywords: ["여행", "공연"] },
+      { time: "21:30", title: "반응 활발", description: "농담과 맞장구가 늘면서 발화 길이도 함께 길어졌어요.", keywords: [] },
+      { time: "23:30", title: "다음 약속", description: "다음 주 만날 장소를 정하며 자연스럽게 마무리했어요.", keywords: ["다음 주 만날 장소"] },
+    ],
+    topicTurns: [
+      { topic: "개그맨 데뷔 과정", turns: 82 },
+      { topic: "활동과 코미디 회고", turns: 82 },
+      { topic: "운동과 몸 이야기", turns: 2 },
+      { topic: "근황 공유", turns: 36 },
+    ],
+    stats: { recordingTime: "28:41", turns: 182, topicCount: 4 },
+  },
 };

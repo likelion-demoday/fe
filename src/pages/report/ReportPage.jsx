@@ -5,6 +5,7 @@ import AppHeader from "../../components/common/AppHeader";
 import { SheetButton } from "../../components/common/BottomSheet";
 import ReportSectionTabs from "../../components/feature/report/ReportSectionTabs";
 import OverviewSection from "../../components/feature/report/OverviewSection";
+import ConversationInformation from "./ConversationInformation";
 import dailyIcon from "../../assets/icons/analysis-type-daily-s.svg";
 import relationMainIcon from "../../assets/icons/relation-main-s.svg";
 import { mockReportDetail } from "../../mocks/reportDetail";
@@ -12,15 +13,17 @@ import { shareCurrentPage } from "../../utils/share";
 
 const SECTIONS = [
   { key: "overview", label: "한번에 보기" },
-  { key: "info", label: "대화 정보", disabled: true },
+  { key: "info", label: "대화 정보" },
   { key: "style", label: "대화 방식", disabled: true },
   { key: "interest", label: "관심도", disabled: true },
   { key: "expression", label: "표독력", disabled: true },
   { key: "extra", label: "추가 분석", disabled: true },
 ];
 
+// gap: 섹션 제목 탭과 본문 사이 간격 (디자인 기준)
 const SECTION_CONTENT = {
-  overview: OverviewSection,
+  overview: { Component: OverviewSection, gap: "gap-[16px]" },
+  info: { Component: ConversationInformation, gap: "gap-[20px]" },
 };
 
 const TagChip = ({ icon, label }) => (
@@ -33,41 +36,43 @@ const TagChip = ({ icon, label }) => (
 const ReportPage = ({ report = mockReportDetail }) => {
   const navigate = useNavigate();
   const [section, setSection] = useState("overview");
-  const SectionContent = SECTION_CONTENT[section];
+  const { Component: SectionContent, gap } = SECTION_CONTENT[section];
 
   return (
     <main className="mx-auto flex h-[844px] w-[390px] flex-col bg-white">
       <div className="no-scrollbar flex min-h-0 flex-1 flex-col gap-[20px] overflow-x-hidden overflow-y-auto px-[24px] py-[16px]">
         <AppHeader />
 
-        <div className="flex w-full flex-col items-start gap-[16px]">
+        <div className={`flex w-full flex-col items-start ${gap}`}>
           <ReportSectionTabs sections={SECTIONS} selected={section} onSelect={setSection} />
 
-          <div className="flex items-center gap-[8px]">
-            <p className="font-['SUIT',sans-serif] text-[13px] leading-[20px] font-semibold tracking-[-0.26px] whitespace-pre text-[#8c8c8c]">
-              {`${report.date}  ·  ${report.duration} 녹음`}
-            </p>
-            <div className="flex items-center gap-[6px]">
-              <TagChip
-                icon={<img src={dailyIcon} alt="" className="block size-[20px] max-w-none shrink-0" />}
-                label={report.type}
-              />
-              <TagChip
-                icon={
-                  <span className="relative size-[20px] shrink-0 overflow-clip">
-                    <img
-                      src={relationMainIcon}
-                      alt=""
-                      className="absolute top-[calc(50%-0.31px)] left-1/2 block h-[15.625px] w-[13.75px] max-w-none -translate-x-1/2 -translate-y-1/2"
-                    />
-                  </span>
-                }
-                label={report.relation}
-              />
+          {section === "overview" && (
+            <div className="flex items-center gap-[8px]">
+              <p className="font-['SUIT',sans-serif] text-[13px] leading-[20px] font-semibold tracking-[-0.26px] whitespace-pre text-[#8c8c8c]">
+                {`${report.date}  ·  ${report.duration} 녹음`}
+              </p>
+              <div className="flex items-center gap-[6px]">
+                <TagChip
+                  icon={<img src={dailyIcon} alt="" className="block size-[20px] max-w-none shrink-0" />}
+                  label={report.type}
+                />
+                <TagChip
+                  icon={
+                    <span className="relative size-[20px] shrink-0 overflow-clip">
+                      <img
+                        src={relationMainIcon}
+                        alt=""
+                        className="absolute top-[calc(50%-0.31px)] left-1/2 block h-[15.625px] w-[13.75px] max-w-none -translate-x-1/2 -translate-y-1/2"
+                      />
+                    </span>
+                  }
+                  label={report.relation}
+                />
+              </div>
             </div>
-          </div>
+          )}
 
-          {SectionContent && <SectionContent report={report} />}
+          <SectionContent report={report} />
         </div>
       </div>
 

@@ -8,7 +8,9 @@ const ReportSectionTabs = ({ sections, selected, onSelect }) => {
   useEffect(() => {
     const tab = tabRefs.current[selected];
     if (listRef.current && tab) {
-      listRef.current.scrollTo({ left: tab.offsetLeft - listRef.current.offsetLeft, behavior: "smooth" });
+      // offsetLeft는 목록 기준 위치(왼쪽 패딩 포함). 선택된 제목을 본문 왼쪽 줄에 맞춤
+      const paddingLeft = parseFloat(getComputedStyle(listRef.current).paddingLeft);
+      listRef.current.scrollTo({ left: tab.offsetLeft - paddingLeft, behavior: "smooth" });
     }
   }, [selected]);
 
@@ -17,7 +19,8 @@ const ReportSectionTabs = ({ sections, selected, onSelect }) => {
       ref={listRef}
       role="tablist"
       aria-label="보고서 섹션"
-      className="no-scrollbar relative -mr-[24px] flex items-end gap-[16px] overflow-x-auto pr-[24px] font-['SUIT',sans-serif] font-extrabold whitespace-nowrap"
+      // 화면 양끝까지 넓혀서 이전·다음 제목이 가장자리에 걸쳐 보이게 함
+      className="no-scrollbar relative -mx-[24px] flex items-end gap-[16px] self-stretch overflow-x-auto px-[24px] font-['SUIT',sans-serif] font-extrabold whitespace-nowrap"
     >
       {sections.map(({ key, label, disabled }) => {
         const isSelected = key === selected;
@@ -32,7 +35,7 @@ const ReportSectionTabs = ({ sections, selected, onSelect }) => {
             aria-selected={isSelected}
             disabled={disabled}
             onClick={() => onSelect(key)}
-            className={`shrink-0 leading-normal transition-[font-size,color] duration-200 ${
+            className={`shrink-0 leading-normal transition-colors duration-200 ${
               isSelected ? "text-[28px] tracking-[0.56px] text-[#262626]" : "text-[20px] text-[#eee]"
             }`}
           >
