@@ -50,7 +50,8 @@ export const SpectrumBar = ({ position, tone }) => {
   );
 };
 
-// 화자 선택 카드: 이름 + 점수(%). 선택하지 않은 쪽은 흐리게
+// 화자 선택 카드: 이름 + 점수. 선택하지 않은 쪽은 흐리게
+// scores 값이 숫자면 "%"를 붙이고, 문자열이면 그대로 표시 (예: "T 87%")
 export const SpeakerScoreSelector = ({ speakers, scores, selected, onSelect }) => (
   <div className="flex items-start gap-[16px]" role="tablist" aria-label="화자 선택">
     {["me", "partner"].map((key) => (
@@ -66,7 +67,7 @@ export const SpeakerScoreSelector = ({ speakers, scores, selected, onSelect }) =
       >
         <span className="text-[20px] font-bold text-[#454545]">{speakers[key].nickname}</span>
         <span className={`font-['SUITE',sans-serif] text-[30px] font-bold ${SPEAKER_TONES[key].text}`}>
-          {scores[key]}%
+          {typeof scores[key] === "number" ? `${scores[key]}%` : scores[key]}
         </span>
       </button>
     ))}

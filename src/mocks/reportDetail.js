@@ -236,4 +236,25 @@ export const mockReportDetail = {
       ],
     },
   },
+  // type: 주 반응 유형(T/F), quotes: 실제 한 말 예시
+  tf: {
+    me: {
+      type: "T",
+      percent: 87,
+      quotes: [
+        { type: "T", text: "지정 연기는 미리 알려줘요?" },
+        { type: "T", text: "날먹이라기보다 그것도 기사 개그죠." },
+        { type: "F", text: "으응 배고팠구나~" },
+      ],
+    },
+    partner: {
+      type: "F",
+      percent: 71,
+      quotes: [
+        { type: "F", text: "으응 배고팠구나~" },
+        { type: "F", text: "아니 그거 진짜 힘들었을것 같아" },
+        { type: "T", text: "그건 니생각이고." },
+      ],
+    },
+  },
 };

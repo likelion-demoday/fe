@@ -9,6 +9,7 @@ import ConversationInformation from "./ConversationInformation";
 import ConversationStyle from "./ConversationStyle";
 import InterestLevel from "./InterestLevel";
 import BadLevel from "./BadLevel";
+import PlusAnalysis from "./PlusAnalysis";
 import dailyIcon from "../../assets/icons/analysis-type-daily-s.svg";
 import relationMainIcon from "../../assets/icons/relation-main-s.svg";
 import { mockReportDetail } from "../../mocks/reportDetail";
@@ -20,7 +21,7 @@ const SECTIONS = [
   { key: "style", label: "대화 방식" },
   { key: "interest", label: "관심도" },
   { key: "expression", label: "표독력" },
-  { key: "extra", label: "추가 분석", disabled: true },
+  { key: "extra", label: "추가 분석" },
 ];
 
 // gap: 섹션 제목 탭과 본문 사이 간격 (디자인 기준)
@@ -30,6 +31,7 @@ const SECTION_CONTENT = {
   style: { Component: ConversationStyle, gap: "gap-[20px]" },
   interest: { Component: InterestLevel, gap: "gap-[20px]" },
   expression: { Component: BadLevel, gap: "gap-[20px]" },
+  extra: { Component: PlusAnalysis, gap: "gap-[20px]" },
 };
 
 const TagChip = ({ icon, label }) => (
