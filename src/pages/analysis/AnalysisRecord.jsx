@@ -11,7 +11,7 @@ import RecordEndSheet, {
 } from "../../components/feature/analysis/RecordEndSheet";
 import microphoneIcon from "../../assets/icons/microphone.svg";
 
-const MAX_SECONDS = 60 * 60;
+const MAX_SECONDS = 30 * 60;
 
 const WAVE_HEIGHT = 183;
 const WAVE_MIN_HEIGHT = 4;
@@ -112,10 +112,7 @@ const AnalysisRecord = () => {
   const recording = recordingRef.current;
   if (!recording) return;
 
-  const ext = recording.mimeType.includes("mp4") ? "mp4" : "webm";
-  const file = new File([recording.blob], `recording.${ext}`, {
-    type: recording.mimeType,
-  });
+  const file = new File([recording.blob], "recording.m4a", { type: "audio/mp4" });
 
   try {
     const { recordingId } = await uploadRecording(file);

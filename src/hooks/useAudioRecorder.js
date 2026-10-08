@@ -7,7 +7,8 @@ const idleBar = () => 0.05 + Math.random() ** 1.5 * 0.45;
 const createIdleLevels = () => Array.from({ length: BAR_COUNT }, idleBar);
 
 const MIME_CANDIDATES = [
-  "audio/mp4"
+  "audio/mp4;codecs=mp4a.40.2", // AAC (일반 m4a와 같은 코덱)
+  "audio/mp4",
 ];
 
 const pickMimeType = () => {
@@ -151,7 +152,7 @@ export function useAudioRecorder() {
       };
       recorderRef.current = recorder;
 
-      recorder.start(1000);
+      recorder.start();
       runMeter();
       setStatus("recording");
     } catch (e) {
