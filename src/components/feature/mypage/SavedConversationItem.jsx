@@ -6,6 +6,7 @@ const SavedConversationItem = ({
   date,
   durationMinutes,
   title,
+  statusLabel,
   to,
   onClick,
 }) => {
@@ -18,8 +19,11 @@ const SavedConversationItem = ({
           {date} • {durationMinutes}분
         </span>
         <span className="text-body">{title}</span>
+        {statusLabel && <span className="text-caption">{statusLabel}</span>}
       </span>
-      <img src={chevronRight} alt="" className="shrink-0" />
+      {(to || onClick) && (
+        <img src={chevronRight} alt="" className="shrink-0" />
+      )}
     </>
   );
 
@@ -29,7 +33,13 @@ const SavedConversationItem = ({
         {content}
       </Link>
     );
-  return <Button text={content} onClick={onClick} className={className} />;
+  if (onClick)
+    return <Button text={content} onClick={onClick} className={className} />;
+  return (
+    <div className={className.replace("cursor-pointer", "cursor-default")}>
+      {content}
+    </div>
+  );
 };
 
 export default SavedConversationItem;

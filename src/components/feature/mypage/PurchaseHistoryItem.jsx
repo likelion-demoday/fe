@@ -7,6 +7,7 @@ const PurchaseHistoryItem = ({
   date = "2026.09.21",
   paymentMethod = "카카오페이",
   price = "17.000원",
+  balanceAfter,
   to,
   onClick,
 }) => {
@@ -20,8 +21,13 @@ const PurchaseHistoryItem = ({
           {date} • {paymentMethod}
         </span>
         <span className="text-title-semibold">{price}</span>
+        {balanceAfter !== undefined && (
+          <span className="text-caption">
+            잔액 {balanceAfter.toLocaleString("ko-KR")}크레딧
+          </span>
+        )}
       </span>
-      <img src={chevronRight} alt="" className="shrink-0" />
+      {(to || onClick) && <img src={chevronRight} alt="" className="shrink-0" />}
     </>
   );
 
@@ -33,7 +39,11 @@ const PurchaseHistoryItem = ({
     );
   }
 
-  return <Button text={content} onClick={onClick} className={className} />;
+  if (onClick) {
+    return <Button text={content} onClick={onClick} className={className} />;
+  }
+
+  return <div className={className.replace("cursor-pointer", "cursor-default")}>{content}</div>;
 };
 
 export default PurchaseHistoryItem;
