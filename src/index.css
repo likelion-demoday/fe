@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 
-/* 온보딩 목소리 등록 - 녹음 중 파형 (소리 인식 시 변화) */
+
 @keyframes voice-wave {
   0%,
   100% {
@@ -12,7 +12,7 @@
 
   }
 }
-/* 대화 분석 로딩 - 캐릭터 둥실 + 그림자 */
+
 @keyframes analysis-float {
   0%,
   100% {
@@ -47,6 +47,14 @@
   }
 }
 
+
+@utility no-scrollbar {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
 @layer base {
   body {
     font-family: "SUITE", sans-serif;
@@ -55,7 +63,6 @@
 }
 
 @layer components {
-  /* 마이페이지 메뉴의 눌림 배경: 좌우 페이지 여백까지 확장 */
   .mypage-press-row {
     position: relative;
     isolation: isolate;

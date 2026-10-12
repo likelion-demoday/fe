@@ -10,10 +10,10 @@ import group5 from "../../../assets/icons/google-group5.svg";
 
 // Figma의 마스크 구조를 그대로 옮긴 값들 (40x40 컨테이너 기준)
 const MASK_STYLE = {
-  maskImage: `url(${mask})`,
+  maskImage: `url("${mask}")`,
   maskRepeat: "no-repeat",
   maskSize: "19.573px 20px",
-  WebkitMaskImage: `url(${mask})`,
+  WebkitMaskImage: `url("${mask}")`,
   WebkitMaskRepeat: "no-repeat",
   WebkitMaskSize: "19.573px 20px",
 };

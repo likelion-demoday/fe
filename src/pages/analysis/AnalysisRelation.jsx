@@ -1,10 +1,13 @@
 import { useCallback, useEffect, useState } from "react";
 import { Navigate, useLocation, useNavigate } from "react-router-dom";
 
+import { payRecording, selectRecordingType } from "../../api/recording";
+import { getCreditPrices, getMyCredits } from "../../api/credit";
+
 import AppHeader from "../../components/common/AppHeader";
 import BottomSheet from "../../components/common/BottomSheet";
+import TextBackButton from "../../components/common/TextBackButton";
 import PurchaseSheet from "../../components/feature/analysis/PurchaseSheet";
-import chevronLeftIcon from "../../assets/icons/chevron-left.svg";
 import relationMainIcon from "../../assets/icons/relation-main-m.svg";
 import relationLoverIcon from "../../assets/icons/relation-lover-m.svg";
 import relationFamilyIcon from "../../assets/icons/relation-family-m.svg";
@@ -43,25 +46,44 @@ const RELATIONS_BY_TYPE = {
   },
 };
 
+const RELATIONSHIP_TYPES = {
+  daily: { friend: "FRIEND_DAILY", lover: "COUPLE_DAILY" },
+  worry: { lover: "COUPLE_CONFLICT", family: "PARENT_CHILD_CONFLICT" },
+};
+
+// type → 크레딧 가격 키 (/credits/prices의 analysis)
+const PRICE_KEYS = { daily: "daily", worry: "conflict" };
+
 const COMPLETE_SHEET_MS = 1500;
 
 const AnalysisRelation = () => {
   const navigate = useNavigate();
   const { state } = useLocation();
   const config = RELATIONS_BY_TYPE[state?.type];
-  // null | "purchase"(구매하기) | "complete"(구매완료)
   const [sheet, setSheet] = useState(null);
   const [selected, setSelected] = useState(null);
+  const [ownedCredit, setOwnedCredit] = useState(0);
+  const [price, setPrice] = useState(0);
+  const [paying, setPaying] = useState(false);
 
+  useEffect(() => {
+    if (!config) return;
+    Promise.all([getMyCredits(), getCreditPrices()])
+      .then(([credits, prices]) => {
+        setOwnedCredit(credits.balance ?? 0);
+        setPrice(prices.analysis?.[PRICE_KEYS[state.type]] ?? 0);
+      })
+      .catch((e) => alert(e.message ?? "크레딧 정보를 불러오지 못했어요."));
+  }, [config, state?.type]);
+
+  // 결제 후 전사(음성 → 텍스트) 완료까지 로딩 화면에서 대기
   const goToLoading = useCallback(() => {
-    // TODO: 분석 요청 API 연동
     navigate("/analysis/loading", {
       replace: true,
-      state: { ...state, relation: selected?.id },
+      state: { ...state, relation: selected?.id, phase: "transcribing" },
     });
   }, [navigate, state, selected]);
 
-  // 구매완료 모달을 잠깐 보여준 뒤 자동으로 분석 중 화면으로 이동 (X를 누르면 바로 이동)
   useEffect(() => {
     if (sheet !== "complete") return;
     const timer = setTimeout(goToLoading, COMPLETE_SHEET_MS);
@@ -71,21 +93,29 @@ const AnalysisRelation = () => {
   if (!config) return <Navigate to="/analysis/type" replace state={state} />;
 
 
-  const ownedCredit = 2000;
-  const price = 1300;
-
   const handleSelect = (relation) => {
     setSelected(relation);
     setSheet("purchase");
   };
 
-  const handlePurchase = () => {
-    console.log("분석 구매", { ...state, relation: selected.id, price });
-    setSheet("complete");
+  const handlePurchase = async () => {
+    if (paying) return;
+    const relationshipType = RELATIONSHIP_TYPES[state.type][selected.id];
+
+    setPaying(true);
+    try {
+      await selectRecordingType(state.recordingId, relationshipType);
+      await payRecording(state.recordingId);
+      setSheet("complete");
+    } catch (e) {
+      alert(e.message ?? "요청에 실패했어요. 다시 시도해 주세요.");
+    } finally {
+      setPaying(false);
+    }
   };
 
   return (
-    <main className="relative mx-auto flex h-[844px] w-[390px] flex-col items-start gap-[30px] overflow-y-auto bg-white px-[24px] py-[16px]">
+    <main className="relative mx-auto flex h-[844px] w-[390px] flex-col items-start gap-[30px] overflow-y-auto no-scrollbar bg-white px-[24px] py-[16px]">
       <AppHeader title="대화 분석" />
 
       <section className="flex w-full flex-col gap-[24px]">
@@ -105,14 +135,7 @@ const AnalysisRelation = () => {
         </div>
       </section>
 
-      <button
-        type="button"
-        onClick={() => navigate(-1)}
-        className="flex items-center justify-center gap-[8px] rounded-[6px]"
-      >
-        <img src={chevronLeftIcon} alt="" className="block h-[13px] w-[8px] max-w-none shrink-0" />
-        <span className="text-body whitespace-nowrap text-[#595959]">뒤로가기</span>
-      </button>
+      <TextBackButton onClick={() => navigate(-1)} />
 
       {sheet === "purchase" && (
         <PurchaseSheet
@@ -121,6 +144,7 @@ const AnalysisRelation = () => {
           price={price}
           onClose={() => setSheet(null)}
           onPurchase={handlePurchase}
+          onCharge={() => navigate("/mypage/payments")}
         />
       )}
       {sheet === "complete" && <BottomSheet title="구매완료!" onClose={goToLoading} />}

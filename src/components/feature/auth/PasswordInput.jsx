@@ -16,7 +16,7 @@ const PasswordInput = ({ value, onChange }) => {
       value={value}
       onChange={onChange}
       placeholder="비밀번호를 입력해주세요."
-      helperText={isError ? "8자 이상으로 입력해주세요." : "8자 이상으로 입력해주세요."}
+      helperText="8자 이상으로 입력해주세요."
       error={isError}
       trailing={
         <button

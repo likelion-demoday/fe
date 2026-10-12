@@ -14,7 +14,11 @@ const Recordings = ({ onConversations, onReports }) => {
           to={onConversations ? undefined : "/mypage/recordings/conversations"}
           onClick={onConversations}
         />
-        <PurchaseHistory label="보고서" onClick={onReports} />
+        <PurchaseHistory
+          label="보고서 보관함"
+          to={onReports ? undefined : "/mypage/recordings/reports"}
+          onClick={onReports}
+        />
       </div>
     </main>
   );

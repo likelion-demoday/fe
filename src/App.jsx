@@ -7,9 +7,13 @@ import MyPage from "./pages/mypage/MyPage";
 import Profile from "./pages/mypage/Profile";
 import Notifications from "./pages/mypage/Notifications";
 import Payments from "./pages/mypage/Payments";
+import CreditCharge from "./pages/payments/CreditCharge";
+import CreditChargeSuccess from "./pages/payments/CreditChargeSuccess";
+import CreditChargeFailure from "./pages/payments/CreditChargeFailure";
 import PurchaseHistoryPage from "./pages/mypage/PurchaseHistoryPage";
 import Recordings from "./pages/mypage/Recordings";
 import SavedConversations from "./pages/mypage/SavedConversations";
+import ReportArchive from "./pages/mypage/ReportArchive";
 import Account from "./pages/mypage/Account";
 import Support from "./pages/mypage/Support";
 //auth
@@ -23,7 +27,6 @@ import KakaoCallbackPage from "./pages/auth/KakaoCallbackPage";
 import GoogleCallbackPage from "./pages/auth/GoogleCallbackPage";
 //analysis
 import AnalysisStart from "./pages/analysis/AnalysisStart";
-import AnalysisPartner from "./pages/analysis/AnalysisPartner";
 import AnalysisRecord from "./pages/analysis/AnalysisRecord";
 import AnalysisType from "./pages/analysis/AnalysisType";
 import AnalysisRelation from "./pages/analysis/AnalysisRelation";
@@ -34,9 +37,17 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<Splash />} />
-      <Route path="/home" element={<Home />} />
 
       <Route element={<ProtectedRoute />}>
+        <Route path="/home" element={<Home />} />
+
+        <Route path="/analysis" element={<AnalysisStart />} />
+        <Route path="/analysis/record" element={<AnalysisRecord />} />
+        <Route path="/analysis/type" element={<AnalysisType />} />
+        <Route path="/analysis/relation" element={<AnalysisRelation />} />
+        <Route path="/analysis/loading" element={<AnalysisLoading />} />
+        <Route path="/analysis/speaker" element={<AnalysisSpeaker />} />
+
         <Route path="/mypage" element={<MyPage />} />
         <Route path="/mypage/profile" element={<Profile />} />
 
@@ -51,8 +62,15 @@ function App() {
           path="/mypage/recordings/conversations"
           element={<SavedConversations />}
         />
+        <Route
+          path="/mypage/recordings/reports"
+          element={<ReportArchive />}
+        />
         <Route path="/mypage/account" element={<Account />} />
         <Route path="/mypage/support" element={<Support />} />
+        <Route path="/payments" element={<CreditCharge />} />
+        <Route path="/payments/success" element={<CreditChargeSuccess />} />
+        <Route path="/payments/failure" element={<CreditChargeFailure />} />
       </Route>
 
       <Route path="/oauth/kakao/callback" element={<KakaoCallbackPage />} />
@@ -63,14 +81,6 @@ function App() {
       <Route path="/onboarding/nickname" element={<Nickname />} />
       <Route path="/onboarding/consent" element={<Consent />} />
       <Route path="/onboarding/voice" element={<VoiceRegister />} />
-
-      <Route path="/analysis" element={<AnalysisStart />} />
-      <Route path="/analysis/partner" element={<AnalysisPartner />} />
-      <Route path="/analysis/record" element={<AnalysisRecord />} />
-      <Route path="/analysis/type" element={<AnalysisType />} />
-      <Route path="/analysis/relation" element={<AnalysisRelation />} />
-      <Route path="/analysis/loading" element={<AnalysisLoading />} />
-      <Route path="/analysis/speaker" element={<AnalysisSpeaker />} />
     </Routes>
   );
 }

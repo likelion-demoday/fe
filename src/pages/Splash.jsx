@@ -15,7 +15,7 @@ const Splash = () => {
   }, [navigate]);
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-[#fafafa]">
+    <div className="mx-auto flex h-[844px] w-[390px] overflow-y-auto no-scrollbar items-center justify-center bg-[#fafafa]">
       {/* 디자인상 화면 정중앙보다 약 50px 위에 배치 */}
       <div className="flex -translate-y-[50px] flex-col items-center">
         {/* 심볼: Paperlogy SemiBold의 ":S"를 90도 회전한 형태 */}
