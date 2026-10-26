@@ -32,6 +32,8 @@ import AnalysisType from "./pages/analysis/AnalysisType";
 import AnalysisRelation from "./pages/analysis/AnalysisRelation";
 import AnalysisLoading from "./pages/analysis/AnalysisLoading";
 import AnalysisSpeaker from "./pages/analysis/AnalysisSpeaker";
+//report
+import ReportPage from "./pages/report/ReportPage";
 
 function App() {
   return (
@@ -48,6 +50,8 @@ function App() {
         <Route path="/analysis/loading" element={<AnalysisLoading />} />
         <Route path="/analysis/speaker" element={<AnalysisSpeaker />} />
 
+        <Route path="/report/:reportId" element={<ReportPage />} />
+
         <Route path="/mypage" element={<MyPage />} />
         <Route path="/mypage/profile" element={<Profile />} />
 
@@ -57,13 +61,13 @@ function App() {
           path="/mypage/payments/history"
           element={<PurchaseHistoryPage />}
         />
-        <Route path="/mypage/recordings" element={<Recordings />} />
+        <Route path="/recordings" element={<Recordings />} />
         <Route
-          path="/mypage/recordings/conversations"
+          path="/recordings/conversations"
           element={<SavedConversations />}
         />
         <Route
-          path="/mypage/recordings/reports"
+          path="/recordings/reports"
           element={<ReportArchive />}
         />
         <Route path="/mypage/account" element={<Account />} />
