@@ -12,7 +12,7 @@ const Support = ({ onFaq, onContact, onNotices, onPolicies }) => {
         <PurchaseHistory label="자주 묻는 질문" onClick={onFaq} />
         <PurchaseHistory label="문의하기" onClick={onContact} />
         <PurchaseHistory label="공지사항" onClick={onNotices} />
-        <PurchaseHistory label="약관 및 정책" onClick={onPolicies} />
+        <PurchaseHistory label="약관 및 정책" to={onPolicies ? undefined : "/mypage/support/policies"} onClick={onPolicies} />
       </div>
     </main>
   );
