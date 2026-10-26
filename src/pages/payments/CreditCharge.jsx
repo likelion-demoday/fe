@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { getMyCredits } from "../../api/credit";
 // import { requestNicePay } from "../../api/payment";
 import AppHeader from "../../components/common/AppHeader";
 import Button from "../../components/common/Button";
@@ -16,10 +17,35 @@ const CREDIT_PRODUCTS = [
   { credits: 11000, price: 10000 },
 ];
 
-const CreditCharge = ({ balance = 12480, onViewAgreement }) => {
+const CreditCharge = ({ onViewAgreement }) => {
   const navigate = useNavigate();
+  const [balance, setBalance] = useState(null);
+  const [creditError, setCreditError] = useState("");
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [paymentOpen, setPaymentOpen] = useState(false);
+
+  useEffect(() => {
+    let active = true;
+
+    const fetchCredits = async () => {
+      try {
+        const credits = await getMyCredits();
+        if (active) {
+          setBalance(credits.balance);
+        }
+      } catch (error) {
+        if (active) {
+          setCreditError(error?.message || "크레딧을 불러오지 못했어요.");
+        }
+      }
+    };
+
+    fetchCredits();
+
+    return () => {
+      active = false;
+    };
+  }, []);
 
   const handlePurchase = (product) => {
     try {
@@ -45,7 +71,17 @@ const CreditCharge = ({ balance = 12480, onViewAgreement }) => {
           }
         />
         <div className="flex flex-col gap-[30px]">
-          <CreditBalance balance={balance} />
+          {creditError ? (
+            <p role="alert" className="text-body text-[#595959]">
+              {creditError}
+            </p>
+          ) : balance === null ? (
+            <p role="status" className="text-body text-[#595959]">
+              보유 크레딧을 불러오는 중...
+            </p>
+          ) : (
+            <CreditBalance balance={balance} />
+          )}
           <section className="flex flex-col gap-[12px]">
             <h2 className="text-label text-black">
               충전할 크레딧을 선택해주세요
