@@ -24,10 +24,13 @@ const ReportCharacterCard = ({ nickname, nicknameColor, character }) => (
         >
           {character.name}
         </h3>
-        <p className="text-[11.241px] font-medium tracking-[0.3372px] whitespace-nowrap text-[#595959]">
-          {character.description[0]}
-          <br />
-          {character.description[1]}
+        {/* description: 줄 단위 배열. 한 줄이 길면 카드 폭에 맞춰 줄바꿈 */}
+        <p className="text-[11.241px] font-medium tracking-[0.3372px] break-keep text-[#595959]">
+          {character.description.map((line, index) => (
+            <span key={index} className="block">
+              {line}
+            </span>
+          ))}
         </p>
       </div>
       <div className={`absolute ${character.shadowBox}`}>

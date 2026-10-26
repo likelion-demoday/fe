@@ -48,15 +48,17 @@ const ConversationInformation = ({ report }) => {
               ))}
             </div>
           </div>
-          <div className="flex w-full flex-col items-start gap-[8px]">
-            <p className="text-[16px] font-bold tracking-[-0.32px] text-[#2d3038]">가장 오래 대화한 이야기</p>
-            <p className="text-[13px] leading-[20px] font-semibold tracking-[-0.26px] text-[#8c8c8c]">
-              {longestTopic.title} · {longestTopic.duration}
-            </p>
-            <p className="text-[14px] leading-[20px] font-medium tracking-[-0.14px] break-keep text-[#595959]">
-              {longestTopic.description}
-            </p>
-          </div>
+          {longestTopic && (
+            <div className="flex w-full flex-col items-start gap-[8px]">
+              <p className="text-[16px] font-bold tracking-[-0.32px] text-[#2d3038]">가장 오래 대화한 이야기</p>
+              <p className="text-[13px] leading-[20px] font-semibold tracking-[-0.26px] text-[#8c8c8c]">
+                {longestTopic.title} · {longestTopic.duration}
+              </p>
+              <p className="text-[14px] leading-[20px] font-medium tracking-[-0.14px] break-keep text-[#595959]">
+                {longestTopic.description}
+              </p>
+            </div>
+          )}
         </div>
       </Section>
 

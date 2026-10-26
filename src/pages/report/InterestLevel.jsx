@@ -17,27 +17,29 @@ const InterestItem = ({ title, count, description, examples }) => (
       <p className="text-[14px] leading-[20px] font-medium tracking-[-0.14px] text-[#ff765b]">총 {count}회</p>
     </div>
     <p className="text-[12px] leading-[18px] font-medium tracking-[0.24px] break-keep text-[#6b6b6b]">{description}</p>
-    <div className="flex flex-wrap items-start gap-x-[16px] gap-y-[8px]">
-      {/* 첫 번째 예시를 대표 예시로 강조 */}
-      {examples.map((example, index) => (
-        <KeywordPill key={example} label={example} highlighted={index === 0} />
-      ))}
-    </div>
+    {examples.length > 0 && (
+      <div className="flex flex-wrap items-start gap-x-[16px] gap-y-[8px]">
+        {/* 첫 번째 예시를 대표 예시로 강조 */}
+        {examples.map((example, index) => (
+          <KeywordPill key={example} label={example} highlighted={index === 0} />
+        ))}
+      </div>
+    )}
   </div>
 );
 
-// 그룹 제목 + 상세 카드 + 요약 카드
+
 const InterestGroup = ({ title, summary, children }) => (
   <div className="flex w-full flex-col items-start gap-[8px]">
     <p className="text-[20px] font-bold whitespace-nowrap text-[#454545]">{title}</p>
     <div className="flex w-full flex-col gap-[12px]">
       {children}
-      <SummaryCard {...summary} />
+      {summary && <SummaryCard {...summary} />}
     </div>
   </div>
 );
 
-// 관심도: 화자별 관심 점수 · 관심을 보인 방식(맞장구, 질문, 호감 표현)
+
 const InterestLevel = ({ report }) => {
   const [speaker, setSpeaker] = useState("me");
   const scores = { me: report.interest.me.score, partner: report.interest.partner.score };
@@ -67,24 +69,28 @@ const InterestLevel = ({ report }) => {
             </InterestGroup>
           ))}
 
-          <InterestGroup title="호감 표현" summary={affection.summary}>
-            <div className={`${DETAIL_CARD} gap-[12px]`}>
-              <p className="text-[12px] leading-[18px] font-medium tracking-[0.24px] text-[#6b6b6b]">
-                대화에서 직접 드러난 표현만 세었어요
-              </p>
-              <div className="grid w-full grid-cols-2 gap-[10px] text-[14px] leading-[22px] font-semibold tracking-[0.28px] whitespace-nowrap">
-                {affection.items.map(({ label, count }) => (
-                  <div
-                    key={label}
-                    className="flex items-center justify-between rounded-[12px] bg-white px-[12px] py-[8px] drop-shadow-[0px_2px_3px_rgba(0,0,0,0.05)] drop-shadow-[0px_0px_5.7px_rgba(0,0,0,0.05)]"
-                  >
-                    <span className="text-[#2d3038]">{label}</span>
-                    <span className="text-[#ff765b]">{count}회</span>
+          {(affection.summary || affection.items.length > 0) && (
+            <InterestGroup title="호감 표현" summary={affection.summary}>
+              {affection.items.length > 0 && (
+                <div className={`${DETAIL_CARD} gap-[12px]`}>
+                  <p className="text-[12px] leading-[18px] font-medium tracking-[0.24px] text-[#6b6b6b]">
+                    대화에서 직접 드러난 표현만 세었어요
+                  </p>
+                  <div className="grid w-full grid-cols-2 gap-[10px] text-[14px] leading-[22px] font-semibold tracking-[0.28px] whitespace-nowrap">
+                    {affection.items.map(({ label, count }) => (
+                      <div
+                        key={label}
+                        className="flex items-center justify-between rounded-[12px] bg-white px-[12px] py-[8px] drop-shadow-[0px_2px_3px_rgba(0,0,0,0.05)] drop-shadow-[0px_0px_5.7px_rgba(0,0,0,0.05)]"
+                      >
+                        <span className="text-[#2d3038]">{label}</span>
+                        <span className="text-[#ff765b]">{count}회</span>
+                      </div>
+                    ))}
                   </div>
-                ))}
-              </div>
-            </div>
-          </InterestGroup>
+                </div>
+              )}
+            </InterestGroup>
+          )}
         </div>
       </ReportSection>
     </div>
