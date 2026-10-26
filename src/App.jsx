@@ -17,6 +17,7 @@ import ReportArchive from "./pages/mypage/ReportArchive";
 import Account from "./pages/mypage/Account";
 import Support from "./pages/mypage/Support";
 import Policies from "./pages/mypage/Policies";
+import Faq from "./pages/mypage/Faq";
 //auth
 import Login from "./pages/auth/Login";
 import SignUp from "./pages/auth/SignUp";
@@ -70,6 +71,7 @@ function App() {
         <Route path="/mypage/account" element={<Account />} />
         <Route path="/mypage/support" element={<Support />} />
         <Route path="/mypage/support/policies" element={<Policies />} />
+        <Route path="/mypage/support/faq" element={<Faq />} />
         <Route path="/payments" element={<CreditCharge />} />
         <Route path="/payments/success" element={<CreditChargeSuccess />} />
         <Route path="/payments/failure" element={<CreditChargeFailure />} />
