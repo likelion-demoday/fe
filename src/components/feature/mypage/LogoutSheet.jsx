@@ -1,8 +1,11 @@
 import BottomSheet, { SheetButton } from "../../common/BottomSheet";
+import accountExitImage from "../../../assets/images/account-exit.png";
 
 const LogoutSheet = ({ onClose, onLogout }) => (
   <BottomSheet
     title="로그아웃"
+    characterSrc={accountExitImage}
+    characterClassName="pointer-events-none block size-full object-cover"
     onClose={onClose}
     footer={
       <>

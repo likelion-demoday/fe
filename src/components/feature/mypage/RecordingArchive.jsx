@@ -5,6 +5,7 @@ import SavedConversationItem from "./SavedConversationItem";
 import divider from "../../../assets/icons/purchase-history-divider.svg";
 import chevronDown from "../../../assets/icons/conversation-chevron-down.svg";
 import ArchiveEmptyState from "./ArchiveEmptyState";
+import archiveEmptyImage from "../../../assets/images/archive-empty.png";
 
 const RecordingArchive = ({
   title,
@@ -73,6 +74,7 @@ const RecordingArchive = ({
           !loading &&
           !error && (
             <ArchiveEmptyState
+              imageSrc={archiveEmptyImage}
               className="mt-[152px]"
               message={
                 items.length === 0
