@@ -71,6 +71,7 @@ function App() {
         <Route path="/payments" element={<CreditCharge />} />
         <Route path="/payments/success" element={<CreditChargeSuccess />} />
         <Route path="/payments/failure" element={<CreditChargeFailure />} />
+        <Route path="/payments/fail" element={<CreditChargeFailure />} />
       </Route>
 
       <Route path="/oauth/kakao/callback" element={<KakaoCallbackPage />} />

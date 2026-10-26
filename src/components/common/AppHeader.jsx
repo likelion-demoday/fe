@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import profileIcon from "../../assets/icons/profile.svg";
 import TextBackButton from "./TextBackButton";
 
-const AppHeader = ({ title, onBack, onLogoClick }) => {
+const AppHeader = ({ title, onBack, onLogoClick, titleClassName = "text-display" }) => {
   const navigate = useNavigate();
 
   return (
@@ -22,7 +22,7 @@ const AppHeader = ({ title, onBack, onLogoClick }) => {
           <img src={profileIcon} alt="" className="absolute -top-[10px] -left-[10px] max-w-none" />
         </button>
       </div>
-      {title && <h1 className="text-display text-black">{title}</h1>}
+      {title && <h1 className={`${titleClassName} text-black`}>{title}</h1>}
       {onBack && <TextBackButton onClick={onBack} />}
     </header>
   );
