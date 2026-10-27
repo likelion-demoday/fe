@@ -64,13 +64,13 @@ function App() {
           path="/mypage/payments/history"
           element={<PurchaseHistoryPage />}
         />
-        <Route path="/recordings" element={<Recordings />} />
+        <Route path="/mypage/recordings" element={<Recordings />} />
         <Route
-          path="/recordings/conversations"
+          path="/mypage/recordings/conversations"
           element={<SavedConversations />}
         />
         <Route
-          path="/recordings/reports"
+          path="/mypage/recordings/reports"
           element={<ReportArchive />}
         />
         <Route path="/mypage/account" element={<Account />} />
