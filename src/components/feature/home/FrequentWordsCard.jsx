@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 import chevronRightIcon from "../../../assets/icons/chevron-right.svg";
 import bubbleLine from "../../../assets/icons/home-bubble-line.svg";
 import useBubblePhysics from "../../../hooks/useBubblePhysics";
@@ -7,17 +9,16 @@ const AREA_WIDTH = 290;
 const AREA_HEIGHT = 154;
 const BOUNCE_CEILING = -20;
 
-const BUBBLES = [
+// 말풍선 위치·크기·색은 디자인 고정, 단어는 많이 쓴 순서대로 채움 (횟수는 첫 번째만 표시)
+const BUBBLE_SLOTS = [
   {
-    word: "맛있다",
-    count: 12,
+    showCount: true,
     x: 143,
     y: 5,
     size: 127,
     background: "linear-gradient(154.74deg, #ff765b 13.04%, #ff8d77 84.85%)",
   },
   {
-    word: "엥?",
     x: 38,
     y: 49,
     size: 90,
@@ -25,14 +26,12 @@ const BUBBLES = [
     background: "linear-gradient(205.65deg, #ff8d77 14.97%, #ffb0a0 85.04%)",
   },
   {
-    word: "아니",
     x: 106,
     y: 13,
     size: 40,
     className: "bg-[#ffe2d8] text-label-small text-white",
   },
   {
-    word: "존*",
     x: 0,
     y: 7,
     size: 55,
@@ -41,9 +40,21 @@ const BUBBLES = [
   },
 ];
 
-const FrequentWordsCard = ({ onDetail }) => {
+const toBubbles = (expressions) =>
+  [...expressions]
+    .sort((a, b) => b.count - a.count)
+    .slice(0, BUBBLE_SLOTS.length)
+    .map(({ expression, count }, index) => ({
+      ...BUBBLE_SLOTS[index],
+      word: expression,
+      count: BUBBLE_SLOTS[index].showCount ? count : null,
+    }));
+
+// 물리 시뮬레이션은 처음 마운트 때 말풍선 배치를 고정하므로, 데이터가 다 온 뒤에 렌더해야 함
+const FrequentWordsCard = ({ count, expressions = [], onDetail }) => {
+  const [bubbles] = useState(() => toBubbles(expressions));
   const { setElement, kick } = useBubblePhysics(
-    BUBBLES,
+    bubbles,
     AREA_WIDTH,
     AREA_HEIGHT,
     BOUNCE_CEILING,
@@ -52,7 +63,7 @@ const FrequentWordsCard = ({ onDetail }) => {
   return (
     <section className="flex w-full flex-col items-center h-full gap-[20px] rounded-[16px] border border-[#eee] bg-white px-[24px] pt-[16px] pb-[48px] drop-shadow-[0px_4px_5.85px_rgba(0,0,0,0.05)] drop-shadow-[0px_0px_23.85px_rgba(0,0,0,0.1)]">
       <div className="flex w-full flex-col gap-[4px]">
-        <p className="text-caption text-[#bfbfbf]">최근 n회 분석 기준</p>
+        <p className="text-caption text-[#bfbfbf]">최근 {count}회 분석 기준</p>
         <div className="flex w-full items-center justify-between">
           <h3 className="text-title-semibold flex-1 text-black">자주 사용하는 말</h3>
           <button
@@ -72,9 +83,14 @@ const FrequentWordsCard = ({ onDetail }) => {
             <img src={bubbleLine} alt="" className="absolute inset-[-909.08%_0] block max-w-none" />
           </div>
         </div>
-        {BUBBLES.map(({ word, count, x, y, size, className = "", background }, index) => (
+        {bubbles.length === 0 && (
+          <p className="text-caption absolute inset-0 flex items-center justify-center text-[#595959]">
+            아직 자주 쓰는 말이 없어요
+          </p>
+        )}
+        {bubbles.map(({ word, count: wordCount, x, y, size, className = "", background }, index) => (
           <div
-            key={word}
+            key={index}
             ref={setElement(index)}
             onPointerEnter={(e) => e.pointerType === "mouse" && kick(index)}
             onPointerDown={() => kick(index)}
@@ -86,10 +102,10 @@ const FrequentWordsCard = ({ onDetail }) => {
               backgroundImage: background,
             }}
           >
-            {count ? (
+            {wordCount ? (
               <>
                 <span className="text-heading text-white">{word}</span>
-                <span className="text-label text-white">{count}번</span>
+                <span className="text-label text-white">{wordCount}번</span>
               </>
             ) : (
               word
