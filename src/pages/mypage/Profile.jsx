@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getMyInfo } from "../../api/user";
+import { getMyInfo, updateMyInfo } from "../../api/user";
 import MyPageHeader from "../../components/feature/mypage/MyPageHeader";
 import ProfileInfo from "../../components/feature/mypage/ProfileInfo";
 
@@ -35,7 +35,10 @@ const Profile = () => {
         </div>
       ) : profile === null ? (
         <p role="status" className="text-body text-[#595959]">프로필을 불러오는 중...</p>
-      ) : <ProfileInfo {...profile} />}
+      ) : <ProfileInfo {...profile} onSaveNickname={async (nickname) => {
+        const updatedProfile = await updateMyInfo(nickname);
+        setProfile(updatedProfile);
+      }} />}
     </main>
   );
 };
