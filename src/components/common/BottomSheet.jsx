@@ -11,6 +11,8 @@ const BottomSheet = ({
   headerGap = "gap-[20px]",
   contentGap = "gap-[10px]",
   showCharacter = true,
+  characterSrc = characterImage,
+  characterClassName = "pointer-events-none absolute top-[-4.41%] left-[-4.41%] size-[108.82%] max-w-none",
 }) => {
   return (
     <div className="absolute inset-0 z-50 flex justify-center" role="dialog" aria-modal="true">
@@ -34,9 +36,9 @@ const BottomSheet = ({
             )}
             {showCharacter && <div className="relative size-[136px] shrink-0 overflow-hidden">
               <img
-                src={characterImage}
+                src={characterSrc}
                 alt=""
-                className="pointer-events-none absolute top-[-4.41%] left-[-4.41%] size-[108.82%] max-w-none"
+                className={characterClassName}
               />
             </div>}
             {children}

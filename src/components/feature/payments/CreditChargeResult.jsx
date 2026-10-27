@@ -1,15 +1,17 @@
 import Button from "../../common/Button";
 import character from "../../../assets/images/credit-charge-result.png";
 
-const CreditChargeResult = ({ title, buttonText, onClick }) => (
+const CreditChargeResult = ({ title, buttonText, onClick, successImage }) => (
   <main className="relative mx-auto flex min-h-[844px] w-full max-w-[390px] flex-col bg-white">
     <section className="absolute top-[calc(50%+0.5px)] left-[16px] flex w-[calc(100%-48px)] -translate-y-1/2 flex-col items-center gap-[10px]">
       <h1 className="text-display w-full text-center text-black">{title}</h1>
       <div className="relative size-[136px] shrink-0 overflow-hidden">
         <img
-          src={character}
+          src={successImage || character}
           alt=""
-          className="absolute -top-[4.41%] -left-[4.41%] size-[108.82%] max-w-none"
+          className={successImage
+            ? "pointer-events-none absolute top-[-11.9%] left-[-12.61%] h-[122.73%] w-[122.52%] max-w-none"
+            : "absolute -top-[4.41%] -left-[4.41%] size-[108.82%] max-w-none"}
         />
       </div>
     </section>
