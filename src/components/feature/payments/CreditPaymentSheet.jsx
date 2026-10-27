@@ -9,7 +9,7 @@ const AGREEMENTS = [
   { id: "refund", label: "[필수] 환불 및 취소 정책 확인" },
 ];
 
-const CreditPaymentSheet = ({ product, onClose, onPurchase, onViewAgreement }) => {
+const CreditPaymentSheet = ({ product, onClose, onPurchase, onViewAgreement, isPaying = false, error }) => {
   const [checked, setChecked] = useState({});
   const format = (value) => value.toLocaleString("ko-KR");
   const allChecked = AGREEMENTS.every(({ id }) => checked[id]);
@@ -22,12 +22,13 @@ const CreditPaymentSheet = ({ product, onClose, onPurchase, onViewAgreement }) =
       contentGap="gap-[30px]"
       footer={
         <SheetButton
-          text={`${format(product.price)}원 결제하기`}
-          disabled={!allChecked}
+          text={isPaying ? "결제 진행 중..." : `${format(product.price)}원 결제하기`}
+          disabled={!allChecked || isPaying}
           onClick={onPurchase}
         />
       }
     >
+      {error && <p role="alert" className="text-caption text-red-600">{error}</p>}
       <div className="flex w-full flex-col gap-[16px]">
         {[
           ["충전 크레딧", `${format(product.credits)}크레딧`],

@@ -16,6 +16,9 @@ import SavedConversations from "./pages/mypage/SavedConversations";
 import ReportArchive from "./pages/mypage/ReportArchive";
 import Account from "./pages/mypage/Account";
 import Support from "./pages/mypage/Support";
+import Policies from "./pages/mypage/Policies";
+import Faq from "./pages/mypage/Faq";
+import FaqRecording from "./pages/mypage/FaqRecording";
 //auth
 import Login from "./pages/auth/Login";
 import SignUp from "./pages/auth/SignUp";
@@ -72,9 +75,13 @@ function App() {
         />
         <Route path="/mypage/account" element={<Account />} />
         <Route path="/mypage/support" element={<Support />} />
+        <Route path="/mypage/support/policies" element={<Policies />} />
+        <Route path="/mypage/support/faq" element={<Faq />} />
+        <Route path="/mypage/support/faq/recording" element={<FaqRecording />} />
         <Route path="/payments" element={<CreditCharge />} />
         <Route path="/payments/success" element={<CreditChargeSuccess />} />
         <Route path="/payments/failure" element={<CreditChargeFailure />} />
+        <Route path="/payments/fail" element={<CreditChargeFailure />} />
       </Route>
 
       <Route path="/oauth/kakao/callback" element={<KakaoCallbackPage />} />

@@ -2,13 +2,13 @@ import { Link } from "react-router-dom";
 import Button from "../../common/Button";
 import chevronRight from "../../../assets/icons/mypage-chevron-right.svg";
 
-const PurchaseHistory = ({ to, onClick, label = "구매 내역" }) => {
+const PurchaseHistory = ({ to, onClick, label = "구매 내역", className: customClassName, trailing }) => {
   const className =
-    "mypage-press-row text-label flex w-full cursor-pointer items-center justify-between py-[12px] text-left text-[#262626]";
+    customClassName || "mypage-press-row text-label flex w-full cursor-pointer items-center justify-between py-[12px] text-left text-[#262626]";
   const content = (
     <>
       <span>{label}</span>
-      <img src={chevronRight} alt="" className="shrink-0" />
+      {trailing ?? <img src={chevronRight} alt="" className="shrink-0" />}
     </>
   );
 

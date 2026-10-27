@@ -1,7 +1,10 @@
 import profileLarge from "../../../assets/icons/profile-large.svg";
 import chevronRight from "../../../assets/icons/mypage-chevron-right.svg";
 import Button from "../../common/Button";
-const ProfileInfo = () => {
+const ProfileInfo = ({ nickname, joinedDays, analysisCount, totalRecordingSeconds }) => {
+  const totalMinutes = Math.floor(totalRecordingSeconds / 60);
+  const hours = Math.floor(totalMinutes / 60);
+  const minutes = totalMinutes % 60;
   return (
     <div className="flex flex-col gap-[46px]">
       <header className="relative flex justify-center">
@@ -13,7 +16,7 @@ const ProfileInfo = () => {
               className="pointer-events-none absolute -top-[116px] -left-[116px] max-w-none"
             />
           </div>
-          <div className="text-title-semibold text-black">드라이브 가자잇</div>
+          <div className="text-title-semibold text-black">{nickname}</div>
         </div>
         <Button
           className="active:bg-[#eeeeee] absolute top-0 right-0 flex cursor-pointer items-center gap-[8px] rounded-[6px] text-[#595959]"
@@ -28,15 +31,15 @@ const ProfileInfo = () => {
       <dl className="flex flex-col items-center gap-[20px] text-black">
         <div className="flex items-center gap-[12px]">
           <dt className="text-caption">가입 기간</dt>
-          <dd className="text-heading">6일</dd>
+          <dd className="text-heading">{joinedDays.toLocaleString("ko-KR")}일</dd>
         </div>
         <div className="flex items-center gap-[12px]">
           <dt className="text-caption">분석한 횟수</dt>
-          <dd className="text-heading">3번</dd>
+          <dd className="text-heading">{analysisCount.toLocaleString("ko-KR")}번</dd>
         </div>
         <div className="flex items-center gap-[12px]">
           <dt className="text-caption">녹음한 시간</dt>
-          <dd className="text-heading">3시간23분</dd>
+          <dd className="text-heading">{hours > 0 ? `${hours.toLocaleString("ko-KR")}시간` : ""}{minutes}분</dd>
         </div>
       </dl>
     </div>
