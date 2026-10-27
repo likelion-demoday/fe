@@ -17,6 +17,8 @@ import ReportArchive from "./pages/mypage/ReportArchive";
 import Account from "./pages/mypage/Account";
 import Support from "./pages/mypage/Support";
 import Policies from "./pages/mypage/Policies";
+import ServiceTerms from "./pages/mypage/ServiceTerms";
+import PersonalInformationConsent from "./pages/mypage/PersonalInformationConsent";
 import Faq from "./pages/mypage/Faq";
 import FaqRecording from "./pages/mypage/FaqRecording";
 //auth
@@ -72,6 +74,8 @@ function App() {
         <Route path="/mypage/account" element={<Account />} />
         <Route path="/mypage/support" element={<Support />} />
         <Route path="/mypage/support/policies" element={<Policies />} />
+        <Route path="/mypage/support/policies/terms" element={<ServiceTerms />} />
+        <Route path="/mypage/support/policies/personal-information" element={<PersonalInformationConsent />} />
         <Route path="/mypage/support/faq" element={<Faq />} />
         <Route path="/mypage/support/faq/recording" element={<FaqRecording />} />
         <Route path="/payments" element={<CreditCharge />} />
