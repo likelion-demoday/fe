@@ -11,14 +11,14 @@ const FILL_PATH =
 const DIFF_PERCENT = 12;
 const ANIMATION_DURATION_MS = 1200;
 
-const SpeakingLengthCard = ({ active = true, onDetail }) => {
+const SpeakingLengthCard = ({ count, active = true, onDetail }) => {
   const progress = useRevealProgress(active, ANIMATION_DURATION_MS);
   const maskId = useId();
 
   return (
     <section className="flex w-full flex-col items-center h-full gap-[16px] rounded-[16px] border border-[#eee] bg-white px-[24px] pt-[16px] pb-[44px] drop-shadow-[0px_4px_5.85px_rgba(0,0,0,0.05)] drop-shadow-[0px_0px_23.85px_rgba(0,0,0,0.1)]">
       <div className="flex w-full flex-col">
-        <p className="text-caption text-[#bfbfbf]">최근 n회 분석 기준</p>
+        <p className="text-caption text-[#bfbfbf]">최근 {count}회 분석 기준</p>
         <div className="flex w-full items-center justify-between">
           <h3 className="text-title-semibold flex-1 text-black">말하는 길이</h3>
           <button
