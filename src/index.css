@@ -86,7 +86,13 @@
   }
 
   /* 원본 SVG의 흰 배경 위에도 눌림 색상이 보이도록 적용 */
-  .mypage-back-press button::after {
+  .press-control {
+    position: relative;
+    cursor: pointer;
+  }
+
+  .mypage-back-press button::after,
+  .press-control::after {
     content: "";
     position: absolute;
     inset: 0;
@@ -95,7 +101,12 @@
     mix-blend-mode: multiply;
   }
 
-  .mypage-back-press button:active::after {
+  .press-control::after {
+    border-radius: inherit;
+  }
+
+  .mypage-back-press button:active::after,
+  .press-control:active::after {
     background-color: #eeeeee;
   }
 
