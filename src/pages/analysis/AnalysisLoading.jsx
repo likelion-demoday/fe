@@ -56,8 +56,8 @@ const AnalysisLoading = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state?.recordingId, isAnalyzing, navigate]);
 
-  // TODO: 보고서 화면 생기면 그쪽으로 이동
   const goToHome = () => navigate("/home", { replace: true });
+  const goToReport = () => navigate(`/report/${state.recordingId}`, { replace: true });
 
   return (
     <main className="relative mx-auto h-[844px] w-[390px] overflow-hidden bg-white">
@@ -105,7 +105,7 @@ const AnalysisLoading = () => {
         <BottomSheet
           title="분석완료!"
           onClose={goToHome}
-          footer={<SheetButton text="다음" onClick={goToHome} />}
+          footer={<SheetButton text="다음" onClick={goToReport} />}
         />
       )}
     </main>

@@ -177,7 +177,9 @@ export const toReportView = (report) => {
 
   return {
     duration: formatDuration(recordingInfo.durationMs),
+    scenario: recordingInfo.scenario,
     ...(SCENARIO_LABELS[recordingInfo.scenario] ?? { type: "", relation: "" }),
+    scenarioInsights: qualitative.scenarioInsights ?? [],
     speakers: {
       me: {
         nickname: me?.speakerName ?? "나",
