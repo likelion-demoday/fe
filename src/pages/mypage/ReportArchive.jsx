@@ -70,6 +70,7 @@ const ReportArchive = ({ onSelect }) => {
         date: new Date(report.createdAt).toLocaleDateString("ko-KR"),
         durationMinutes: Math.round(report.durationSeconds / 60),
         category: CATEGORIES[report.relationshipType] || "기타",
+        relationshipType: report.relationshipType,
         statusLabel: STATUSES[report.analysisStatus] || report.analysisStatus,
       }))}
       emptyMessage="아직 분석 내역이 없어요"
