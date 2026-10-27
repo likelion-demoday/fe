@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { getAnalyses } from "../../api/analysis";
 import RecordingArchive from "../../components/feature/mypage/RecordingArchive";
 
@@ -15,6 +16,7 @@ const STATUSES = {
 };
 
 const ReportArchive = ({ onSelect }) => {
+  const navigate = useNavigate();
   const [reports, setReports] = useState([]);
   const [page, setPage] = useState(0);
   const [hasNext, setHasNext] = useState(false);
@@ -74,7 +76,7 @@ const ReportArchive = ({ onSelect }) => {
         statusLabel: STATUSES[report.analysisStatus] || report.analysisStatus,
       }))}
       emptyMessage="아직 분석 내역이 없어요"
-      onSelect={onSelect}
+      onSelect={onSelect ?? ((id) => navigate(`/report/${id}`))}
       loading={loading}
       error={error}
       hasNext={hasNext}

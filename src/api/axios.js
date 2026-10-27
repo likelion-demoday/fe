@@ -51,6 +51,9 @@ const handleSessionExpired = () => {
 
 api.interceptors.response.use(
   (response) => {
+    if (response.config.responseType === "blob") {
+      return response.data;
+    }
     const { isSuccess, code, message, result, error } = response.data;
 
     if (isSuccess) {
