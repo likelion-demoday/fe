@@ -1,7 +1,7 @@
 import BottomSheet, { SheetButton } from "../../common/BottomSheet";
 import accountExitImage from "../../../assets/images/account-exit.png";
 
-const WithdrawSheet = ({ onClose, onWithdraw }) => (
+const WithdrawSheet = ({ onClose, onContact }) => (
   <BottomSheet
     title="회원 탈퇴"
     characterSrc={accountExitImage}
@@ -10,7 +10,7 @@ const WithdrawSheet = ({ onClose, onWithdraw }) => (
     footer={
       <>
         <SheetButton text="취소" onClick={onClose} />
-        <SheetButton text="회원탈퇴" onClick={onWithdraw} />
+        <SheetButton text="문의하기" onClick={onContact} />
       </>
     }
   >
@@ -20,6 +20,9 @@ const WithdrawSheet = ({ onClose, onWithdraw }) => (
         탈퇴하면 저장된 대화와 크레딧, 보고서가
         <br />
         삭제되고 복구할 수 없어요.
+        <br />
+        <br />
+        탈퇴하시려면 고객센터에 문의하세요.
       </p>
     </div>
   </BottomSheet>

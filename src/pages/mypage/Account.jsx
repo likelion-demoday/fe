@@ -6,7 +6,7 @@ import PurchaseHistory from "../../components/feature/mypage/PurchaseHistory";
 import LogoutSheet from "../../components/feature/mypage/LogoutSheet";
 import WithdrawSheet from "../../components/feature/mypage/WithdrawSheet";
 
-const Account = ({ onLoginInfo, onPrivacy, onWithdraw }) => {
+const Account = ({ onLoginInfo, onPrivacy }) => {
   const navigate = useNavigate();
   const [activeSheet, setActiveSheet] = useState(null);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
@@ -50,7 +50,10 @@ const Account = ({ onLoginInfo, onPrivacy, onWithdraw }) => {
         <LogoutSheet onClose={closeSheet} onLogout={handleLogout} isLoggingOut={isLoggingOut} error={logoutError} />
       )}
       {activeSheet === "withdraw" && (
-        <WithdrawSheet onClose={closeSheet} onWithdraw={onWithdraw} />
+        <WithdrawSheet onClose={closeSheet} onContact={() => {
+          closeSheet();
+          navigate("/mypage/support/contact");
+        }} />
       )}
     </main>
   );
