@@ -33,10 +33,16 @@ const ExpressionAxis = ({ label, value, description, examples, tone }) => (
 );
 
 
-const BadLevel = ({ report }) => {
+// 표독력 화면. 같은 구성의 표현 강도·애착 유형 탭도 data/제목만 바꿔 재사용
+const BadLevel = ({
+  report,
+  data = report.expression,
+  axisTitle = "표현에서 보이는 것",
+  contextTitle = "내용에서 보이는 것",
+}) => {
   const [speaker, setSpeaker] = useState("me");
-  const scores = { me: report.expression.me.score, partner: report.expression.partner.score };
-  const { summary, axes, contexts } = report.expression[speaker];
+  const scores = { me: data.me.score, partner: data.partner.score };
+  const { summary, axes, contexts } = data[speaker];
   const tone = SPEAKER_TONES[speaker];
 
   return (
@@ -53,7 +59,7 @@ const BadLevel = ({ report }) => {
 
       {axes.length > 0 && (
         <section className="flex w-full flex-col items-start gap-[14px]">
-          <h2 className="text-[24px] leading-[34px] font-bold tracking-[0.48px] text-[#262626]">표현에서 보이는 것</h2>
+          <h2 className="text-[24px] leading-[34px] font-bold tracking-[0.48px] text-[#262626]">{axisTitle}</h2>
           <div className="flex w-full flex-col items-start gap-[20px] rounded-[16px] border border-[#eee] bg-white p-[20px] drop-shadow-[0px_4px_5.85px_rgba(0,0,0,0.05)] drop-shadow-[0px_0px_23.85px_rgba(0,0,0,0.1)]">
             {axes.map((axis, index) => (
               <Fragment key={axis.label}>
@@ -67,7 +73,7 @@ const BadLevel = ({ report }) => {
 
       {contexts.length > 0 && (
         <section className="flex w-full flex-col items-start gap-[8px]">
-          <h2 className="text-[20px] font-bold whitespace-nowrap text-[#454545]">내용에서 보이는 것</h2>
+          <h2 className="text-[20px] font-bold whitespace-nowrap text-[#454545]">{contextTitle}</h2>
           <div className="flex w-full flex-col gap-[16px]">
             {contexts.map(({ title, description }) => (
               <div

@@ -72,3 +72,20 @@ export const CHARACTER_STYLES = {
     shadowBox: "top-[172.94px] left-[44.1px] h-[12.995px] w-[69.614px]",
   },
 };
+
+// 섹션 제목 (연인·갈등 보고서는 "갈등 정보" 문구 사용)
+export const INFO_LABELS = {
+  content: "대화 내용",
+  topics: "공통 관심사",
+  longest: "가장 오래 대화한 이야기",
+  timeline: "대화 타임라인",
+  turns: "주제별 대화 턴 수",
+};
+
+export const CONFLICT_INFO_LABELS = {
+  content: "갈등 내용",
+  topics: "의견이 갈린 주제",
+  longest: "가장 오래 머문 쟁점",
+  timeline: "갈등 타임라인",
+  turns: "쟁점별 대화 턴 수",
+};

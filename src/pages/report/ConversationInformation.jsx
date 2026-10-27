@@ -6,6 +6,7 @@ import {
   KeywordPill,
   ReportSection as Section,
 } from "../../components/feature/report/ReportBlocks";
+import { INFO_LABELS } from "../../constants/report";
 
 const escapeRegExp = (text) => text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
@@ -32,15 +33,15 @@ const StatBox = ({ label, value }) => (
 );
 
 
-const ConversationInformation = ({ report }) => {
+const ConversationInformation = ({ report, labels = INFO_LABELS }) => {
   const { commonInterests, longestTopic, timeline, topicTurns, stats } = report.info;
 
   return (
     <div className="flex w-full flex-col items-start gap-[30px] font-['SUIT',sans-serif]">
-      <Section title="대화 내용">
+      <Section title={labels.content}>
         <div className={`flex w-full flex-col items-start gap-[30px] overflow-clip rounded-[24px] border border-[#eee] bg-white p-[20px] ${CARD_SHADOW}`}>
           <div className="flex flex-col items-start gap-[8px]">
-            <p className="text-[16px] font-bold tracking-[-0.32px] text-[#2d3038]">공통 관심사</p>
+            <p className="text-[16px] font-bold tracking-[-0.32px] text-[#2d3038]">{labels.topics}</p>
             <div className="flex flex-wrap gap-[16px]">
               {/* 가장 비중이 큰 관심사(첫 번째)만 강조 */}
               {commonInterests.map((interest, index) => (
@@ -50,7 +51,7 @@ const ConversationInformation = ({ report }) => {
           </div>
           {longestTopic && (
             <div className="flex w-full flex-col items-start gap-[8px]">
-              <p className="text-[16px] font-bold tracking-[-0.32px] text-[#2d3038]">가장 오래 대화한 이야기</p>
+              <p className="text-[16px] font-bold tracking-[-0.32px] text-[#2d3038]">{labels.longest}</p>
               <p className="text-[13px] leading-[20px] font-semibold tracking-[-0.26px] text-[#8c8c8c]">
                 {longestTopic.title} · {longestTopic.duration}
               </p>
@@ -62,7 +63,7 @@ const ConversationInformation = ({ report }) => {
         </div>
       </Section>
 
-      <Section title="대화 타임라인">
+      <Section title={labels.timeline}>
         <div className="flex w-full flex-col items-start gap-[16px] rounded-[24px] border border-[#eee] bg-white p-[20px] drop-shadow-[0px_4px_5.85px_rgba(0,0,0,0.05)] drop-shadow-[0px_0px_23.85px_rgba(0,0,0,0.1)]">
           {timeline.map(({ time, title, description, keywords }, index) => (
             <Fragment key={time}>
@@ -85,7 +86,7 @@ const ConversationInformation = ({ report }) => {
         </div>
       </Section>
 
-      <Section title="주제별 대화 턴 수">
+      <Section title={labels.turns}>
         <div className={`grid w-full grid-cols-[repeat(2,fit-content(100%))] gap-[20px] overflow-clip rounded-[16px] border border-[#eee] bg-white px-[20px] pt-[20px] pb-[16px] ${CARD_SHADOW}`}>
           {topicTurns.map(({ topic, turns }) => (
             <div key={topic} className="flex flex-col items-end gap-[2px] self-start justify-self-start">

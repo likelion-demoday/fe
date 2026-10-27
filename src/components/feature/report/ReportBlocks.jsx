@@ -73,3 +73,19 @@ export const SpeakerScoreSelector = ({ speakers, scores, selected, onSelect }) =
     ))}
   </div>
 );
+
+// 말풍선: 라벨 + 실제 한 말. 강조할 라벨은 화자 색, 나머지는 회색
+export const QuoteBubble = ({ label, text, highlighted, tone }) => (
+  <div
+    className={`flex w-[310px] flex-col items-start gap-[8px] overflow-clip rounded-[16px] rounded-tl-none bg-white px-[20px] py-[12px] ${CARD_SHADOW}`}
+  >
+    <p
+      className={`text-[14px] leading-[20px] font-medium tracking-[-0.14px] ${
+        highlighted ? tone.text : "text-[#8c8c8c]"
+      }`}
+    >
+      {label}
+    </p>
+    <p className="text-[16px] font-bold tracking-[-0.32px] break-keep text-[#454545]">“{text}”</p>
+  </div>
+);

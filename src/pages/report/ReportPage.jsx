@@ -13,8 +13,10 @@ import InterestLevel from "./InterestLevel";
 import BadLevel from "./BadLevel";
 import PlusAnalysis from "./PlusAnalysis";
 import ScenarioInsight from "./ScenarioInsight";
+import MissedWords from "./MissedWords";
 import dailyIcon from "../../assets/icons/analysis-type-daily-s.svg";
 import relationMainIcon from "../../assets/icons/relation-main-s.svg";
+import { CONFLICT_INFO_LABELS } from "../../constants/report";
 import { mockAnalysisReportResponse } from "../../mocks/analysisReportResponse";
 import { toReportView } from "../../utils/reportMapper";
 import { shareCurrentPage } from "../../utils/share";
@@ -24,14 +26,24 @@ const STATUS_MESSAGES = {
   FAILED: "분석에 실패했어요.",
 };
 
-const fetchReport = (reportId) =>
-  import.meta.env.DEV && reportId === "mock"
-    ? Promise.resolve(mockAnalysisReportResponse)
-    : getAnalysisReport(reportId);
+// 개발용 목데이터: /report/mock (친구·일상), /report/mock-conflict (연인·갈등)
+const DEV_MOCK_SCENARIOS = { mock: "FRIEND_DAILY", "mock-conflict": "COUPLE_CONFLICT" };
+
+const fetchReport = (reportId) => {
+  const scenario = import.meta.env.DEV && DEV_MOCK_SCENARIOS[reportId];
+  if (!scenario) return getAnalysisReport(reportId);
+
+  const { report } = mockAnalysisReportResponse;
+  return Promise.resolve({
+    ...mockAnalysisReportResponse,
+    report: { ...report, recordingInfo: { ...report.recordingInfo, scenario } },
+  });
+};
 
 const SECTIONS = [
   { key: "overview", label: "한번에 보기" },
   { key: "info", label: "대화 정보" },
+  { key: "conflictInfo", label: "갈등 정보" },
   { key: "style", label: "대화 방식" },
   { key: "interest", label: "관심도" },
   { key: "expression", label: "표독력" },
@@ -50,7 +62,7 @@ const SECTIONS = [
 const SCENARIO_SECTIONS = {
   FRIEND_DAILY: ["overview", "info", "style", "interest", "expression", "extra"],
   COUPLE_DAILY: ["overview", "info", "style", "interest", "affection", "extra"],
-  COUPLE_CONFLICT: ["overview", "info", "style", "conflictReaction", "intensity", "missedWords", "attachment"],
+  COUPLE_CONFLICT: ["overview", "conflictInfo", "style", "conflictReaction", "intensity", "missedWords", "attachment"],
   PARENT_CHILD_CONFLICT: ["overview", "info", "style", "questionAdvice", "conflictExpression", "retry"],
 };
 
@@ -68,12 +80,35 @@ const SECTION_CONTENT = {
   expression: { Component: BadLevel, gap: "gap-[20px]" },
   extra: { Component: PlusAnalysis, gap: "gap-[20px]" },
   affection: scenarioSection("애정 표현", ["AFFECTION_EXPRESSION"]),
-  conflictReaction: scenarioSection("갈등 반응", ["CONFLICT_POSITION", "CONFLICT_TOPIC"]),
-  // TODO: 표현 강도 전용 화면 전까지 표독력 화면 재사용 (같은 spicinessInsights 데이터)
-  intensity: { Component: BadLevel, gap: "gap-[20px]" },
-  missedWords: scenarioSection("놓친 말", ["MISSED_SIGNAL"]),
-  // TODO: 애착 유형은 API에 대응 데이터 없음
-  attachment: scenarioSection("애착 유형", []),
+  // 연인·갈등 전용 탭 (데이터: report.conflict, 현재 임시 데이터)
+  conflictInfo: {
+    Component: ({ report }) => <ConversationInformation report={report} labels={CONFLICT_INFO_LABELS} />,
+    gap: "gap-[20px]",
+  },
+  conflictReaction: {
+    Component: ({ report }) => (
+      <InterestLevel report={report} data={report.conflict.reaction} title="서로의 갈등 반응" />
+    ),
+    gap: "gap-[20px]",
+  },
+  intensity: {
+    Component: ({ report }) => (
+      <BadLevel report={report} data={report.conflict.intensity} axisTitle="갈등 표현에서 보이는 것" />
+    ),
+    gap: "gap-[20px]",
+  },
+  missedWords: { Component: MissedWords, gap: "gap-[20px]" },
+  attachment: {
+    Component: ({ report }) => (
+      <BadLevel
+        report={report}
+        data={report.conflict.attachment}
+        axisTitle="애착 반응 패턴"
+        contextTitle="복합형 · 감정 강도"
+      />
+    ),
+    gap: "gap-[20px]",
+  },
   questionAdvice: scenarioSection("질문/조언", ["QUESTION_RESPONSE_STYLE", "CONVERSATION_OPENNESS"]),
   conflictExpression: scenarioSection("갈등 표현", ["CONFLICT_TOPIC", "CONFLICT_POSITION", "CARE_EXPRESSION"]),
   retry: scenarioSection("다시 대화", ["SOLUTION", "TURNING_POINT"]),

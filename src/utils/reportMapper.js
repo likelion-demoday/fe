@@ -7,6 +7,7 @@ import {
   SPICINESS_AXIS_CATEGORIES,
   SPICINESS_CONTEXT_CATEGORIES,
 } from "../constants/report";
+import { buildCoupleConflictMock } from "../mocks/coupleConflict";
 
 const QUESTION_PATTERNS = ["FOLLOW_UP_QUESTION", "EMOTION_QUESTION"];
 
@@ -128,7 +129,7 @@ const toInterest = (role, partnerRole, qualitative) => {
       })),
       summary: pickByCategory(insight.observations, group.observations)[0],
     })).filter(({ items }) => items.length > 0),
-    affection: { items: [], summary: affection },
+    chips: { title: "호감 표현", caption: "대화에서 직접 드러난 표현만 세었어요", items: [], summary: affection },
   };
 };
 
@@ -174,6 +175,10 @@ export const toReportView = (report) => {
   const topics = qualitative.topics ?? [];
   const longestTopic =
     topics.find((topic) => topic.longest) ?? [...topics].sort((a, b) => b.turnCount - a.turnCount)[0];
+  const conflict =
+    recordingInfo.scenario === "COUPLE_CONFLICT"
+      ? buildCoupleConflictMock(me?.speakerName ?? "나", partnerName)
+      : null;
 
   return {
     duration: formatDuration(recordingInfo.durationMs),
@@ -191,7 +196,7 @@ export const toReportView = (report) => {
       },
     },
     overview: {
-      scores: [
+      scores: conflict?.overviewScores ?? [
         {
           label: "관심도",
           me: findByRole(qualitative.interestInsights, meRole)?.score ?? 0,
@@ -244,5 +249,6 @@ export const toReportView = (report) => {
       me: toTf(meRole, qualitative),
       partner: toTf(partnerRole, qualitative),
     },
+    conflict,
   };
 };
