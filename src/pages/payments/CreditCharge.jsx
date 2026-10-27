@@ -7,7 +7,7 @@ import Button from "../../components/common/Button";
 import CreditBalance from "../../components/feature/payments/CreditBalance";
 import CreditProductCard from "../../components/feature/payments/CreditProductCard";
 import CreditPaymentSheet from "../../components/feature/payments/CreditPaymentSheet";
-import chevronLeft from "../../assets/icons/chevron-left.svg";
+import TextBackButton from "../../components/common/TextBackButton";
 
 const CreditCharge = ({ onViewAgreement }) => {
   const navigate = useNavigate();
@@ -73,16 +73,7 @@ const CreditCharge = ({ onViewAgreement }) => {
     <main className="relative mx-auto flex min-h-[844px] w-full max-w-[390px] flex-col bg-white">
       <div className="flex flex-col gap-[20px] px-[24px] pt-[16px]">
         <AppHeader title="크레딧 충전" onLogoClick={() => navigate("/mypage")} />
-        <Button
-          onClick={() => navigate("/mypage/payments")}
-          className="text-body flex w-fit cursor-pointer items-center gap-[8px] rounded-[6px] text-[#595959]"
-          text={
-            <>
-              <img src={chevronLeft} alt="" className="shrink-0" />
-              <span>뒤로가기</span>
-            </>
-          }
-        />
+        <TextBackButton onClick={() => navigate("/mypage/payments")} />
         <div className="flex flex-col gap-[30px]">
           {creditError ? (
             <p role="alert" className="text-body text-[#595959]">
