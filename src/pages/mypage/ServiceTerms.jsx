@@ -14,8 +14,9 @@ const ARTICLES = [
   ["제11조 운영 주체 및 문의", "상호: 리세이(RE:SAY)\n대표자: 이호석\n사업자등록번호: 642-48-01300\n사업장 주소: 서울특별시 노원구 노원로1길 121\n업종: 정보통신업 / 응용 소프트웨어 개발 및 공급업\n고객지원 연락처: hoslee404@gmail.com\n시행 예정일: 2026.10.31"],
 ];
 
-const ServiceTerms = () => (
+const ServiceTerms = ({ onBack }) => (
   <PolicyDocument
+    onBack={onBack}
     title="서비스 이용약관"
     description="RE:SAY 이용을 위한 기본적인 권리와 책임을 안내합니다."
     sections={ARTICLES}

@@ -16,9 +16,14 @@ import SavedConversations from "./pages/mypage/SavedConversations";
 import ReportArchive from "./pages/mypage/ReportArchive";
 import Account from "./pages/mypage/Account";
 import Support from "./pages/mypage/Support";
+import Contact from "./pages/mypage/Contact";
 import Policies from "./pages/mypage/Policies";
 import ServiceTerms from "./pages/mypage/ServiceTerms";
 import PersonalInformationConsent from "./pages/mypage/PersonalInformationConsent";
+import VoiceInformationConsent from "./pages/mypage/VoiceInformationConsent";
+import PrivacyPolicy from "./pages/mypage/PrivacyPolicy";
+import PaymentRefundPolicy from "./pages/mypage/PaymentRefundPolicy";
+import RecordingAnalysisGuide from "./pages/mypage/RecordingAnalysisGuide";
 import Faq from "./pages/mypage/Faq";
 import FaqRecording from "./pages/mypage/FaqRecording";
 //auth
@@ -73,9 +78,14 @@ function App() {
         />
         <Route path="/mypage/account" element={<Account />} />
         <Route path="/mypage/support" element={<Support />} />
+        <Route path="/mypage/support/contact" element={<Contact />} />
         <Route path="/mypage/support/policies" element={<Policies />} />
         <Route path="/mypage/support/policies/terms" element={<ServiceTerms />} />
         <Route path="/mypage/support/policies/personal-information" element={<PersonalInformationConsent />} />
+        <Route path="/mypage/support/policies/voice-information" element={<VoiceInformationConsent />} />
+        <Route path="/mypage/support/policies/privacy" element={<PrivacyPolicy />} />
+        <Route path="/mypage/support/policies/payment-refund" element={<PaymentRefundPolicy />} />
+        <Route path="/mypage/support/policies/recording-analysis" element={<RecordingAnalysisGuide />} />
         <Route path="/mypage/support/faq" element={<Faq />} />
         <Route path="/mypage/support/faq/recording" element={<FaqRecording />} />
         <Route path="/payments" element={<CreditCharge />} />

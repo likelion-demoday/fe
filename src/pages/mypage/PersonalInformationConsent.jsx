@@ -9,8 +9,9 @@ const SECTIONS = [
   ["이용자 권리", "저장된 녹음과 분석 자료는 이용자가 직접 삭제할 수 있으며 회원 탈퇴 시 서비스 데이터는 삭제됩니다. 법정 보존 기록은 예외입니다. 열람·정정·삭제·처리 정지 등을 요청할 고객센터 연락처는 hoslee404@gmail.com입니다."],
 ];
 
-const PersonalInformationConsent = () => (
+const PersonalInformationConsent = ({ onBack }) => (
   <PolicyDocument
+    onBack={onBack}
     title="개인정보 수집·이용 동의"
     description="서비스 운영에 필요한 정보와 사용 목적을 확인해주세요."
     sections={SECTIONS}
