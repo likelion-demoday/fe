@@ -4,7 +4,7 @@ import AppHeader from "../../common/AppHeader";
 const MyPageHeader = ({ onBack, title = "마이페이지", titleClassName = "text-display" }) => {
   const navigate = useNavigate();
   return (
-    <AppHeader title={title} titleClassName={titleClassName} onBack={onBack} onLogoClick={() => navigate("/mypage")} />
+    <AppHeader title={title} titleClassName={titleClassName} onBack={onBack} onLogoClick={() => navigate("/home")} />
   );
 };
 
