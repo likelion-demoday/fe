@@ -62,10 +62,11 @@ const Faq = ({ onSelectQuestion }) => {
             <section aria-labelledby={`faq-group-${groupIndex}`} className="flex flex-col gap-[19px]">
               <h2 id={`faq-group-${groupIndex}`}>{title}</h2>
               <div className="flex flex-col gap-[2px]">
-                {questions.map((question) => (
+                {questions.map((question, questionIndex) => (
                   <Fragment key={question}>
                     <PurchaseHistory
                       label={question}
+                      to={!onSelectQuestion && title === "녹음과 분석" ? `/mypage/support/faq/recording#question-${questionIndex + 1}` : undefined}
                       className="mypage-press-row flex h-[49px] w-full cursor-pointer items-center justify-between text-left"
                       trailing={<span aria-hidden="true" className="w-[18px] shrink-0 text-[#999]">›</span>}
                       onClick={onSelectQuestion ? () => onSelectQuestion(question) : undefined}
