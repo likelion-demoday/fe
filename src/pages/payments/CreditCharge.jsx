@@ -72,7 +72,7 @@ const CreditCharge = ({ onViewAgreement }) => {
   return (
     <main className="relative mx-auto flex min-h-[844px] w-full max-w-[390px] flex-col bg-white">
       <div className="flex flex-col gap-[20px] px-[24px] pt-[16px]">
-        <AppHeader title="크레딧 충전" onLogoClick={() => navigate("/mypage")} />
+        <AppHeader title="크레딧 충전" onLogoClick={() => navigate("/home")} />
         <TextBackButton onClick={() => navigate("/mypage/payments")} />
         <div className="flex flex-col gap-[30px]">
           {creditError ? (
