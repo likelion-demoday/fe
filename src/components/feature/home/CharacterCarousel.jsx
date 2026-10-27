@@ -1,51 +1,40 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import cardBg from "../../../assets/icons/character-card-bg-large.svg";
 import cardShadow from "../../../assets/icons/character-shadow-large.svg";
-import superEgenImage from "../../../assets/images/character-super-egen.png";
-import explainerImage from "../../../assets/images/character-explainer.png";
+import { getAnalyses, getAnalysisReport } from "../../../api/analysis";
+import { getCharacterImageBlob, getCharacterImageStatus } from "../../../api/character";
 
-// TODO: API 연동 전 임시 데이터 (description/mission 일부는 디자인에 없어 임의 문구)
-const CHARACTERS = [
-  {
-    id: "super-egen-1",
-    name: "슈퍼에겐 아줌마",
-    date: "2일전",
-    titleColor: "#c8b9cd",
-    gradientTo: "#e2d6e6",
-    description: ["상대방의 감정에 집중하고", "리액션이 많아요"],
-    mission: ["리액션 전에", "내 생각 먼저 말하기"],
-    image: superEgenImage,
-    imageBox: "top-[49px] left-[54px] h-[180.5px] w-[144.45px]",
-    shadowBox: "top-[200px] left-[51px] h-[15.03px] w-[80.5px]",
-  },
-  {
-    id: "explainer",
-    name: "설명 보부상",
-    date: "2일전",
-    titleColor: "#3d465d",
-    gradientTo: "#c2c5d9",
-    description: ["묻지 않은 정보까지", "자세히 설명해줘요"],
-    mission: ["상대방이 물어본", "정보만 이야기해보기"],
-    image: explainerImage,
-    imageBox: "top-[51px] left-[18px] size-[181px]",
-    shadowBox: "top-[198.13px] left-[68.81px] h-[14.819px] w-[79.386px]",
-  },
-  {
-    id: "super-egen-2",
-    name: "슈퍼에겐 아줌마",
-    date: "5일전",
-    titleColor: "#c8b9cd",
-    gradientTo: "#e2d6e6",
-    description: ["상대방의 감정에 집중하고", "리액션이 많아요"],
-    mission: ["리액션 전에", "내 생각 먼저 말하기"],
-    image: superEgenImage,
-    imageBox: "top-[49px] left-[54px] h-[180.5px] w-[144.45px]",
-    shadowBox: "top-[200px] left-[51px] h-[15.03px] w-[80.5px]",
-  },
-];
+const CARD_STYLE = {
+  titleColor: "#3d465d",
+  gradientTo: "#c2c5d9",
+  imageBox: "top-[51px] left-[18px] size-[181px]",
+  shadowBox: "top-[198.13px] left-[68.81px] h-[14.819px] w-[79.386px]",
+};
 
-// 디자인 기준: 가운데 카드 186x229, 옆 카드 130x160 (가운데 카드를 축소한 형태)
+const loadCharacter = async ({ recordingId, createdAt }) => {
+  const [analysis, imageStatus] = await Promise.all([
+    getAnalysisReport(recordingId),
+    getCharacterImageStatus(recordingId),
+  ]);
+  const insight = analysis.report?.qualitativeAnalysis?.characterInsights?.find(
+    (item) => item.speakerRole === "SELF",
+  );
+  const image = imageStatus.images?.find((item) => item.speakerRole === "SELF");
+  if (!insight || image?.status !== "COMPLETED") return null;
+
+  const blob = await getCharacterImageBlob(image.contentUrl);
+  return {
+    ...CARD_STYLE,
+    id: recordingId,
+    name: insight.name,
+    date: new Date(createdAt).toLocaleDateString("ko-KR"),
+    description: insight.description,
+    image: URL.createObjectURL(blob),
+  };
+};
+
+
 const SIDE_SCALE = 130 / 186;
 const POSITIONS = {
   "-1": `translate(-76px, 49px) scale(${SIDE_SCALE})`,
@@ -77,7 +66,6 @@ const CharacterCard = ({ character, offset, dragX, isDragging, onSelect }) => {
         backgroundImage: `linear-gradient(146.42deg, #fff 40.14%, ${character.gradientTo} 89.39%)`,
       }}
     >
-      {/* 옆 카드는 흐리게: 디자인의 backdrop-blur를 transform 안에서도 깨지지 않도록 filter로 대체 */}
       <div
         className="absolute inset-0 transition-[filter] duration-500"
         style={{ filter: isActive ? "blur(0px)" : "blur(2.56px)" }}
@@ -102,27 +90,9 @@ const CharacterCard = ({ character, offset, dragX, isDragging, onSelect }) => {
               {character.date}
             </p>
           </div>
-          <div className="relative font-medium">
-            <div
-              className={`flex w-[95.604px] flex-col gap-[2px] transition-opacity duration-300 ${isActive ? "opacity-100" : "opacity-0"}`}
-            >
-              <p className="text-[8.935px] tracking-[0.268px] text-[#454545]">
-                Mission!
-              </p>
-              <p className="text-[11.615px] tracking-[0.3485px] whitespace-nowrap text-[#262626]">
-                {character.mission[0]}
-                <br />
-                {character.mission[1]}
-              </p>
-            </div>
-            <p
-              className={`absolute top-0 left-0 text-[13px] tracking-[0.39px] whitespace-nowrap text-[#595959] transition-opacity duration-300 ${isActive ? "opacity-0" : "opacity-100"}`}
-            >
-              {character.description[0]}
-              <br />
-              {character.description[1]}
-            </p>
-          </div>
+          <p className="w-[154px] text-[11.615px] font-medium tracking-[0.3485px] break-keep text-[#595959]">
+            {character.description}
+          </p>
         </div>
 
         <div className={`absolute ${character.shadowBox}`}>
@@ -148,14 +118,41 @@ const CharacterCard = ({ character, offset, dragX, isDragging, onSelect }) => {
 };
 
 const CharacterCarousel = () => {
-  const [activeIndex, setActiveIndex] = useState(1);
+  const [characters, setCharacters] = useState([]);
+  const [loaded, setLoaded] = useState(false);
+  const [activeIndex, setActiveIndex] = useState(0);
   const [dragX, setDragX] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
   const dragStartX = useRef(null);
   const hasDragged = useRef(false);
 
+  useEffect(() => {
+    let active = true;
+
+    const fetchCharacters = async () => {
+      try {
+        const { items = [] } = await getAnalyses({ size: 3 });
+        const list = await Promise.all(
+          items
+            .filter((item) => item.analysisStatus === "COMPLETED")
+            .map((item) => loadCharacter(item).catch(() => null)),
+        );
+        if (active) setCharacters(list.filter(Boolean));
+      } catch (error) {
+        console.error(error.message);
+      } finally {
+        if (active) setLoaded(true);
+      }
+    };
+
+    fetchCharacters();
+    return () => {
+      active = false;
+    };
+  }, []);
+
   const goTo = (index) => {
-    setActiveIndex(Math.max(0, Math.min(CHARACTERS.length - 1, index)));
+    setActiveIndex(Math.max(0, Math.min(characters.length - 1, index)));
   };
 
   const handlePointerDown = (e) => {
@@ -174,7 +171,7 @@ const CharacterCarousel = () => {
     if (isDragging) {
       const atEdge =
         (dx > 0 && activeIndex === 0) ||
-        (dx < 0 && activeIndex === CHARACTERS.length - 1);
+        (dx < 0 && activeIndex === characters.length - 1);
       setDragX(atEdge ? dx * 0.3 : dx);
     }
   };
@@ -188,6 +185,17 @@ const CharacterCarousel = () => {
     setDragX(0);
   };
 
+  if (!loaded) return <div className="h-[263px] w-[338px]" />;
+  if (characters.length === 0) {
+    return (
+      <div className="flex h-[263px] w-[338px] justify-center">
+        <div className="flex h-[229px] w-[186px] items-center justify-center rounded-[16px] border-[0.893px] border-[#eee] bg-white shadow-[0px_3.574px_10.454px_0px_rgba(0,0,0,0.05),0px_0px_42.62px_0px_rgba(0,0,0,0.05)]">
+          <p className="text-caption text-[#595959]">아직 분석된 대화가 없어요</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div
       className="relative h-[263px] w-[338px] touch-pan-y select-none"
@@ -199,7 +207,7 @@ const CharacterCarousel = () => {
       aria-roledescription="carousel"
       aria-label="나의 캐릭터"
     >
-      {CHARACTERS.map((character, index) => (
+      {characters.map((character, index) => (
         <CharacterCard
           key={character.id}
           character={character}
