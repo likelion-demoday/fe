@@ -2,13 +2,13 @@ import { useState, useEffect } from "react";
 
 import FrequentWordsCard from "./FrequentWordsCard";
 import SpeakingSpeedCard from "./SpeakingSpeedCard";
+import SpeakingLengthCard from "./SpeakingLengthCard";
 import ProfanityRateCard from "./ProfanityRateCard";
 import HabitHistoryCard from "./HabitHistoryCard";
 import chevronRightIcon from "../../../assets/icons/chevron-right.svg";
 
 import { getAnalysisSummary } from "../../../api/analysis";
 
-const TOTAL_CARDS = 4;
 const SLIDE_GAP = 24;
 
 const SLIDES = [
@@ -16,6 +16,7 @@ const SLIDES = [
   { id: "speaking-speed", render: (active, summary) => <SpeakingSpeedCard active={active} summary={summary} /> },
   { id: "profanity-rate", render: (active, summary) => <ProfanityRateCard active={active} summary={summary} /> },
   { id: "habit-history", render: (active, summary) => <HabitHistoryCard active={active} summary={summary} /> },
+  { id: "speaking-length", render: (active) => <SpeakingLengthCard active={active} /> },
 ];
 
 const EmptySummaryCard = () => (
@@ -93,7 +94,7 @@ const HabitSummaryCarousel = () => {
       </div>
 
       <div className="pointer-events-none absolute bottom-[20px] left-1/2 flex -translate-x-1/2 items-center gap-[12px]">
-        {Array.from({ length: TOTAL_CARDS }, (_, index) => (
+        {Array.from({ length: SLIDES.length }, (_, index) => (
           <span
             key={index}
             className={`size-[8px] rounded-[99px] ${index === activeIndex ? "bg-[#454545]" : "bg-[#d9d9d9]"}`}
