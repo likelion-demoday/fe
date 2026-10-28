@@ -26,6 +26,7 @@ const Policies = ({ onViewPolicy }) => {
           <PurchaseHistory
             key={id}
             label={label}
+            to={!onViewPolicy ? `/mypage/support/policies/${id}` : undefined}
             onClick={onViewPolicy ? () => onViewPolicy(id) : undefined}
           />
         ))}

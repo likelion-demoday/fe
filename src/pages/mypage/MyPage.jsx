@@ -6,8 +6,7 @@ const MyPage = () => {
   const navigate = useNavigate();
 
   const handleBack = () => {
-    if (window.history.state?.idx > 0) navigate(-1);
-    else navigate("/home", { replace: true });
+    navigate("/home", { replace: true });
   };
 
   return (
