@@ -1,36 +1,27 @@
 import { useEffect, useRef, useState } from "react";
 
-import cardBg from "../../../assets/icons/character-card-bg-large.svg";
-import cardShadow from "../../../assets/icons/character-shadow-large.svg";
 import { getAnalyses, getAnalysisReport } from "../../../api/analysis";
-import { getCharacterImageBlob, getCharacterImageStatus } from "../../../api/character";
+import { getCharacterImageUrls } from "../../../api/character";
 
-const CARD_STYLE = {
-  titleColor: "#3d465d",
-  gradientTo: "#c2c5d9",
-  imageBox: "top-[51px] left-[18px] size-[181px]",
-  shadowBox: "top-[198.13px] left-[68.81px] h-[14.819px] w-[79.386px]",
-};
+const TITLE_COLOR = "#3d465d";
 
+// 카드 이미지는 배경까지 포함 (186 x 229 비율). 위쪽 공백에 이름·설명을 겹쳐 띄움
 const loadCharacter = async ({ recordingId, createdAt }) => {
-  const [analysis, imageStatus] = await Promise.all([
+  const [analysis, imageUrls] = await Promise.all([
     getAnalysisReport(recordingId),
-    getCharacterImageStatus(recordingId),
+    getCharacterImageUrls(recordingId),
   ]);
   const insight = analysis.report?.qualitativeAnalysis?.characterInsights?.find(
     (item) => item.speakerRole === "SELF",
   );
-  const image = imageStatus.images?.find((item) => item.speakerRole === "SELF");
-  if (!insight || image?.status !== "COMPLETED") return null;
+  if (!insight || !imageUrls.SELF) return null;
 
-  const blob = await getCharacterImageBlob(image.contentUrl);
   return {
-    ...CARD_STYLE,
     id: recordingId,
     name: insight.name,
     date: new Date(createdAt).toLocaleDateString("ko-KR"),
     description: insight.description,
-    image: URL.createObjectURL(blob),
+    image: imageUrls.SELF,
   };
 };
 
@@ -63,26 +54,24 @@ const CharacterCard = ({ character, offset, dragX, isDragging, onSelect }) => {
         transform: `translateX(${dragX}px) ${baseTransform}`,
         opacity: isVisible ? 1 : 0,
         pointerEvents: isVisible ? "auto" : "none",
-        backgroundImage: `linear-gradient(146.42deg, #fff 40.14%, ${character.gradientTo} 89.39%)`,
       }}
     >
       <div
         className="absolute inset-0 transition-[filter] duration-500"
         style={{ filter: isActive ? "blur(0px)" : "blur(2.56px)" }}
       >
-        <div className="absolute top-[-1.12px] left-[-1px] h-[124px] w-[191px]">
-          <img
-            src={cardBg}
-            alt=""
-            className="absolute inset-[-38.47%_-24.97%] block max-w-none"
-          />
-        </div>
+        <img
+          src={character.image}
+          alt={isActive ? `${character.name} 캐릭터` : ""}
+          draggable={false}
+          className="pointer-events-none absolute inset-0 block size-full max-w-none object-cover"
+        />
 
-        <div className="absolute top-0 left-0 flex w-[185.846px] flex-col gap-[6px] px-[16px] py-[14px]">
+        <div className="absolute top-0 left-0 flex w-full flex-col gap-[6px] px-[16px] py-[14px]">
           <div className="flex w-full items-center justify-between whitespace-nowrap">
             <h3
               className={`font-bold transition-[font-size] duration-500 ${isActive ? "text-[16.083px] tracking-[0.6433px]" : "text-[18px] tracking-[0.72px]"}`}
-              style={{ color: character.titleColor }}
+              style={{ color: TITLE_COLOR }}
             >
               {character.name}
             </h3>
@@ -94,20 +83,6 @@ const CharacterCard = ({ character, offset, dragX, isDragging, onSelect }) => {
             {character.description}
           </p>
         </div>
-
-        <div className={`absolute ${character.shadowBox}`}>
-          <img
-            src={cardShadow}
-            alt=""
-            className="absolute inset-[-35.77%_-6.68%] block max-w-none"
-          />
-        </div>
-        <img
-          src={character.image}
-          alt={isActive ? `${character.name} 캐릭터` : ""}
-          draggable={false}
-          className={`pointer-events-none absolute max-w-none object-cover ${character.imageBox}`}
-        />
       </div>
 
       <div

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 import { getAnalysisReport } from "../../api/analysis";
+import { getCharacterImageStatus, getCharacterImageUrls } from "../../api/character";
 
 import AppHeader from "../../components/common/AppHeader";
 import { SheetButton } from "../../components/common/BottomSheet";
@@ -38,6 +39,17 @@ const fetchReport = (reportId) => {
     ...mockAnalysisReportResponse,
     report: { ...report, recordingInfo: { ...report.recordingInfo, scenario } },
   });
+};
+
+const IMAGE_POLLING_MS = 3000;
+const IMAGE_POLLING_LIMIT = 60; // 최대 3분
+
+const withCharacterImages = (report, imageUrls) => {
+  const attach = (speaker) => ({
+    ...speaker,
+    character: { ...speaker.character, imageUrl: imageUrls[speaker.role] },
+  });
+  return { ...report, speakers: { me: attach(report.speakers.me), partner: attach(report.speakers.partner) } };
 };
 
 const SECTIONS = [
@@ -126,8 +138,10 @@ const ReportPage = () => {
   const { reportId } = useParams();
   const [section, setSection] = useState("overview");
   const [loaded, setLoaded] = useState({ id: null, report: null, message: null });
+  const [characterImages, setCharacterImages] = useState({ id: null, urls: {} });
   const isCurrent = loaded.id === reportId;
-  const report = isCurrent ? loaded.report : null;
+  const imageUrls = characterImages.id === reportId ? characterImages.urls : {};
+  const report = isCurrent && loaded.report ? withCharacterImages(loaded.report, imageUrls) : null;
   const message = isCurrent ? loaded.message : null;
 
   useEffect(() => {
@@ -148,6 +162,36 @@ const ReportPage = () => {
 
     return () => {
       cancelled = true;
+    };
+  }, [reportId]);
+
+  // 캐릭터 이미지는 분석 완료 후 비동기 생성 → 생성 중이면 끝날 때까지 폴링 (없어도 보고서는 보여줌)
+  useEffect(() => {
+    let timer;
+    let cancelled = false;
+    let attempts = 0;
+
+    const poll = async () => {
+      try {
+        const { images = [] } = await getCharacterImageStatus(reportId);
+        const isPending = images.some(({ status }) => status === "PENDING" || status === "GENERATING");
+        if (!isPending) {
+          const urls = await getCharacterImageUrls(reportId);
+          if (!cancelled) setCharacterImages({ id: reportId, urls });
+          return;
+        }
+      } catch {
+        // 일시적인 오류는 다음 주기에 다시 시도
+      }
+      attempts += 1;
+      if (!cancelled && attempts < IMAGE_POLLING_LIMIT) timer = setTimeout(poll, IMAGE_POLLING_MS);
+    };
+
+    poll();
+
+    return () => {
+      cancelled = true;
+      clearTimeout(timer);
     };
   }, [reportId]);
 

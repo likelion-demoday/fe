@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import { getRecordingStatus } from "../../api/recording";
+import { requestCharacterImage } from "../../api/character";
 
 import AppHeader from "../../components/common/AppHeader";
 import BottomSheet, { SheetButton } from "../../components/common/BottomSheet";
@@ -33,6 +34,8 @@ const AnalysisLoading = () => {
           return;
         }
         if (isAnalyzing && step === "COMPLETED") {
+          // 캐릭터 이미지는 비동기 생성. 중복 요청은 서버에서 alreadyRequested로 처리
+          requestCharacterImage(recordingId).catch((error) => console.error(error.message));
           setIsDone(true);
           return;
         }

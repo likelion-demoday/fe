@@ -1,6 +1,3 @@
-import explainerImage from "../assets/images/character-explainer.png";
-import superEgenImage from "../assets/images/character-super-egen.png";
-
 // 화자별 색 (나: 주황, 상대: 파랑)
 export const SPEAKER_TONES = {
   me: {
@@ -55,21 +52,15 @@ export const SPICINESS_CONTEXT_CATEGORIES = ["ATTACK_TARGET", "PLAYFUL_CONTEXT",
 
 export const REACTION_TYPES = { THINKING: "T", FEELING: "F", MIXED: "T/F" };
 
-// TODO: 캐릭터 이미지 API 연동 전 임시 카드 스타일 (나/상대 고정)
+// 캐릭터 카드 글자색 · 이미지 생성 전 배경 (나/상대 고정)
 export const CHARACTER_STYLES = {
   me: {
     titleColor: "#3d465d",
     background: "linear-gradient(146.42deg, #fff 40.138%, #c2c5d9 89.392%)",
-    image: explainerImage,
-    imageBox: "top-[44.1px] left-[15.56px] size-[156.515px]",
-    shadowBox: "top-[171.33px] left-[59.5px] h-[12.814px] w-[68.647px]",
   },
   partner: {
     titleColor: "#c8b9cd",
     background: "linear-gradient(154.64deg, #fff 43.136%, #e2d6e6 87.54%)",
-    image: superEgenImage,
-    imageBox: "top-[42.81px] left-[39.16px] h-[156.089px] w-[124.916px]",
-    shadowBox: "top-[172.94px] left-[44.1px] h-[12.995px] w-[69.614px]",
   },
 };
 
