@@ -51,9 +51,7 @@ const CreditPaymentSheet = ({ product, onClose, onPurchase, onViewAgreement, isP
               className="flex min-w-0 cursor-pointer items-center gap-[12px] text-left"
             >
               {checked[id] ? (
-                <span className="flex size-[20px] shrink-0 items-center justify-center rounded-full border-2 border-[#6b6b6b] bg-white">
-                  <span className="size-[12px] rounded-full bg-[#454545]" />
-                </span>
+                <span className="size-[20px] shrink-0 rounded-full bg-[#454545]" />
               ) : (
                 <img src={circleIcon} alt="" className="size-[20px] shrink-0" />
               )}

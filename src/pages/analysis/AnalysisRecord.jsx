@@ -11,11 +11,11 @@ import RecordEndSheet, {
 } from "../../components/feature/analysis/RecordEndSheet";
 import microphoneIcon from "../../assets/icons/microphone.svg";
 
+import RecordingWaveform from "../../components/feature/analysis/RecordingWaveform";
+import RecordingControl from "../../components/feature/analysis/RecordingControl";
+
 const MAX_SECONDS = 30 * 60;
 
-const WAVE_HEIGHT = 183;
-const WAVE_MIN_HEIGHT = 4;
-const WAVE_GAIN = 1.08;
 
 const ERROR_MESSAGES = {
   denied: "마이크 권한을 허용해 주세요.",
@@ -138,50 +138,18 @@ const AnalysisRecord = () => {
             <p className="text-heading w-full text-center text-black">
               {formatTime(elapsed)} / {formatTime(MAX_SECONDS)}
             </p>
-            <div className="flex h-[183px] w-full items-center gap-[3px]">
-              {levels.map((level, index) => (
-                <span
-                  key={index}
-                  className={`w-[2.5px] shrink-0 rounded-[28px] ${
-                    index <= head ? "bg-[#ff765b]" : "bg-[#d9d9d9]"
-                  }`}
-                  style={{
-                    height: `${Math.max(
-                      WAVE_MIN_HEIGHT,
-                      Math.min(WAVE_HEIGHT, level * WAVE_HEIGHT * WAVE_GAIN),
-                    )}px`,
-                  }}
-                />
-              ))}
-            </div>
+            <RecordingWaveform levels={levels} head={head} />
           </div>
 
           <div className="flex flex-col items-center gap-[16px]">
-            <button
-              type="button"
+            <RecordingControl
+              active={isRunning}
               onClick={handleMicClick}
               disabled={isEnded}
-              aria-label={isRunning ? "녹음 일시정지" : "녹음 시작"}
-              aria-pressed={isRunning}
-              className={`flex size-[90px] items-center justify-center overflow-clip rounded-[20px] ${
-                isRunning
-                  ? "bg-[#ffb0a0] shadow-[0px_0px_30px_0px_rgba(255,118,91,0.3)]"
-                  : "bg-white shadow-[0px_4px_11.7px_0px_rgba(0,0,0,0.05),0px_0px_47.7px_0px_rgba(0,0,0,0.1)]"
-              }`}
+              label={isRunning ? "녹음 일시정지" : "녹음 시작"}
             >
-              {isRunning ? (
-                <span className="relative size-[40px] overflow-clip">
-                  <span className="absolute top-[5px] left-[7px] h-[30px] w-[8px] rounded-[1px] bg-white" />
-                  <span className="absolute top-[5px] left-[24px] h-[30px] w-[8px] rounded-[1px] bg-white" />
-                </span>
-              ) : (
-                <img
-                  src={microphoneIcon}
-                  alt=""
-                  className="block size-[40px] max-w-none"
-                />
-              )}
-            </button>
+              <img src={microphoneIcon} alt="" className="block size-[40px] max-w-none" />
+            </RecordingControl>
 
             {error && (
               <p className="text-label text-center text-[#ff765b]">
