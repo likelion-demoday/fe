@@ -26,6 +26,9 @@ import PaymentRefundPolicy from "./pages/mypage/PaymentRefundPolicy";
 import RecordingAnalysisGuide from "./pages/mypage/RecordingAnalysisGuide";
 import Faq from "./pages/mypage/Faq";
 import FaqRecording from "./pages/mypage/FaqRecording";
+import FaqService from "./pages/mypage/FaqService";
+import FaqPayment from "./pages/mypage/FaqPayment";
+import FaqAccount from "./pages/mypage/FaqAccount";
 //auth
 import Login from "./pages/auth/Login";
 import SignUp from "./pages/auth/SignUp";
@@ -88,6 +91,9 @@ function App() {
         <Route path="/mypage/support/policies/recording-analysis" element={<RecordingAnalysisGuide />} />
         <Route path="/mypage/support/faq" element={<Faq />} />
         <Route path="/mypage/support/faq/recording" element={<FaqRecording />} />
+        <Route path="/mypage/support/faq/service" element={<FaqService />} />
+        <Route path="/mypage/support/faq/payment" element={<FaqPayment />} />
+        <Route path="/mypage/support/faq/account" element={<FaqAccount />} />
         <Route path="/payments" element={<CreditCharge />} />
         <Route path="/payments/success" element={<CreditChargeSuccess />} />
         <Route path="/payments/failure" element={<CreditChargeFailure />} />

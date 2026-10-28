@@ -3,6 +3,13 @@ import { useNavigate } from "react-router-dom";
 import MyPageHeader from "../../components/feature/mypage/MyPageHeader";
 import PurchaseHistory from "../../components/feature/mypage/PurchaseHistory";
 
+const FAQ_PATHS = {
+  "서비스 이용": "service",
+  "녹음과 분석": "recording",
+  "결제와 크레딧": "payment",
+  "계정과 개인정보": "account",
+};
+
 const FAQ_GROUPS = [
   {
     title: "서비스 이용",
@@ -60,13 +67,17 @@ const Faq = ({ onSelectQuestion }) => {
           <Fragment key={title}>
             <div className="h-px w-full bg-[#f1eceb]" />
             <section aria-labelledby={`faq-group-${groupIndex}`} className="flex flex-col gap-[19px]">
-              <h2 id={`faq-group-${groupIndex}`}>{title}</h2>
+              <h2 id={`faq-group-${groupIndex}`}>
+                {FAQ_PATHS[title] ? (
+                  <button type="button" className="cursor-pointer" onClick={() => navigate(`/mypage/support/faq/${FAQ_PATHS[title]}`)}>{title}</button>
+                ) : title}
+              </h2>
               <div className="flex flex-col gap-[2px]">
                 {questions.map((question, questionIndex) => (
                   <Fragment key={question}>
                     <PurchaseHistory
                       label={question}
-                      to={!onSelectQuestion && title === "녹음과 분석" ? `/mypage/support/faq/recording#question-${questionIndex + 1}` : undefined}
+                      to={!onSelectQuestion && FAQ_PATHS[title] ? `/mypage/support/faq/${FAQ_PATHS[title]}#question-${questionIndex + 1}` : undefined}
                       className="mypage-press-row flex h-[49px] w-full cursor-pointer items-center justify-between text-left"
                       trailing={<span aria-hidden="true" className="w-[18px] shrink-0 text-[#999]">›</span>}
                       onClick={onSelectQuestion ? () => onSelectQuestion(question) : undefined}
