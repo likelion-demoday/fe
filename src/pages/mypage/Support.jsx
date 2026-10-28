@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import MyPageHeader from "../../components/feature/mypage/MyPageHeader";
 import PurchaseHistory from "../../components/feature/mypage/PurchaseHistory";
 
-const Support = ({ onFaq, onContact, onNotices, onPolicies }) => {
+const Support = ({ onFaq, onContact, onPolicies }) => {
   const navigate = useNavigate();
 
   return (
@@ -11,7 +11,6 @@ const Support = ({ onFaq, onContact, onNotices, onPolicies }) => {
       <div className="flex flex-col gap-[12px]">
         <PurchaseHistory label="자주 묻는 질문" to={onFaq ? undefined : "/mypage/support/faq"} onClick={onFaq} />
         <PurchaseHistory label="문의하기" to={onContact ? undefined : "/mypage/support/contact"} onClick={onContact} />
-        <PurchaseHistory label="공지사항" onClick={onNotices} />
         <PurchaseHistory label="약관 및 정책" to={onPolicies ? undefined : "/mypage/support/policies"} onClick={onPolicies} />
       </div>
     </main>

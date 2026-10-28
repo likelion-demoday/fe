@@ -56,7 +56,7 @@ const ConversationPlayback = ({ conversation, onClose }) => {
           <div className="mt-[15px] w-full">
             <RecordingWaveform levels={LEVELS} head={elapsed > 0 && duration > 0 ? Math.floor(elapsed / duration * LEVELS.length) : -1} inactiveColor="#eee" />
           </div>
-          <RecordingControl active={playing} onClick={togglePlayback} disabled={!audioUrl} label={playing ? "녹음 일시정지" : "녹음 재생"} iconIncludesShadow>
+          <RecordingControl variant="listen" active={playing} onClick={togglePlayback} disabled={!audioUrl} label={playing ? "녹음 일시정지" : "녹음 재생"} iconIncludesShadow>
             <img src={playIcon} alt="" className="pointer-events-none absolute left-[-54.56%] top-[-54.56%] w-[209.12%] max-w-none" />
           </RecordingControl>
         </div>
