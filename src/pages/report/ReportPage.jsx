@@ -16,15 +16,13 @@ import PlusAnalysis from "./PlusAnalysis";
 import MissedWords from "./MissedWords";
 import dailyIcon from "../../assets/icons/analysis-type-daily-s.svg";
 import relationMainIcon from "../../assets/icons/relation-main-s.svg";
+import { getFailureMessage } from "../../constants/analysis";
 import { CONFLICT_INFO_LABELS, PARENT_CONFLICT_INFO_LABELS } from "../../constants/report";
 import { mockAnalysisReportResponse } from "../../mocks/analysisReportResponse";
 import { toReportView } from "../../utils/reportMapper";
 import { shareCurrentPage } from "../../utils/share";
 
-const STATUS_MESSAGES = {
-  ANALYZING: "아직 분석 중이에요. 잠시 후 다시 확인해 주세요.",
-  FAILED: "분석에 실패했어요.",
-};
+const ANALYZING_MESSAGE = "아직 분석 중이에요. 잠시 후 다시 확인해 주세요.";
 
 // 개발용 목데이터: /report/mock (친구·일상), /report/mock-couple (연인·일상), /report/mock-conflict (연인·갈등), /report/mock-parent (부모·자녀 갈등)
 const DEV_MOCK_SCENARIOS = {
@@ -188,7 +186,9 @@ const ReportPage = () => {
         if (result.status === "COMPLETED" && result.report) {
           finish({ report: toReportView(result.report) });
         } else {
-          finish({ message: STATUS_MESSAGES[result.status] ?? STATUS_MESSAGES.FAILED });
+          finish({
+            message: result.status === "ANALYZING" ? ANALYZING_MESSAGE : getFailureMessage(result.failureReason),
+          });
         }
       })
       .catch((e) => finish({ message: e.message ?? "보고서를 불러오지 못했어요." }));
@@ -233,7 +233,7 @@ const ReportPage = () => {
       <main className="mx-auto flex h-[844px] w-[390px] flex-col bg-white px-[24px] py-[16px]">
         <AppHeader />
         <div className="flex flex-1 flex-col items-center justify-center gap-[20px]">
-          <p className="text-title-medium text-center text-[#595959]">{message ?? "보고서를 불러오는 중이에요"}</p>
+          <p className="text-title-medium text-center whitespace-pre-line text-[#595959]">{message ?? "보고서를 불러오는 중이에요"}</p>
           {message && (
             <div className="flex w-full">
               <SheetButton text="홈으로" onClick={() => navigate("/home")} />

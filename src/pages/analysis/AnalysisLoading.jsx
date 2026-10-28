@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 import { getRecordingStatus } from "../../api/recording";
 import { requestCharacterImage } from "../../api/character";
+import { getFailureMessage } from "../../constants/analysis";
 
 import AppHeader from "../../components/common/AppHeader";
 import BottomSheet, { SheetButton } from "../../components/common/BottomSheet";
@@ -26,7 +27,7 @@ const AnalysisLoading = () => {
 
     const poll = async () => {
       try {
-        const { step } = await getRecordingStatus(recordingId);
+        const { step, failureReason } = await getRecordingStatus(recordingId);
         if (cancelled) return;
 
         if (!isAnalyzing && step === "SPEAKER_SELECTION_REQUIRED") {
@@ -40,7 +41,7 @@ const AnalysisLoading = () => {
           return;
         }
         if (step === "FAILED") {
-          alert("분석에 실패했어요. 다시 시도해 주세요.");
+          alert(getFailureMessage(failureReason));
           navigate("/home", { replace: true });
           return;
         }
