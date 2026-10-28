@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
+import { getAnalysisReport } from "../../api/analysis";
 import { getRecordingStatus } from "../../api/recording";
 import { requestCharacterImage } from "../../api/character";
 import { getFailureMessage } from "../../constants/analysis";
@@ -41,7 +42,15 @@ const AnalysisLoading = () => {
           return;
         }
         if (step === "FAILED") {
-          alert(getFailureMessage(failureReason));
+          // 상태 API는 분석 단계 실패를 ANALYSIS_FAILED로만 주므로 상세 사유는 보고서 API에서 조회
+          const reason =
+            failureReason === "ANALYSIS_FAILED"
+              ? await getAnalysisReport(recordingId)
+                  .then((report) => report.failureReason ?? failureReason)
+                  .catch(() => failureReason)
+              : failureReason;
+          if (cancelled) return;
+          alert(getFailureMessage(reason));
           navigate("/home", { replace: true });
           return;
         }
