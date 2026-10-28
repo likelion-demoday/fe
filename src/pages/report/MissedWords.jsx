@@ -20,10 +20,10 @@ const MissedWordsSection = ({ speakers, title, scores, quotes }) => {
   );
 };
 
-// 놓친 말: 놓친 말 · 갈등 반응 경향 · 대화 개선 힌트
-const MissedWords = ({ report }) => (
+// 놓친 말(연인·갈등) / 다시 대화(부모·자녀 갈등): 제목별 화자 선택 + 대표 발화 묶음
+const MissedWords = ({ report, sections = report.conflict.missed }) => (
   <div className="flex w-full flex-col items-start gap-[30px] font-['SUIT',sans-serif]">
-    {report.conflict.missed.map((section) => (
+    {sections.map((section) => (
       <MissedWordsSection key={section.title} speakers={report.speakers} {...section} />
     ))}
   </div>

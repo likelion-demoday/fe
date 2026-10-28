@@ -13,11 +13,10 @@ import ConversationStyle from "./ConversationStyle";
 import InterestLevel from "./InterestLevel";
 import BadLevel from "./BadLevel";
 import PlusAnalysis from "./PlusAnalysis";
-import ScenarioInsight from "./ScenarioInsight";
 import MissedWords from "./MissedWords";
 import dailyIcon from "../../assets/icons/analysis-type-daily-s.svg";
 import relationMainIcon from "../../assets/icons/relation-main-s.svg";
-import { CONFLICT_INFO_LABELS } from "../../constants/report";
+import { CONFLICT_INFO_LABELS, PARENT_CONFLICT_INFO_LABELS } from "../../constants/report";
 import { mockAnalysisReportResponse } from "../../mocks/analysisReportResponse";
 import { toReportView } from "../../utils/reportMapper";
 import { shareCurrentPage } from "../../utils/share";
@@ -27,8 +26,13 @@ const STATUS_MESSAGES = {
   FAILED: "분석에 실패했어요.",
 };
 
-// 개발용 목데이터: /report/mock (친구·일상), /report/mock-conflict (연인·갈등)
-const DEV_MOCK_SCENARIOS = { mock: "FRIEND_DAILY", "mock-conflict": "COUPLE_CONFLICT" };
+// 개발용 목데이터: /report/mock (친구·일상), /report/mock-couple (연인·일상), /report/mock-conflict (연인·갈등), /report/mock-parent (부모·자녀 갈등)
+const DEV_MOCK_SCENARIOS = {
+  mock: "FRIEND_DAILY",
+  "mock-couple": "COUPLE_DAILY",
+  "mock-conflict": "COUPLE_CONFLICT",
+  "mock-parent": "PARENT_CHILD_CONFLICT",
+};
 
 const fetchReport = (reportId) => {
   const scenario = import.meta.env.DEV && DEV_MOCK_SCENARIOS[reportId];
@@ -56,7 +60,9 @@ const SECTIONS = [
   { key: "overview", label: "한번에 보기" },
   { key: "info", label: "대화 정보" },
   { key: "conflictInfo", label: "갈등 정보" },
+  { key: "conflictFlow", label: "갈등 흐름" },
   { key: "style", label: "대화 방식" },
+  { key: "parentStyle", label: "대화 방식" },
   { key: "interest", label: "관심도" },
   { key: "expression", label: "표독력" },
   { key: "affection", label: "애정 표현" },
@@ -64,7 +70,7 @@ const SECTIONS = [
   { key: "intensity", label: "표현 강도" },
   { key: "missedWords", label: "놓친 말" },
   { key: "attachment", label: "애착 유형" },
-  { key: "questionAdvice", label: "질문/조언" },
+  { key: "questionAdvice", label: "질문·조언" },
   { key: "conflictExpression", label: "갈등 표현" },
   { key: "retry", label: "다시 대화" },
   { key: "extra", label: "추가 분석" },
@@ -75,14 +81,8 @@ const SCENARIO_SECTIONS = {
   FRIEND_DAILY: ["overview", "info", "style", "interest", "expression", "extra"],
   COUPLE_DAILY: ["overview", "info", "style", "interest", "affection", "extra"],
   COUPLE_CONFLICT: ["overview", "conflictInfo", "style", "conflictReaction", "intensity", "missedWords", "attachment"],
-  PARENT_CHILD_CONFLICT: ["overview", "info", "style", "questionAdvice", "conflictExpression", "retry"],
+  PARENT_CHILD_CONFLICT: ["overview", "conflictFlow", "parentStyle", "questionAdvice", "conflictExpression", "retry"],
 };
-
-// 시나리오 전용 탭: 탭 제목 + 보여줄 scenarioInsights 카테고리
-const scenarioSection = (title, categories) => ({
-  Component: ({ report }) => <ScenarioInsight report={report} title={title} categories={categories} />,
-  gap: "gap-[20px]",
-});
 
 const SECTION_CONTENT = {
   overview: { Component: OverviewSection, gap: "gap-[16px]" },
@@ -91,7 +91,18 @@ const SECTION_CONTENT = {
   interest: { Component: InterestLevel, gap: "gap-[20px]" },
   expression: { Component: BadLevel, gap: "gap-[20px]" },
   extra: { Component: PlusAnalysis, gap: "gap-[20px]" },
-  affection: scenarioSection("애정 표현", ["AFFECTION_EXPRESSION"]),
+  // 연인·일상 전용 탭 (데이터: report.affection, 현재 임시 데이터)
+  affection: {
+    Component: ({ report }) => (
+      <BadLevel
+        report={report}
+        data={report.affection}
+        axisTitle="애정 표현에서 보이는 것"
+        contextTitle="둘만의 패턴에서 보이는 것"
+      />
+    ),
+    gap: "gap-[20px]",
+  },
   // 연인·갈등 전용 탭 (데이터: report.conflict, 현재 임시 데이터)
   conflictInfo: {
     Component: ({ report }) => <ConversationInformation report={report} labels={CONFLICT_INFO_LABELS} />,
@@ -121,9 +132,31 @@ const SECTION_CONTENT = {
     ),
     gap: "gap-[20px]",
   },
-  questionAdvice: scenarioSection("질문/조언", ["QUESTION_RESPONSE_STYLE", "CONVERSATION_OPENNESS"]),
-  conflictExpression: scenarioSection("갈등 표현", ["CONFLICT_TOPIC", "CONFLICT_POSITION", "CARE_EXPRESSION"]),
-  retry: scenarioSection("다시 대화", ["SOLUTION", "TURNING_POINT"]),
+  // 부모·자녀 갈등 전용 탭 (데이터: report.parentConflict, 현재 임시 데이터)
+  conflictFlow: {
+    Component: ({ report }) => <ConversationInformation report={report} labels={PARENT_CONFLICT_INFO_LABELS} />,
+    gap: "gap-[20px]",
+  },
+  parentStyle: {
+    Component: ({ report }) => <ConversationStyle report={report} expressionTitle="갈등 중 표현 습관" />,
+    gap: "gap-[20px]",
+  },
+  questionAdvice: {
+    Component: ({ report }) => (
+      <InterestLevel report={report} data={report.parentConflict.questionAdvice} title="질문과 조언" />
+    ),
+    gap: "gap-[20px]",
+  },
+  conflictExpression: {
+    Component: ({ report }) => (
+      <BadLevel report={report} data={report.parentConflict.conflictExpression} axisTitle="갈등 표현에서 보이는 것" />
+    ),
+    gap: "gap-[20px]",
+  },
+  retry: {
+    Component: ({ report }) => <MissedWords report={report} sections={report.parentConflict.retry} />,
+    gap: "gap-[20px]",
+  },
 };
 
 const TagChip = ({ icon, label }) => (

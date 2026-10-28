@@ -80,3 +80,11 @@ export const CONFLICT_INFO_LABELS = {
   timeline: "갈등 타임라인",
   turns: "쟁점별 대화 턴 수",
 };
+
+export const PARENT_CONFLICT_INFO_LABELS = {
+  content: "갈등 내용",
+  topics: "의견이 갈린 주제",
+  longest: "가장 오래 이어진 이야기",
+  timeline: "갈등 타임라인",
+  turns: "쟁점별 대화 턴 수",
+};

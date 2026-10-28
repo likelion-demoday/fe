@@ -8,6 +8,8 @@ import {
   SPICINESS_CONTEXT_CATEGORIES,
 } from "../constants/report";
 import { buildCoupleConflictMock } from "../mocks/coupleConflict";
+import { buildCoupleDailyMock } from "../mocks/coupleDaily";
+import { buildParentChildConflictMock } from "../mocks/parentChildConflict";
 
 const QUESTION_PATTERNS = ["FOLLOW_UP_QUESTION", "EMOTION_QUESTION"];
 
@@ -149,6 +151,30 @@ const toExpression = (role, qualitative) => {
   };
 };
 
+// 시나리오 전용 탭은 임시 데이터 위에 API에 있는 문구·점수만 실제 값으로 덮어씀 (%·횟수·예시 발화는 API에 없음)
+const findScenarioInsight = (qualitative, role, categories) =>
+  (qualitative.scenarioInsights ?? []).find(
+    ({ category, speakerRoles = [] }) =>
+      categories.includes(category) && (speakerRoles.length === 0 || speakerRoles.includes(role)),
+  );
+
+const withScenarioSummary = (data, roles, qualitative, categories) => {
+  const merge = (mock, role) => {
+    const insight = findScenarioInsight(qualitative, role, categories);
+    return insight ? { ...mock, summary: { title: insight.title, description: insight.description } } : mock;
+  };
+  return { me: merge(data.me, roles.me), partner: merge(data.partner, roles.partner) };
+};
+
+const withSpiciness = (data, roles, qualitative) => {
+  const merge = (mock, role) => {
+    if (!findByRole(qualitative.spicinessInsights, role)) return mock;
+    const { score, summary, contexts } = toExpression(role, qualitative);
+    return { ...mock, score, summary, contexts: contexts.length > 0 ? contexts : mock.contexts };
+  };
+  return { me: merge(data.me, roles.me), partner: merge(data.partner, roles.partner) };
+};
+
 const toTf = (role, qualitative) => {
   const insight = findByRole(qualitative.reactionStyleInsights, role) ?? {};
   const isT = (insight.thinkingPercent ?? 0) >= (insight.feelingPercent ?? 0);
@@ -175,10 +201,59 @@ export const toReportView = (report) => {
   const topics = qualitative.topics ?? [];
   const longestTopic =
     topics.find((topic) => topic.longest) ?? [...topics].sort((a, b) => b.turnCount - a.turnCount)[0];
-  const conflict =
+  const roles = { me: meRole, partner: partnerRole };
+  const conflictMock =
     recordingInfo.scenario === "COUPLE_CONFLICT"
       ? buildCoupleConflictMock(me?.speakerName ?? "나", partnerName)
       : null;
+  const conflict = conflictMock && {
+    ...conflictMock,
+    reaction: withScenarioSummary(conflictMock.reaction, roles, qualitative, ["CONFLICT_POSITION", "CONFLICT_TOPIC"]),
+    intensity: withSpiciness(conflictMock.intensity, roles, qualitative),
+  };
+  const coupleDailyMock = recordingInfo.scenario === "COUPLE_DAILY" ? buildCoupleDailyMock() : null;
+  const coupleDaily = coupleDailyMock && {
+    ...coupleDailyMock,
+    affection: withScenarioSummary(coupleDailyMock.affection, roles, qualitative, ["AFFECTION_EXPRESSION"]),
+  };
+  const parentConflictMock =
+    recordingInfo.scenario === "PARENT_CHILD_CONFLICT" ? buildParentChildConflictMock() : null;
+  const parentConflict = parentConflictMock && {
+    ...parentConflictMock,
+    questionAdvice: withScenarioSummary(parentConflictMock.questionAdvice, roles, qualitative, [
+      "QUESTION_RESPONSE_STYLE",
+      "CONVERSATION_OPENNESS",
+    ]),
+    conflictExpression: withScenarioSummary(parentConflictMock.conflictExpression, roles, qualitative, [
+      "CONFLICT_TOPIC",
+      "CONFLICT_POSITION",
+    ]),
+  };
+  const interestScore = {
+    label: "관심도",
+    me: findByRole(qualitative.interestInsights, meRole)?.score ?? 0,
+    partner: findByRole(qualitative.interestInsights, partnerRole)?.score ?? 0,
+  };
+  const secondScore = coupleDaily
+    ? { label: "애정지수", me: coupleDaily.affection.me.score, partner: coupleDaily.affection.partner.score }
+    : {
+        label: "표독력",
+        me: findByRole(qualitative.spicinessInsights, meRole)?.score ?? 0,
+        partner: findByRole(qualitative.spicinessInsights, partnerRole)?.score ?? 0,
+      };
+  // 연인·일상은 관심도의 칩 묶음을 "애정 표현"으로 보여줌
+  const withAffectionChips = (interest, key) =>
+    coupleDaily
+      ? {
+          ...interest,
+          chips: {
+            title: "애정 표현",
+            caption: "대화에서 직접 확인되는 표현만 모았어요.",
+            items: coupleDaily.affectionChips[key].items,
+            summary: interest.chips.summary ?? coupleDaily.affectionChips[key].summary,
+          },
+        }
+      : interest;
 
   return {
     duration: formatDuration(recordingInfo.durationMs),
@@ -187,27 +262,18 @@ export const toReportView = (report) => {
     scenarioInsights: qualitative.scenarioInsights ?? [],
     speakers: {
       me: {
+        role: meRole,
         nickname: me?.speakerName ?? "나",
         character: toCharacter(findByRole(qualitative.characterInsights, meRole), "me"),
       },
       partner: {
+        role: partnerRole,
         nickname: partnerName,
         character: toCharacter(findByRole(qualitative.characterInsights, partnerRole), "partner"),
       },
     },
     overview: {
-      scores: conflict?.overviewScores ?? [
-        {
-          label: "관심도",
-          me: findByRole(qualitative.interestInsights, meRole)?.score ?? 0,
-          partner: findByRole(qualitative.interestInsights, partnerRole)?.score ?? 0,
-        },
-        {
-          label: "표독력",
-          me: findByRole(qualitative.spicinessInsights, meRole)?.score ?? 0,
-          partner: findByRole(qualitative.spicinessInsights, partnerRole)?.score ?? 0,
-        },
-      ],
+      scores: conflict?.overviewScores ?? parentConflict?.overviewScores ?? [interestScore, secondScore],
       summary: qualitative.overview ?? { title: "", description: "" },
     },
     info: {
@@ -238,8 +304,8 @@ export const toReportView = (report) => {
       partner: toStyle(partnerRole, meRole, me?.speakerName ?? "나", quantitative, qualitative),
     },
     interest: {
-      me: toInterest(meRole, partnerRole, qualitative),
-      partner: toInterest(partnerRole, meRole, qualitative),
+      me: withAffectionChips(toInterest(meRole, partnerRole, qualitative), "me"),
+      partner: withAffectionChips(toInterest(partnerRole, meRole, qualitative), "partner"),
     },
     expression: {
       me: toExpression(meRole, qualitative),
@@ -250,5 +316,7 @@ export const toReportView = (report) => {
       partner: toTf(partnerRole, qualitative),
     },
     conflict,
+    affection: coupleDaily?.affection ?? null,
+    parentConflict,
   };
 };

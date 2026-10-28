@@ -50,7 +50,7 @@ const ExpressionPill = ({ word, count }) => {
 };
 
 
-const ConversationStyle = ({ report }) => {
+const ConversationStyle = ({ report, expressionTitle = "자주 쓰는 표현" }) => {
   const [speaker, setSpeaker] = useState("me");
   const { rhythm, rhythmSummary, expressions, expressionSummary } = report.style[speaker];
   const tone = SPEAKER_TONES[speaker];
@@ -86,7 +86,7 @@ const ConversationStyle = ({ report }) => {
           </div>
         </ReportSection>
 
-        <ReportSection title="자주 쓰는 표현">
+        <ReportSection title={expressionTitle}>
           <div className="flex w-full flex-col gap-[12px]">
             <div className="flex w-full flex-col items-start gap-[20px] rounded-[20px] border border-[#eee] bg-white p-[20px] drop-shadow-[0px_0px_10px_rgba(0,0,0,0.07)] drop-shadow-[0px_4px_3px_rgba(0,0,0,0.05)]">
               {expressions.map(({ category, items }) => (
