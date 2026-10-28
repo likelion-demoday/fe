@@ -52,6 +52,42 @@ export const SPICINESS_CONTEXT_CATEGORIES = ["ATTACK_TARGET", "PLAYFUL_CONTEXT",
 
 export const REACTION_TYPES = { THINKING: "T", FEELING: "F", MIXED: "T/F" };
 
+// reportMetrics type → 화면 표시 이름 (API title이 비어 있을 때 사용)
+export const METRIC_LABELS = {
+  COMPLIMENT: "칭찬",
+  ENCOURAGEMENT: "응원",
+  CARING_EXPRESSION: "챙기는 말",
+  FRIENDLY_ADDRESS: "친근한 호칭",
+  DIRECT_AFFECTION: "직접 표현",
+  JOY_OR_GRATITUDE: "기쁨·고마움",
+  COMPLIMENT_OR_ENCOURAGEMENT: "칭찬·응원",
+  AFFECTIONATE_ADDRESS: "다정한 호칭",
+  POSITION_EXPLANATION: "입장 설명",
+  REBUTTAL: "반박",
+  AVOIDANCE: "대화 피하기",
+  APOLOGY: "사과",
+  YIELDING: "양보",
+  EMOTION_CHECK: "감정 확인",
+  QUESTION: "질문",
+  MISSED_RESPONSE: "미응답",
+  DIRECT_EXPRESSION: "직설 표현",
+  ASSERTIVE_EXPRESSION: "단정 표현",
+  SOFTENING_EXPRESSION: "완충 표현",
+  RECOVERY_EXPRESSION: "회복 표현",
+  SITUATION_QUESTION: "상황 확인 질문",
+  CONCRETE_ADVICE: "구체적인 조언",
+  EXPERIENCE_COMPARISON: "경험 비교",
+  SHORT_RESPONSE: "짧은 대답",
+  TOPIC_AVOIDANCE: "주제 피하기",
+  EMOTION_EXPRESSION: "감정 표현",
+  CHILD_EXPRESSION: "자녀의 입장 표현",
+  PARENT_CONFIRMATION: "부모의 확인 반응",
+  ADVICE: "조언 표현",
+};
+
+// PERCENT 지표는 전체 발화 비율이 아니라 관찰된 정도 (API 명세 안내 문구)
+export const PERCENT_METRIC_CAPTION = "이번 대화에서 해당 표현이 관찰된 정도예요.";
+
 // 캐릭터 카드 글자색 · 이미지 생성 전 배경 (나/상대 고정)
 export const CHARACTER_STYLES = {
   me: {

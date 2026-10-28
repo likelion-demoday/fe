@@ -33,11 +33,12 @@ const ExpressionAxis = ({ label, value, description, examples, tone }) => (
 );
 
 
-// 표독력 화면. 같은 구성의 표현 강도·애착 유형 탭도 data/제목만 바꿔 재사용
+// 표독력 화면. 같은 구성의 애정 표현·표현 강도·갈등 표현 탭도 data/제목만 바꿔 재사용
 const BadLevel = ({
   report,
   data = report.expression,
   axisTitle = "표현에서 보이는 것",
+  axisCaption,
   contextTitle = "내용에서 보이는 것",
 }) => {
   const [speaker, setSpeaker] = useState("me");
@@ -59,7 +60,12 @@ const BadLevel = ({
 
       {axes.length > 0 && (
         <section className="flex w-full flex-col items-start gap-[14px]">
-          <h2 className="text-[24px] leading-[34px] font-bold tracking-[0.48px] text-[#262626]">{axisTitle}</h2>
+          <div className="flex w-full flex-col gap-[4px]">
+            <h2 className="text-[24px] leading-[34px] font-bold tracking-[0.48px] text-[#262626]">{axisTitle}</h2>
+            {axisCaption && (
+              <p className="text-[12px] leading-[18px] font-medium tracking-[0.24px] text-[#8c8c8c]">{axisCaption}</p>
+            )}
+          </div>
           <div className="flex w-full flex-col items-start gap-[20px] rounded-[16px] border border-[#eee] bg-white p-[20px] drop-shadow-[0px_4px_5.85px_rgba(0,0,0,0.05)] drop-shadow-[0px_0px_23.85px_rgba(0,0,0,0.1)]">
             {axes.map((axis, index) => (
               <Fragment key={axis.label}>

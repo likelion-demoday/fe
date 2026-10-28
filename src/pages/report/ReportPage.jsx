@@ -17,8 +17,9 @@ import MissedWords from "./MissedWords";
 import dailyIcon from "../../assets/icons/analysis-type-daily-s.svg";
 import relationMainIcon from "../../assets/icons/relation-main-s.svg";
 import { getFailureMessage } from "../../constants/analysis";
-import { CONFLICT_INFO_LABELS, PARENT_CONFLICT_INFO_LABELS } from "../../constants/report";
+import { CONFLICT_INFO_LABELS, PARENT_CONFLICT_INFO_LABELS, PERCENT_METRIC_CAPTION } from "../../constants/report";
 import { mockAnalysisReportResponse } from "../../mocks/analysisReportResponse";
+import { buildMockReportExtras } from "../../mocks/reportExtras";
 import { toReportView } from "../../utils/reportMapper";
 import { shareCurrentPage } from "../../utils/share";
 
@@ -39,7 +40,11 @@ const fetchReport = (reportId) => {
   const { report } = mockAnalysisReportResponse;
   return Promise.resolve({
     ...mockAnalysisReportResponse,
-    report: { ...report, recordingInfo: { ...report.recordingInfo, scenario } },
+    report: {
+      ...report,
+      recordingInfo: { ...report.recordingInfo, scenario },
+      qualitativeAnalysis: { ...report.qualitativeAnalysis, ...buildMockReportExtras(scenario) },
+    },
   });
 };
 
@@ -67,7 +72,6 @@ const SECTIONS = [
   { key: "conflictReaction", label: "갈등 반응" },
   { key: "intensity", label: "표현 강도" },
   { key: "missedWords", label: "놓친 말" },
-  { key: "attachment", label: "애착 유형" },
   { key: "questionAdvice", label: "질문·조언" },
   { key: "conflictExpression", label: "갈등 표현" },
   { key: "retry", label: "다시 대화" },
@@ -78,7 +82,7 @@ const SECTIONS = [
 const SCENARIO_SECTIONS = {
   FRIEND_DAILY: ["overview", "info", "style", "interest", "expression", "extra"],
   COUPLE_DAILY: ["overview", "info", "style", "interest", "affection", "extra"],
-  COUPLE_CONFLICT: ["overview", "conflictInfo", "style", "conflictReaction", "intensity", "missedWords", "attachment"],
+  COUPLE_CONFLICT: ["overview", "conflictInfo", "style", "conflictReaction", "intensity", "missedWords"],
   PARENT_CHILD_CONFLICT: ["overview", "conflictFlow", "parentStyle", "questionAdvice", "conflictExpression", "retry"],
 };
 
@@ -89,19 +93,20 @@ const SECTION_CONTENT = {
   interest: { Component: InterestLevel, gap: "gap-[20px]" },
   expression: { Component: BadLevel, gap: "gap-[20px]" },
   extra: { Component: PlusAnalysis, gap: "gap-[20px]" },
-  // 연인·일상 전용 탭 (데이터: report.affection, 현재 임시 데이터)
+  // 연인·일상 전용 탭 (데이터: report.affection)
   affection: {
     Component: ({ report }) => (
       <BadLevel
         report={report}
         data={report.affection}
         axisTitle="애정 표현에서 보이는 것"
+        axisCaption={PERCENT_METRIC_CAPTION}
         contextTitle="둘만의 패턴에서 보이는 것"
       />
     ),
     gap: "gap-[20px]",
   },
-  // 연인·갈등 전용 탭 (데이터: report.conflict, 현재 임시 데이터)
+  // 연인·갈등 전용 탭 (데이터: report.conflict)
   conflictInfo: {
     Component: ({ report }) => <ConversationInformation report={report} labels={CONFLICT_INFO_LABELS} />,
     gap: "gap-[20px]",
@@ -114,23 +119,17 @@ const SECTION_CONTENT = {
   },
   intensity: {
     Component: ({ report }) => (
-      <BadLevel report={report} data={report.conflict.intensity} axisTitle="갈등 표현에서 보이는 것" />
-    ),
-    gap: "gap-[20px]",
-  },
-  missedWords: { Component: MissedWords, gap: "gap-[20px]" },
-  attachment: {
-    Component: ({ report }) => (
       <BadLevel
         report={report}
-        data={report.conflict.attachment}
-        axisTitle="애착 반응 패턴"
-        contextTitle="복합형 · 감정 강도"
+        data={report.conflict.intensity}
+        axisTitle="갈등 표현에서 보이는 것"
+        axisCaption={PERCENT_METRIC_CAPTION}
       />
     ),
     gap: "gap-[20px]",
   },
-  // 부모·자녀 갈등 전용 탭 (데이터: report.parentConflict, 현재 임시 데이터)
+  missedWords: { Component: MissedWords, gap: "gap-[20px]" },
+  // 부모·자녀 갈등 전용 탭 (데이터: report.parentConflict)
   conflictFlow: {
     Component: ({ report }) => <ConversationInformation report={report} labels={PARENT_CONFLICT_INFO_LABELS} />,
     gap: "gap-[20px]",
@@ -147,7 +146,12 @@ const SECTION_CONTENT = {
   },
   conflictExpression: {
     Component: ({ report }) => (
-      <BadLevel report={report} data={report.parentConflict.conflictExpression} axisTitle="갈등 표현에서 보이는 것" />
+      <BadLevel
+        report={report}
+        data={report.parentConflict.conflictExpression}
+        axisTitle="갈등 표현에서 보이는 것"
+        axisCaption={PERCENT_METRIC_CAPTION}
+      />
     ),
     gap: "gap-[20px]",
   },
@@ -200,6 +204,7 @@ const ReportPage = () => {
 
   // 캐릭터 이미지는 분석 완료 후 비동기 생성 → 생성 중이면 끝날 때까지 폴링 (없어도 보고서는 보여줌)
   useEffect(() => {
+    if (import.meta.env.DEV && DEV_MOCK_SCENARIOS[reportId]) return;
     let timer;
     let cancelled = false;
     let attempts = 0;
