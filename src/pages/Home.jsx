@@ -10,7 +10,8 @@ const Home = () => {
 
   return (
     <div className="relative mx-auto h-[844px] w-[390px] bg-white">
-      <main className="flex h-full w-full flex-col gap-[20px] overflow-x-hidden overflow-y-auto no-scrollbar px-[24px] py-[16px]">
+      {/* 하단 고정 버튼에 마지막 내용이 가리지 않도록 아래 여백 확보 */}
+      <main className="flex h-full w-full flex-col gap-[20px] overflow-x-hidden overflow-y-auto no-scrollbar px-[24px] pt-[16px] pb-[120px]">
         <AppHeader />
 
         <div className="flex w-full flex-col gap-[36px]">
@@ -26,7 +27,8 @@ const Home = () => {
         </div>
       </main>
 
-      <div className="absolute bottom-0 left-0 flex w-full bg-gradient-to-b from-[rgba(255,255,255,0)] to-white to-[15.614%] px-[24px] pt-[20px] pb-[30px]">
+      {/* 화면 높이가 844px보다 작은 휴대폰에서도 보이도록 뷰포트 하단에 고정 */}
+      <div className="fixed bottom-0 left-1/2 z-10 flex w-full max-w-[390px] -translate-x-1/2 bg-gradient-to-b from-[rgba(255,255,255,0)] to-white to-[15.614%] px-[24px] pt-[20px] pb-[30px]">
         <SheetButton
           text="분석 시작하기"
           onClick={() => navigate("/analysis")}

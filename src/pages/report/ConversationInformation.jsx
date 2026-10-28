@@ -87,10 +87,11 @@ const ConversationInformation = ({ report, labels = INFO_LABELS }) => {
       </Section>
 
       <Section title={labels.turns}>
-        <div className={`grid w-full grid-cols-[repeat(2,fit-content(100%))] gap-[20px] overflow-clip rounded-[16px] border border-[#eee] bg-white px-[20px] pt-[20px] pb-[16px] ${CARD_SHADOW}`}>
+        {/* 주제명이 길면 다음 줄로 넘기고, 카드 폭보다 길면 칩 안에서 줄바꿈 */}
+        <div className={`flex w-full flex-wrap items-start gap-[20px] overflow-clip rounded-[16px] border border-[#eee] bg-white px-[20px] pt-[20px] pb-[16px] ${CARD_SHADOW}`}>
           {topicTurns.map(({ topic, turns }) => (
-            <div key={topic} className="flex flex-col items-end gap-[2px] self-start justify-self-start">
-              <KeywordPill label={topic} />
+            <div key={topic} className="flex max-w-full flex-col items-end gap-[2px]">
+              <KeywordPill label={topic} wrap />
               <p className="text-[13px] leading-[20px] font-semibold tracking-[-0.26px] whitespace-nowrap text-[#ff765b]">
                 {turns}턴
               </p>

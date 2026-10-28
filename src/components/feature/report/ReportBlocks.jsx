@@ -5,11 +5,12 @@ export const CARD_SHADOW = "shadow-[0px_4px_11.7px_0px_rgba(0,0,0,0.05),0px_0px_
 export const DIVIDER_GRADIENT =
   "linear-gradient(90deg, rgba(238,238,238,0) 0%, #eee 5%, #eee 95%, rgba(238,238,238,0) 100%)";
 
-export const KeywordPill = ({ label, highlighted = false }) => (
+// wrap: 긴 문구(주제명 등)를 한 줄로 두지 않고 부모 폭 안에서 줄바꿈
+export const KeywordPill = ({ label, highlighted = false, wrap = false }) => (
   <span
-    className={`flex shrink-0 items-center justify-center rounded-[12px] border border-[#eee] bg-white px-[12px] py-[4px] text-[14px] leading-[22px] font-semibold tracking-[0.28px] whitespace-nowrap drop-shadow-[0px_2px_3px_rgba(0,0,0,0.05)] drop-shadow-[0px_0px_5.7px_rgba(0,0,0,0.05)] ${
-      highlighted ? "text-[#ff765b]" : "text-[#595959]"
-    }`}
+    className={`flex items-center justify-center rounded-[12px] border border-[#eee] bg-white px-[12px] py-[4px] text-[14px] leading-[22px] font-semibold tracking-[0.28px] drop-shadow-[0px_2px_3px_rgba(0,0,0,0.05)] drop-shadow-[0px_0px_5.7px_rgba(0,0,0,0.05)] ${
+      wrap ? "max-w-full text-center break-keep" : "shrink-0 whitespace-nowrap"
+    } ${highlighted ? "text-[#ff765b]" : "text-[#595959]"}`}
   >
     {label}
   </span>
