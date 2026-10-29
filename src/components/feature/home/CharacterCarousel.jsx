@@ -8,7 +8,7 @@ import { CHARACTER_STYLES } from "../../../constants/report";
 // 배경(그라데이션 + 위쪽 흰 물결)은 프론트에서 그리고, 배경 투명 캐릭터 이미지를 아래쪽에 올림
 const CARD_STYLE = CHARACTER_STYLES.me;
 
-const loadCharacter = async ({ recordingId, createdAt }) => {
+const loadCharacter = async ({ recordingId }) => {
   const [analysis, imageUrls] = await Promise.all([
     getAnalysisReport(recordingId),
     getCharacterImageUrls(recordingId),
@@ -21,7 +21,6 @@ const loadCharacter = async ({ recordingId, createdAt }) => {
   return {
     id: recordingId,
     name: insight.name,
-    date: new Date(createdAt).toLocaleDateString("ko-KR"),
     description: insight.description,
     image: imageUrls.SELF,
   };
@@ -77,17 +76,12 @@ const CharacterCard = ({ character, offset, dragX, isDragging, onSelect }) => {
           className="pointer-events-none absolute bottom-0 left-1/2 block size-[181px] max-w-none -translate-x-1/2 object-contain"
         />
         <div className="relative flex w-full flex-col gap-[6px] px-[16px] pt-[14px]">
-          <div className="flex w-full items-center justify-between whitespace-nowrap">
-            <h3
-              className={`font-bold transition-[font-size] duration-500 ${isActive ? "text-[16.083px] tracking-[0.6433px]" : "text-[18px] tracking-[0.72px]"}`}
-              style={{ color: CARD_STYLE.titleColor }}
-            >
-              {character.name}
-            </h3>
-            <p className="text-[8.935px] font-medium tracking-[0.268px] text-[#bfbfbf]">
-              {character.date}
-            </p>
-          </div>
+          <h3
+            className={`font-bold whitespace-nowrap transition-[font-size] duration-500 ${isActive ? "text-[16.083px] tracking-[0.6433px]" : "text-[18px] tracking-[0.72px]"}`}
+            style={{ color: CARD_STYLE.titleColor }}
+          >
+            {character.name}
+          </h3>
           <p className="w-[154px] text-[11.615px] font-medium tracking-[0.3485px] break-keep text-[#595959]">
             {character.description}
           </p>
