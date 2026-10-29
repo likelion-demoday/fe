@@ -40,10 +40,11 @@ const InterestGroup = ({ title, summary, children }) => (
 );
 
 
-const InterestLevel = ({ report }) => {
+// 관심도 화면. 같은 구성의 갈등 반응 탭도 data/제목만 바꿔 재사용
+const InterestLevel = ({ report, data = report.interest, title = "관심을 보인 방식" }) => {
   const [speaker, setSpeaker] = useState("me");
-  const scores = { me: report.interest.me.score, partner: report.interest.partner.score };
-  const { summary, groups, affection } = report.interest[speaker];
+  const scores = { me: data.me.score, partner: data.partner.score };
+  const { summary, groups, chips } = data[speaker];
 
   return (
     <div className="flex w-full flex-col items-start gap-[30px] font-['SUIT',sans-serif]">
@@ -57,7 +58,7 @@ const InterestLevel = ({ report }) => {
         <SummaryCard {...summary} />
       </div>
 
-      <ReportSection title="관심을 보인 방식">
+      <ReportSection title={title}>
         <div className="flex w-full flex-col items-start gap-[30px]">
           {groups.map(({ title, items, summary: groupSummary }) => (
             <InterestGroup key={title} title={title} summary={groupSummary}>
@@ -69,15 +70,15 @@ const InterestLevel = ({ report }) => {
             </InterestGroup>
           ))}
 
-          {(affection.summary || affection.items.length > 0) && (
-            <InterestGroup title="호감 표현" summary={affection.summary}>
-              {affection.items.length > 0 && (
+          {(chips.summary || chips.items.length > 0) && (
+            <InterestGroup title={chips.title} summary={chips.summary}>
+              {chips.items.length > 0 && (
                 <div className={`${DETAIL_CARD} gap-[12px]`}>
                   <p className="text-[12px] leading-[18px] font-medium tracking-[0.24px] text-[#6b6b6b]">
-                    대화에서 직접 드러난 표현만 세었어요
+                    {chips.caption}
                   </p>
                   <div className="grid w-full grid-cols-2 gap-[10px] text-[14px] leading-[22px] font-semibold tracking-[0.28px] whitespace-nowrap">
-                    {affection.items.map(({ label, count }) => (
+                    {chips.items.map(({ label, count }) => (
                       <div
                         key={label}
                         className="flex items-center justify-between rounded-[12px] bg-white px-[12px] py-[8px] drop-shadow-[0px_2px_3px_rgba(0,0,0,0.05)] drop-shadow-[0px_0px_5.7px_rgba(0,0,0,0.05)]"

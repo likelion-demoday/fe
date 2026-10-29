@@ -44,7 +44,7 @@ const popStyle = (revealed, delayMs) => ({
  * @param rate 비속어 사용률(%). null이면 강조 없이 회색 이모지만 표시 (디자인의 default 상태)
  * @param active 캐러셀에서 이 카드가 보이는지 여부 (처음 보일 때 한 번 재생)
  */
-const ProfanityRateCard = ({ rate = 0.2, active = true, onDetail }) => {
+const ProfanityRateCard = ({ count, rate = null, active = true, onDetail }) => {
   const activeIndex = rate === null ? -1 : getLevelIndex(rate);
   const [revealed, setRevealed] = useState(active);
   if (active && !revealed) setRevealed(true);
@@ -52,7 +52,7 @@ const ProfanityRateCard = ({ rate = 0.2, active = true, onDetail }) => {
   return (
     <section className="flex h-full w-full flex-col items-center gap-[16px] rounded-[16px] border border-[#eee] bg-white px-[24px] pt-[16px] pb-[44px] drop-shadow-[0px_4px_5.85px_rgba(0,0,0,0.05)] drop-shadow-[0px_0px_23.85px_rgba(0,0,0,0.1)]">
       <div className="flex w-full flex-col">
-        <p className="text-caption text-[#bfbfbf]">최근 n회 분석 기준</p>
+        <p className="text-caption text-[#bfbfbf]">최근 {count}회 분석 기준</p>
         <div className="flex w-full items-center justify-between">
           <h3 className="text-title-semibold flex-1 text-black">비속어 사용률</h3>
           <button
@@ -95,7 +95,7 @@ const ProfanityRateCard = ({ rate = 0.2, active = true, onDetail }) => {
                 transition: `opacity 300ms ease-out ${LABEL_DELAY_MS}ms, transform 300ms ease-out ${LABEL_DELAY_MS}ms`,
               }}
             >
-              {rate}%
+              {Math.round(rate * 10) / 10}%
             </p>
           )}
         </div>

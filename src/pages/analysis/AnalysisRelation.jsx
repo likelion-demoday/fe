@@ -11,6 +11,12 @@ import PurchaseSheet from "../../components/feature/analysis/PurchaseSheet";
 import relationMainIcon from "../../assets/icons/relation-main-m.svg";
 import relationLoverIcon from "../../assets/icons/relation-lover-m.svg";
 import relationFamilyIcon from "../../assets/icons/relation-family-m.svg";
+import purchaseCoinsImage from "../../assets/images/purchase-coins.png";
+
+const COMPLETE_IMAGE = {
+  src: purchaseCoinsImage,
+  className: "top-[-11.9%] left-[-12.61%] h-[122.73%] w-[122.52%]",
+};
 
 const RELATION_ICONS = {
   main: (
@@ -147,7 +153,7 @@ const AnalysisRelation = () => {
           onCharge={() => navigate("/mypage/payments")}
         />
       )}
-      {sheet === "complete" && <BottomSheet title="구매완료!" onClose={goToLoading} />}
+      {sheet === "complete" && <BottomSheet title="구매완료!" image={COMPLETE_IMAGE} onClose={goToLoading} />}
     </main>
   );
 };

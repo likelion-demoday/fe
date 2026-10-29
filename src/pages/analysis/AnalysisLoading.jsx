@@ -1,11 +1,18 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
+import { getAnalysisReport } from "../../api/analysis";
 import { getRecordingStatus } from "../../api/recording";
+import { requestCharacterImage } from "../../api/character";
+import { getFailureMessage } from "../../constants/analysis";
+import { clearPendingAnalysis, savePendingAnalysis } from "../../utils/pendingAnalysis";
 
 import AppHeader from "../../components/common/AppHeader";
 import BottomSheet, { SheetButton } from "../../components/common/BottomSheet";
 import characterImage from "../../assets/images/record-end-character.png";
+import analysisFailedImage from "../../assets/images/analysis-failed.png";
+
+const FAILED_IMAGE = { src: analysisFailedImage, className: "inset-0 size-full object-cover" };
 
 const POLLING_MS = 3000;
 
@@ -14,18 +21,21 @@ const AnalysisLoading = () => {
   const navigate = useNavigate();
   const { state } = useLocation();
   const [isDone, setIsDone] = useState(false);
+  // 분석 실패 시 안내 문구 (null이면 실패 아님)
+  const [failureMessage, setFailureMessage] = useState(null);
   const isAnalyzing = state?.phase === "analyzing";
 
   useEffect(() => {
     const recordingId = state?.recordingId;
     if (!recordingId) return;
+    savePendingAnalysis(state);
 
     let timer;
     let cancelled = false;
 
     const poll = async () => {
       try {
-        const { step } = await getRecordingStatus(recordingId);
+        const { step, failureReason } = await getRecordingStatus(recordingId);
         if (cancelled) return;
 
         if (!isAnalyzing && step === "SPEAKER_SELECTION_REQUIRED") {
@@ -33,12 +43,23 @@ const AnalysisLoading = () => {
           return;
         }
         if (isAnalyzing && step === "COMPLETED") {
+          // 캐릭터 이미지는 비동기 생성. 중복 요청은 서버에서 alreadyRequested로 처리
+          requestCharacterImage(recordingId).catch((error) => console.error(error.message));
+          clearPendingAnalysis();
           setIsDone(true);
           return;
         }
         if (step === "FAILED") {
-          alert("분석에 실패했어요. 다시 시도해 주세요.");
-          navigate("/home", { replace: true });
+          // 상태 API는 분석 단계 실패를 ANALYSIS_FAILED로만 주므로 상세 사유는 보고서 API에서 조회
+          const reason =
+            failureReason === "ANALYSIS_FAILED"
+              ? await getAnalysisReport(recordingId)
+                  .then((report) => report.failureReason ?? failureReason)
+                  .catch(() => failureReason)
+              : failureReason;
+          if (cancelled) return;
+          clearPendingAnalysis();
+          setFailureMessage(getFailureMessage(reason));
           return;
         }
       } catch {
@@ -56,8 +77,8 @@ const AnalysisLoading = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state?.recordingId, isAnalyzing, navigate]);
 
-  // TODO: 보고서 화면 생기면 그쪽으로 이동
   const goToHome = () => navigate("/home", { replace: true });
+  const goToReport = () => navigate(`/report/${state.recordingId}`, { replace: true });
 
   return (
     <main className="relative mx-auto h-[844px] w-[390px] overflow-hidden bg-white">
@@ -101,11 +122,30 @@ const AnalysisLoading = () => {
         </div>
       </div>
 
+      {failureMessage && (
+        <BottomSheet
+          title="대화 분석 실패"
+          image={FAILED_IMAGE}
+          onClose={goToHome}
+          footer={
+            <>
+              <SheetButton text="다른 녹음 분석" onClick={() => navigate("/analysis", { replace: true })} />
+              <SheetButton text="분석하지 않기" onClick={goToHome} />
+            </>
+          }
+        >
+          <div className="flex w-full flex-col items-center gap-[21px] text-center">
+            <h3 className="text-heading whitespace-nowrap text-black">대화를 분석하기 어려워요</h3>
+            <p className="text-label whitespace-pre-line text-[#595959]">{failureMessage}</p>
+          </div>
+        </BottomSheet>
+      )}
+
       {isDone && (
         <BottomSheet
           title="분석완료!"
           onClose={goToHome}
-          footer={<SheetButton text="다음" onClick={goToHome} />}
+          footer={<SheetButton text="다음" onClick={goToReport} />}
         />
       )}
     </main>

@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import { getSpeakerSamples, mapSpeakers } from "../../api/recording";
+import { getMe } from "../../api/user";
 
 import AppHeader from "../../components/common/AppHeader";
 import BottomSheet, { SheetButton } from "../../components/common/BottomSheet";
@@ -9,12 +10,17 @@ import clipLeft1 from "../../assets/icons/voice-clip-left-1.svg";
 import clipLeft2 from "../../assets/icons/voice-clip-left-2.svg";
 import clipRight1 from "../../assets/icons/voice-clip-right-1.svg";
 import clipRight2 from "../../assets/icons/voice-clip-right-2.svg";
+import partnerNameImage from "../../assets/images/partner-name.png";
 
 
-const USER_NAME = "OOO";
+// 닉네임을 불러오기 전·실패 시 표시
+const FALLBACK_NAME = "회원";
 
 
 const PARTNER_NAME_MAX = 7;
+
+// 상대방 호칭 시트 이미지 (이름표+연필)
+const PARTNER_NAME_IMAGE = { src: partnerNameImage, className: "inset-0 size-full object-cover" };
 
 
 const PARTNER_LABELS = {
@@ -113,9 +119,17 @@ const AnalysisSpeaker = () => {
   const [speakers, setSpeakers] = useState([]);
   const [audioUrl, setAudioUrl] = useState(null);
   const [submitting, setSubmitting] = useState(false);
+  const [nickname, setNickname] = useState("");
+  const userName = nickname || FALLBACK_NAME;
 
   const partnerLabel = PARTNER_LABELS[state?.relation] ?? "상대방을";
   const recordingId = state?.recordingId;
+
+  useEffect(() => {
+    getMe()
+      .then((result) => setNickname(result.nickname ?? ""))
+      .catch(() => {});
+  }, []);
 
   useEffect(() => {
     if (!recordingId) return;
@@ -133,7 +147,7 @@ const AnalysisSpeaker = () => {
     if (!audio) return;
     clipEndRef.current = endMs / 1000;
     audio.currentTime = startMs / 1000;
-    audio.play();
+    audio.play().catch((e) => console.error(e.message));
   };
 
   const handleTimeUpdate = () => {
@@ -144,7 +158,21 @@ const AnalysisSpeaker = () => {
     }
   };
 
+  const stopClip = () => {
+    audioRef.current?.pause();
+    clipEndRef.current = null;
+  };
+
+  // 모달을 닫으면 재생 중인 목소리도 멈춤
+  const handleCloseConfirmSheet = () => {
+    stopClip();
+    setSheet(null);
+  };
+
+  // 카드를 누르면 확인 모달을 열면서 그 화자의 첫 번째 음성 구간을 들려줌
   const handleSelectSpeaker = (id) => {
+    const clip = speakers.find((speaker) => speaker.id === id)?.clips[0];
+    if (clip) playClip(clip.startMs, clip.endMs);
     setSpeakerId(id);
     setSheet("confirm");
   };
@@ -156,6 +184,7 @@ const AnalysisSpeaker = () => {
   };
 
   const handleCloseNameSheet = () => {
+    stopClip();
     setSheet(null);
     setIsEditing(false);
     setPartnerName("");
@@ -186,7 +215,7 @@ const AnalysisSpeaker = () => {
       <AppHeader title="대화 분석" />
 
       <section className="flex w-full flex-col gap-[36px]">
-        <h2 className="text-heading text-[#262626]">{USER_NAME}님의 목소리를 골라주세요</h2>
+        <h2 className="text-heading text-[#262626]">{userName}님의 목소리를 골라주세요</h2>
         <div className="flex w-full flex-col gap-[140px]">
           {speakers.map((speaker) => (
             <SpeakerRow
@@ -204,13 +233,13 @@ const AnalysisSpeaker = () => {
       {sheet === "confirm" && (
         <BottomSheet
           title={`화자 ${speakerId}`}
-          onClose={() => setSheet(null)}
+          onClose={handleCloseConfirmSheet}
           headerGap="gap-[30px]"
           contentGap="gap-[4px]"
           footer={<SheetButton text="확인" onClick={() => setSheet("name")} />}
         >
           <div className="flex w-full flex-col items-center gap-[21px] whitespace-nowrap">
-            <h3 className="text-heading text-black">{USER_NAME}님이 맞으신가요?</h3>
+            <h3 className="text-heading text-black">{userName}님이 맞으신가요?</h3>
             <p className="text-label text-[#595959]">잘못 골랐어도 이후에 수정 가능해요</p>
           </div>
         </BottomSheet>
@@ -248,6 +277,7 @@ const AnalysisSpeaker = () => {
             )
           }
           onClose={handleCloseNameSheet}
+          image={PARTNER_NAME_IMAGE}
           headerGap="gap-[30px]"
           contentGap="gap-[4px]"
           footer={
