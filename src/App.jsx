@@ -74,27 +74,45 @@ function App() {
           path="/mypage/payments/history"
           element={<PurchaseHistoryPage />}
         />
-        <Route path="/recordings" element={<Recordings />} />
+        <Route path="/mypage/recordings" element={<Recordings />} />
         <Route
-          path="/recordings/conversations"
+          path="/mypage/recordings/conversations"
           element={<SavedConversations />}
         />
-        <Route
-          path="/recordings/reports"
-          element={<ReportArchive />}
-        />
+        <Route path="/mypage/recordings/reports" element={<ReportArchive />} />
         <Route path="/mypage/account" element={<Account />} />
         <Route path="/mypage/support" element={<Support />} />
         <Route path="/mypage/support/contact" element={<Contact />} />
         <Route path="/mypage/support/policies" element={<Policies />} />
-        <Route path="/mypage/support/policies/terms" element={<ServiceTerms />} />
-        <Route path="/mypage/support/policies/personal-information" element={<PersonalInformationConsent />} />
-        <Route path="/mypage/support/policies/voice-information" element={<VoiceInformationConsent />} />
-        <Route path="/mypage/support/policies/privacy" element={<PrivacyPolicy />} />
-        <Route path="/mypage/support/policies/payment-refund" element={<PaymentRefundPolicy />} />
-        <Route path="/mypage/support/policies/recording-analysis" element={<RecordingAnalysisGuide />} />
+        <Route
+          path="/mypage/support/policies/terms"
+          element={<ServiceTerms />}
+        />
+        <Route
+          path="/mypage/support/policies/personal-information"
+          element={<PersonalInformationConsent />}
+        />
+        <Route
+          path="/mypage/support/policies/voice-information"
+          element={<VoiceInformationConsent />}
+        />
+        <Route
+          path="/mypage/support/policies/privacy"
+          element={<PrivacyPolicy />}
+        />
+        <Route
+          path="/mypage/support/policies/payment-refund"
+          element={<PaymentRefundPolicy />}
+        />
+        <Route
+          path="/mypage/support/policies/recording-analysis"
+          element={<RecordingAnalysisGuide />}
+        />
         <Route path="/mypage/support/faq" element={<Faq />} />
-        <Route path="/mypage/support/faq/recording" element={<FaqRecording />} />
+        <Route
+          path="/mypage/support/faq/recording"
+          element={<FaqRecording />}
+        />
         <Route path="/mypage/support/faq/service" element={<FaqService />} />
         <Route path="/mypage/support/faq/payment" element={<FaqPayment />} />
         <Route path="/mypage/support/faq/account" element={<FaqAccount />} />
