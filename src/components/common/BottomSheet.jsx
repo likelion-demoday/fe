@@ -5,6 +5,12 @@ import characterImage from "../../assets/images/record-end-character.png";
 
 // 실제 뷰포트 하단에 표시하고 긴 내용은 시트 내부에서 스크롤합니다.
 // title: 문자열이면 기본 제목 스타일, 요소면 그대로 렌더링 (예: 입력창)
+// image: 캐릭터 자리 이미지 교체용 { src, className } (className은 136px 상자 안 위치·크기)
+const DEFAULT_IMAGE = {
+  src: characterImage,
+  className: "top-[-4.41%] left-[-4.41%] size-[108.82%]",
+};
+
 const BottomSheet = ({
   title,
   onClose,
@@ -13,8 +19,7 @@ const BottomSheet = ({
   headerGap = "gap-[20px]",
   contentGap = "gap-[10px]",
   showCharacter = true,
-  characterSrc = characterImage,
-  characterClassName = "pointer-events-none absolute top-[-4.41%] left-[-4.41%] size-[108.82%] max-w-none",
+  image = DEFAULT_IMAGE,
 }) => {
   useEffect(() => {
     const previousOverflow = document.body.style.overflow;
@@ -46,9 +51,9 @@ const BottomSheet = ({
             )}
             {showCharacter && <div className="relative size-[136px] shrink-0 overflow-hidden">
               <img
-                src={characterSrc}
+                src={image.src}
                 alt=""
-                className={characterClassName}
+                className={`pointer-events-none absolute max-w-none ${image.className}`}
               />
             </div>}
             {children}

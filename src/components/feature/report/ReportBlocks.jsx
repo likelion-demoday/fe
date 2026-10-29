@@ -5,11 +5,12 @@ export const CARD_SHADOW = "shadow-[0px_4px_11.7px_0px_rgba(0,0,0,0.05),0px_0px_
 export const DIVIDER_GRADIENT =
   "linear-gradient(90deg, rgba(238,238,238,0) 0%, #eee 5%, #eee 95%, rgba(238,238,238,0) 100%)";
 
-export const KeywordPill = ({ label, highlighted = false }) => (
+// wrap: 긴 문구(주제명 등)를 한 줄로 두지 않고 부모 폭 안에서 줄바꿈
+export const KeywordPill = ({ label, highlighted = false, wrap = false }) => (
   <span
-    className={`flex shrink-0 items-center justify-center rounded-[12px] border border-[#eee] bg-white px-[12px] py-[4px] text-[14px] leading-[22px] font-semibold tracking-[0.28px] whitespace-nowrap drop-shadow-[0px_2px_3px_rgba(0,0,0,0.05)] drop-shadow-[0px_0px_5.7px_rgba(0,0,0,0.05)] ${
-      highlighted ? "text-[#ff765b]" : "text-[#595959]"
-    }`}
+    className={`flex items-center justify-center rounded-[12px] border border-[#eee] bg-white px-[12px] py-[4px] text-[14px] leading-[22px] font-semibold tracking-[0.28px] drop-shadow-[0px_2px_3px_rgba(0,0,0,0.05)] drop-shadow-[0px_0px_5.7px_rgba(0,0,0,0.05)] ${
+      wrap ? "max-w-full text-center break-keep" : "shrink-0 whitespace-nowrap"
+    } ${highlighted ? "text-[#ff765b]" : "text-[#595959]"}`}
   >
     {label}
   </span>
@@ -52,8 +53,13 @@ export const SpectrumBar = ({ position, tone }) => {
 
 // 화자 선택 카드: 이름 + 점수. 선택하지 않은 쪽은 흐리게
 // scores 값이 숫자면 "%"를 붙이고, 문자열이면 그대로 표시 (예: "T 87%")
+// 점수 문구가 길어 화면보다 넓어지면 가로 스크롤 (그림자가 잘리지 않게 바깥 여백까지 스크롤 영역으로 씀)
 export const SpeakerScoreSelector = ({ speakers, scores, selected, onSelect }) => (
-  <div className="flex items-start gap-[16px]" role="tablist" aria-label="화자 선택">
+  <div
+    className="no-scrollbar -mx-[24px] -my-[20px] flex max-w-[calc(100%+48px)] items-start gap-[16px] self-stretch overflow-x-auto px-[24px] py-[20px]"
+    role="tablist"
+    aria-label="화자 선택"
+  >
     {["me", "partner"].map((key) => (
       <button
         key={key}
@@ -71,5 +77,21 @@ export const SpeakerScoreSelector = ({ speakers, scores, selected, onSelect }) =
         </span>
       </button>
     ))}
+  </div>
+);
+
+// 말풍선: 라벨 + 실제 한 말. 강조할 라벨은 화자 색, 나머지는 회색
+export const QuoteBubble = ({ label, text, highlighted, tone }) => (
+  <div
+    className={`flex w-[310px] flex-col items-start gap-[8px] overflow-clip rounded-[16px] rounded-tl-none bg-white px-[20px] py-[12px] ${CARD_SHADOW}`}
+  >
+    <p
+      className={`text-[14px] leading-[20px] font-medium tracking-[-0.14px] ${
+        highlighted ? tone.text : "text-[#8c8c8c]"
+      }`}
+    >
+      {label}
+    </p>
+    <p className="text-[16px] font-bold tracking-[-0.32px] break-keep text-[#454545]">“{text}”</p>
   </div>
 );

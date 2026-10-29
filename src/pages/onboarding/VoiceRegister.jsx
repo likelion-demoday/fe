@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import BackButton from "../../components/common/BackButton";
@@ -15,17 +15,81 @@ const SCRIPT_LINES = [
 
 const WAVE_BARS = [6, 16, 36, 30, 8, 6, 34, 56, 10, 36, 18, 30, 8];
 
-const Waveform = () => (
+const MIC_ERROR_MESSAGES = {
+  denied: "마이크 권한을 허용해 주세요.",
+  notfound: "연결된 마이크를 찾을 수 없어요.",
+  unknown: "마이크를 사용할 수 없어요. 다시 시도해 주세요.",
+};
+
+// 실제 등록이 아니라 마이크 동작 확인용: 입력 크기(0~1)만 측정
+const useMicLevel = () => {
+  const [isListening, setIsListening] = useState(false);
+  const [level, setLevel] = useState(0);
+  const [error, setError] = useState(null);
+  const streamRef = useRef(null);
+  const ctxRef = useRef(null);
+  const rafRef = useRef(0);
+
+  const stop = useCallback(() => {
+    cancelAnimationFrame(rafRef.current);
+    streamRef.current?.getTracks().forEach((track) => track.stop());
+    streamRef.current = null;
+    ctxRef.current?.close().catch(() => {});
+    ctxRef.current = null;
+    setLevel(0);
+    setIsListening(false);
+  }, []);
+
+  useEffect(() => stop, [stop]);
+
+  const start = useCallback(async () => {
+    setError(null);
+    // 권한 팝업을 기다리는 사이 클릭 직후 상태가 끝나면 Chrome이 AudioContext를 suspended로 만들어
+    // 입력이 계속 0으로 읽힘 → 클릭 시점에 만들고 권한을 받은 뒤 resume
+    const ctx = new AudioContext();
+    ctxRef.current = ctx;
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      streamRef.current = stream;
+      await ctx.resume();
+
+      const analyser = ctx.createAnalyser();
+      analyser.fftSize = 256;
+      ctx.createMediaStreamSource(stream).connect(analyser);
+
+      const data = new Uint8Array(analyser.fftSize);
+      const tick = () => {
+        analyser.getByteTimeDomainData(data);
+        let peak = 0;
+        for (const v of data) peak = Math.max(peak, Math.abs(v - 128) / 128);
+        // 말소리 피크는 보통 0.05~0.3이라 작은 소리도 보이게 키움
+        setLevel(Math.min(1, Math.sqrt(peak * 4)));
+        rafRef.current = requestAnimationFrame(tick);
+      };
+      tick();
+      setIsListening(true);
+    } catch (e) {
+      stop();
+      setError(
+        e?.name === "NotAllowedError" || e?.name === "SecurityError"
+          ? "denied"
+          : e?.name === "NotFoundError"
+            ? "notfound"
+            : "unknown",
+      );
+    }
+  }, [stop]);
+
+  return { isListening, level, error, start, stop };
+};
+
+const Waveform = ({ level }) => (
   <div className="flex size-[68px] items-center justify-center gap-[2.5px] overflow-clip">
     {WAVE_BARS.map((height, index) => (
       <span
         key={index}
-        className="w-[2.5px] shrink-0 rounded-[28px] bg-white"
-        style={{
-          height: `${height}px`,
-          animation: "voice-wave 0.9s ease-in-out infinite",
-          animationDelay: `${(index % 5) * 0.12}s`,
-        }}
+        className="w-[2.5px] shrink-0 rounded-[28px] bg-white transition-[height] duration-75"
+        style={{ height: `${Math.max(4, height * (0.15 + level * 0.85))}px` }}
       />
     ))}
   </div>
@@ -33,23 +97,23 @@ const Waveform = () => (
 
 const VoiceRegister = () => {
   const navigate = useNavigate();
-  const [isRecording, setIsRecording] = useState(false);
+  const { isListening: isRecording, level, error, start, stop } = useMicLevel();
   const [hasRecorded, setHasRecorded] = useState(false);
 
   const handleBack = () => {
-    console.log("뒤로가기 버튼 클릭");
     navigate(-1);
   };
 
   const toggleRecording = () => {
-    setIsRecording((prev) => {
-      if (prev) setHasRecorded(true);
-      return !prev;
-    });
+    if (isRecording) {
+      stop();
+      setHasRecorded(true);
+    } else {
+      start();
+    }
   };
 
   const handleNext = () => {
-    console.log("다음 버튼 클릭");
     navigate("/onboarding/consent");
   };
 
@@ -103,11 +167,16 @@ const VoiceRegister = () => {
           }`}
         >
           {isRecording ? (
-            <Waveform />
+            <Waveform level={level} />
           ) : (
             <img src={microphoneIcon} alt="" className="block size-[40px] max-w-none" />
           )}
         </button>
+        {error && (
+          <p className="-mt-[32px] font-['SUITE',sans-serif] text-[13px] font-medium text-[#ff765b]">
+            {MIC_ERROR_MESSAGES[error]}
+          </p>
+        )}
 
         <div className="flex w-full flex-col items-center gap-[24px]">
           <div className="flex items-center justify-center gap-[12px]">

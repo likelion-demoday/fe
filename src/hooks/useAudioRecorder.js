@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
 const BAR_COUNT = 63;
+const TIMESLICE_MS = 250;
 const HEAD_INDEX = Math.floor(BAR_COUNT / 2);
 
 const idleBar = () => 0.05 + Math.random() ** 1.5 * 0.45;
@@ -36,6 +37,8 @@ const toErrorCode = (e) => {
 export function useAudioRecorder() {
   const [status, setStatus] = useState("idle");
   const [error, setError] = useState(null);
+  // 녹음 중 마이크가 끊긴 경우(전화 수신, 장치 분리 등) true
+  const [interrupted, setInterrupted] = useState(false);
   const [levels, setLevels] = useState(createIdleLevels);
   const [head, setHead] = useState(-1);
   const headRef = useRef(-1);
@@ -128,6 +131,22 @@ export function useAudioRecorder() {
       });
       streamRef.current = stream;
 
+      const handleTrackLost = () => {
+        const current = recorderRef.current;
+        if (current?.state === "recording") {
+          current.pause();
+          cancelAnimationFrame(rafRef.current);
+          rafRef.current = 0;
+          peakRef.current = 0;
+          setStatus("paused");
+        }
+        setInterrupted(true);
+      };
+      stream.getAudioTracks().forEach((track) => {
+        track.addEventListener("mute", handleTrackLost);
+        track.addEventListener("ended", handleTrackLost);
+      });
+
       const ctx = new AudioContext();
       ctxRef.current = ctx;
       const analyser = ctx.createAnalyser();
@@ -152,7 +171,9 @@ export function useAudioRecorder() {
       };
       recorderRef.current = recorder;
 
-      recorder.start();
+      // Chrome MP4 녹음은 timeslice 없이 시작하면 stop 전까지 requestData가 헤더(36B)만 줘서
+      // 녹음 들어보기(snapShot)가 재생되지 않음 → 일정 간격으로 조각을 받아 둠
+      recorder.start(TIMESLICE_MS);
       runMeter();
       setStatus("recording");
     } catch (e) {
@@ -183,13 +204,13 @@ export function useAudioRecorder() {
 
     recorder.resume();
     runMeter();
+    setInterrupted(false);
     setStatus("recording");
   }, [runMeter]);
 
   const snapShot = useCallback(() => {
     const recorder = recorderRef.current;
-    if (!recorder || recorder.state === "inactive") return null;
-    Promise.resolve(null);
+    if (!recorder || recorder.state === "inactive") return Promise.resolve(null);
 
     const mimeType = recorder.mimeType || "audio/mp4";
 
@@ -232,12 +253,14 @@ export function useAudioRecorder() {
     setHead(-1);
     headRef.current = -1;
     setError(null);
+    setInterrupted(false);
     setStatus("idle");
   }, [teardown]);
 
   return {
     status,
     error,
+    interrupted,
     levels,
     head,
     isRecording: status === "recording",
