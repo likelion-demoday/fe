@@ -11,8 +11,14 @@ export const kakaoLogin = async (code) => {
   });
 };
 
-export const signUp = async ({ email, password, nickname }) => {
-  return api.post("/api/v1/auth/signup", { email, password, nickname });
+// agreements: { terms, privacy, voice, marketing }
+export const signUp = async ({ email, password, nickname, agreements }) => {
+  return api.post("/api/v1/auth/signup", { email, password, nickname, agreements });
+};
+
+// 소셜 첫 로그인(isNewUser) 후 가입. registerToken은 30분 유효·1회용, 만료 시 AUTH401_4
+export const oauthSignUp = async ({ registerToken, nickname, agreements }) => {
+  return api.post("/api/v1/auth/oauth/signup", { registerToken, nickname, agreements });
 };
 
 export const login = async ({ email, password }) => {

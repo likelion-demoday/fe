@@ -25,7 +25,7 @@ const SignUp = () => {
   };
 
   const handleSignUp = () => {
-    setSignupData({ email, password });
+    setSignupData({ email, password, registerToken: "" });
     navigate("/onboarding/nickname");
   };
 

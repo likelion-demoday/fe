@@ -1,10 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { kakaoLogin } from "../../api/auth";
+import useAuthStore from "../../store/authStore";
 
 function KakaoCallbackPage() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+  const clearAuthData = useAuthStore((state) => state.clearAuthData);
+  const setAuthData = useAuthStore((state) => state.setAuthData);
   const [errorMessage, setErrorMessage] = useState("");
   const isRequested = useRef(false); // 백엔드로 요청 두 번 보내기 방지용
   const code = searchParams.get("code");
@@ -20,6 +23,13 @@ function KakaoCallbackPage() {
       try {
         const data = await kakaoLogin(code);
 
+        // 신규 회원은 토큰 대신 registerToken → 온보딩(닉네임·약관) 후 가입
+        if (data?.isNewUser) {
+          clearAuthData();
+          setAuthData({ registerToken: data.registerToken });
+          navigate("/onboarding/nickname", { replace: true });
+          return;
+        }
         if (!data?.accessToken || !data?.refreshToken) {
           throw new Error("로그인 응답에 토큰이 없습니다.");
         }
@@ -32,7 +42,7 @@ function KakaoCallbackPage() {
       }
     };
     login();
-  }, [code, callbackError, navigate]);
+  }, [code, callbackError, navigate, clearAuthData, setAuthData]);
 
   return (
     <div className="flex h-screen w-full flex-col items-center justify-center gap-4 px-4">

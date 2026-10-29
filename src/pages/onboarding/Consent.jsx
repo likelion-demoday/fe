@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import useAuthStore from "../../store/authStore";
-import { signUp } from "../../api/auth";
+import { oauthSignUp, signUp } from "../../api/auth";
 
 import BackButton from "../../components/common/BackButton";
 import Button from "../../components/common/Button";
@@ -41,7 +41,7 @@ const Divider = () => (
 );
 
 const Consent = () => {
-  const { email, password, nickname } = useAuthStore();
+  const { email, password, nickname, registerToken } = useAuthStore();
   const clearAuthData = useAuthStore((state) => state.clearAuthData);
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -68,12 +68,26 @@ const Consent = () => {
   };
 
   const handleNext = async () => {
+    const agreements = Object.fromEntries(AGREEMENTS.map(({ id }) => [id, Boolean(checked[id])]));
+
     try {
-      await signUp({ email, password, nickname });
+      if (registerToken) {
+        const result = await oauthSignUp({ registerToken, nickname, agreements });
+        localStorage.setItem("accessToken", result.accessToken);
+        localStorage.setItem("refreshToken", result.refreshToken);
+        localStorage.setItem("isLogin", "true");
+      } else {
+        await signUp({ email, password, nickname, agreements });
+      }
       clearAuthData();
       navigate("/home", { replace: true });
     } catch (error) {
-      if (error.code === "AUTH409_1") {
+      if (error.code === "AUTH401_4") {
+        // registerToken 만료(30분) 또는 재사용 → 소셜 로그인부터 다시
+        clearAuthData();
+        alert("가입 시간이 지났어요. 다시 로그인해 주세요.");
+        navigate("/auth/login", { replace: true });
+      } else if (error.code === "AUTH409_1") {
         setErrorMessage("이미 가입된 이메일입니다.");
       } else {
         setErrorMessage(error.message);
