@@ -9,7 +9,7 @@ import { clearPendingAnalysis, savePendingAnalysis } from "../../utils/pendingAn
 
 import AppHeader from "../../components/common/AppHeader";
 import BottomSheet, { SheetButton } from "../../components/common/BottomSheet";
-import characterImage from "../../assets/images/record-end-character.png";
+import LoadingMotion from "../../components/feature/analysis/LoadingMotion";
 import analysisFailedImage from "../../assets/images/analysis-failed.png";
 
 const FAILED_IMAGE = { src: analysisFailedImage, className: "inset-0 size-full object-cover" };
@@ -86,35 +86,21 @@ const AnalysisLoading = () => {
         <AppHeader />
       </div>
  
-      <div className="absolute top-[262px] left-1/2 flex -translate-x-1/2 flex-col items-center" aria-hidden="true">
-        <div
-          className="relative size-[136px] overflow-hidden"
-          style={{ animation: "analysis-float 1.8s ease-in-out infinite" }}
-        >
-          <img
-            src={characterImage}
-            alt=""
-            className="pointer-events-none absolute top-[-4.41%] left-[-4.41%] size-[108.82%] max-w-none"
-          />
-        </div>
-        <span
-          className="mt-[4px] h-[10px] w-[72px] rounded-[50%] bg-[rgba(0,0,0,0.3)] blur-[3px]"
-          style={{ animation: "analysis-shadow 1.8s ease-in-out infinite" }}
-        />
-      </div>
+      <LoadingMotion className="absolute top-[330px] left-1/2 h-[75px] w-[66px] -translate-x-1/2" />
 
       <div className="absolute top-[441px] left-1/2 flex w-[195px] -translate-x-1/2 flex-col items-center gap-[16px] text-center">
         <h1 className="text-display w-full text-black" role="status">
-          분석중
-          {[0, 1, 2].map((index) => (
-            <span
-              key={index}
-              aria-hidden="true"
-              style={{ animation: `analysis-dot 1.4s ${index * 0.2}s infinite` }}
-            >
-              .
+          {/* "..."은 가운데 정렬 계산에서 빼서 "분석중" 글자가 로딩 모션과 같은 중심에 오게 함 */}
+          <span className="relative">
+            분석중
+            <span aria-hidden="true" className="absolute left-full">
+              {[0, 1, 2].map((index) => (
+                <span key={index} style={{ animation: `analysis-dot 1.4s ${index * 0.2}s infinite` }}>
+                  .
+                </span>
+              ))}
             </span>
-          ))}
+          </span>
         </h1>
         <div className="flex w-full flex-col items-center gap-[8px]">
           <p className="text-title-medium w-full text-black">5분정도 시간이 소요돼요</p>
