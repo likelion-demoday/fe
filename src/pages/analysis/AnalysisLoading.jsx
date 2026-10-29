@@ -5,6 +5,7 @@ import { getAnalysisReport } from "../../api/analysis";
 import { getRecordingStatus } from "../../api/recording";
 import { requestCharacterImage } from "../../api/character";
 import { getFailureMessage } from "../../constants/analysis";
+import { clearPendingAnalysis, savePendingAnalysis } from "../../utils/pendingAnalysis";
 
 import AppHeader from "../../components/common/AppHeader";
 import BottomSheet, { SheetButton } from "../../components/common/BottomSheet";
@@ -27,6 +28,7 @@ const AnalysisLoading = () => {
   useEffect(() => {
     const recordingId = state?.recordingId;
     if (!recordingId) return;
+    savePendingAnalysis(state);
 
     let timer;
     let cancelled = false;
@@ -43,6 +45,7 @@ const AnalysisLoading = () => {
         if (isAnalyzing && step === "COMPLETED") {
           // 캐릭터 이미지는 비동기 생성. 중복 요청은 서버에서 alreadyRequested로 처리
           requestCharacterImage(recordingId).catch((error) => console.error(error.message));
+          clearPendingAnalysis();
           setIsDone(true);
           return;
         }
@@ -55,6 +58,7 @@ const AnalysisLoading = () => {
                   .catch(() => failureReason)
               : failureReason;
           if (cancelled) return;
+          clearPendingAnalysis();
           setFailureMessage(getFailureMessage(reason));
           return;
         }

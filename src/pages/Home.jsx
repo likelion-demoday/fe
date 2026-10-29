@@ -1,12 +1,43 @@
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+import { getRecordingStatus } from "../api/recording";
 import AppHeader from "../components/common/AppHeader";
+import BottomSheet from "../components/common/BottomSheet";
 import HabitSummaryCarousel from "../components/feature/home/HabitSummaryCarousel";
 import CharacterCarousel from "../components/feature/home/CharacterCarousel";
 import { SheetButton } from "../components/feature/analysis/RecordEndSheet";
+import { getPendingAnalysis } from "../utils/pendingAnalysis";
 
 const Home = () => {
   const navigate = useNavigate();
+  // 화자 선택을 기다리는 진행 중 분석 (이어하기 시트 표시용)
+  const [speakerPending, setSpeakerPending] = useState(null);
+
+  // 로딩 화면을 나간 분석 이어가기. 전사·분석 중이면 서버가 계속 진행하므로 그대로 둠
+  useEffect(() => {
+    const pending = getPendingAnalysis();
+    if (!pending?.recordingId) return;
+
+    let cancelled = false;
+    getRecordingStatus(pending.recordingId)
+      .then(({ step }) => {
+        if (cancelled) return;
+        if (step === "SPEAKER_SELECTION_REQUIRED") {
+          setSpeakerPending(pending);
+        } else if (step === "COMPLETED" || step === "FAILED") {
+          // 로딩 화면에서 완료/실패 시트를 보여주고 저장된 정보를 지움
+          navigate("/analysis/loading", {
+            state: { ...pending, phase: step === "COMPLETED" ? "analyzing" : "transcribing" },
+          });
+        }
+      })
+      .catch(() => {});
+
+    return () => {
+      cancelled = true;
+    };
+  }, [navigate]);
 
   return (
     // 휴대폰처럼 화면이 844px보다 짧으면 화면 높이에 맞춰 줄여서 하단 버튼이 항상 보이게 함
@@ -34,6 +65,24 @@ const Home = () => {
           onClick={() => navigate("/analysis")}
         />
       </div>
+
+      {speakerPending && (
+        <BottomSheet
+          title="분석이 멈춰 있어요"
+          onClose={() => setSpeakerPending(null)}
+          footer={
+            <>
+              <SheetButton text="나중에" onClick={() => setSpeakerPending(null)} />
+              <SheetButton
+                text="이어하기"
+                onClick={() => navigate("/analysis/speaker", { state: speakerPending })}
+              />
+            </>
+          }
+        >
+          <p className="text-label text-center text-[#595959]">화자를 선택하면 분석이 이어져요</p>
+        </BottomSheet>
+      )}
     </div>
   );
 };
