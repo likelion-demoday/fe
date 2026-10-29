@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import MyPageHeader from "../../components/feature/mypage/MyPageHeader";
 import PurchaseHistoryItem from "../../components/feature/mypage/PurchaseHistoryItem";
 import ArchiveEmptyState from "../../components/feature/mypage/ArchiveEmptyState";
+import purchaseHistoryEmptyImage from "../../assets/images/purchase-history-empty.png";
 import divider from "../../assets/icons/purchase-history-divider.svg";
 
 const PurchaseHistoryPage = ({ onSelect }) => {
@@ -67,6 +68,7 @@ const PurchaseHistoryPage = ({ onSelect }) => {
       )}
       {!loading && !error && purchases.length === 0 ? (
         <ArchiveEmptyState
+          imageSrc={purchaseHistoryEmptyImage}
           message="아직 크레딧 내역이 없어요"
           className="mt-[157px]"
         />

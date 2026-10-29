@@ -9,6 +9,17 @@ import Button from "../../components/common/Button";
 import circleIcon from "../../assets/icons/check-circle.svg";
 import chevronRightIcon from "../../assets/icons/chevron-right.svg";
 import dividerIcon from "../../assets/icons/divider.svg";
+import MarketingConsent from "../mypage/MarketingConsent";
+import VoiceInformationConsent from "../mypage/VoiceInformationConsent";
+import ServiceTerms from "../mypage/ServiceTerms";
+import PersonalInformationConsent from "../mypage/PersonalInformationConsent";
+
+const AGREEMENT_PAGES = {
+  terms: ServiceTerms,
+  privacy: PersonalInformationConsent,
+  voice: VoiceInformationConsent,
+  marketing: MarketingConsent,
+};
 
 const AGREEMENTS = [
   { id: "terms", label: "[필수] 서비스 이용약관 동의", required: true },
@@ -47,6 +58,7 @@ const Consent = () => {
 
   const navigate = useNavigate();
   const [checked, setChecked] = useState({});
+  const [activeAgreement, setActiveAgreement] = useState(null);
 
   const allChecked = AGREEMENTS.every(({ id }) => checked[id]);
   const requiredChecked = AGREEMENTS.filter(({ required }) => required).every(
@@ -95,8 +107,13 @@ const Consent = () => {
   };
 
   const handleView = (id) => {
-    console.log("약관 보기", id);
+    setActiveAgreement(id);
   };
+
+  const AgreementPage = AGREEMENT_PAGES[activeAgreement];
+  if (AgreementPage) {
+    return <AgreementPage onBack={() => setActiveAgreement(null)} />;
+  }
 
   return (
     <div className="mx-auto flex h-[844px] w-[390px] overflow-y-auto no-scrollbar flex-col items-start justify-between bg-white">

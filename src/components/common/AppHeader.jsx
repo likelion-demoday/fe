@@ -2,17 +2,18 @@ import { useNavigate } from "react-router-dom";
 import profileIcon from "../../assets/icons/profile.svg";
 import TextBackButton from "./TextBackButton";
 
-const AppHeader = ({ title, onBack, onLogoClick }) => {
+const AppHeader = ({ title, onBack, onLogoClick, titleClassName = "text-display" }) => {
   const navigate = useNavigate();
+  const Logo = onLogoClick ? "button" : "p";
 
   return (
     <header className="flex w-full flex-col gap-[20px]">
       <div className="flex h-[40px] items-center justify-between">
-        <p onClick={onLogoClick} className="font-['SUIT',sans-serif] text-[20px] leading-normal font-extrabold tracking-[-0.8px] whitespace-nowrap text-black">
+        <Logo type={onLogoClick ? "button" : undefined} onClick={onLogoClick} className={`${onLogoClick ? "cursor-pointer " : ""}font-['SUIT',sans-serif] text-[20px] leading-normal font-extrabold tracking-[-0.8px] whitespace-nowrap text-black`}>
           <span>RE</span>
           <span className="text-[#ff765b]">:S</span>
           <span className="tracking-[-1.28px]">AY</span>
-        </p>
+        </Logo>
         <button
           type="button"
           onClick={() => navigate("/mypage")}
@@ -22,7 +23,7 @@ const AppHeader = ({ title, onBack, onLogoClick }) => {
           <img src={profileIcon} alt="" className="absolute -top-[10px] -left-[10px] max-w-none" />
         </button>
       </div>
-      {title && <h1 className="text-display text-black">{title}</h1>}
+      {title && <h1 className={`${titleClassName} text-black`}>{title}</h1>}
       {onBack && <TextBackButton onClick={onBack} />}
     </header>
   );

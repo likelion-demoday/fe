@@ -1,6 +1,6 @@
 import emptyCharacter from "../../../assets/images/record-end-character.png";
 
-const ArchiveEmptyState = ({ message, className = "" }) => (
+const ArchiveEmptyState = ({ message, className = "", imageSrc }) => (
   <div
     role="status"
     className={`flex flex-col items-center gap-[10px] ${className}`}
@@ -8,9 +8,11 @@ const ArchiveEmptyState = ({ message, className = "" }) => (
     <p className="text-heading w-full text-center text-[#454545]">{message}</p>
     <div className="relative size-[136px] overflow-hidden">
       <img
-        src={emptyCharacter}
+        src={imageSrc || emptyCharacter}
         alt=""
-        className="absolute -top-[4.41%] -left-[4.41%] size-[108.82%] max-w-none"
+        className={imageSrc
+          ? "pointer-events-none block size-full object-cover"
+          : "absolute -top-[4.41%] -left-[4.41%] size-[108.82%] max-w-none"}
       />
     </div>
   </div>
