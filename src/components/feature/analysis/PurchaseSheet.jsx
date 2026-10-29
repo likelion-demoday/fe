@@ -1,5 +1,13 @@
 import BottomSheet, { SheetButton } from "../../common/BottomSheet";
 import dividerIcon from "../../../assets/icons/purchase-divider.svg";
+import receiptImage from "../../../assets/images/purchase-receipt.png";
+import creditShortImage from "../../../assets/images/credit-short.png";
+
+// 바텀시트 이미지 (136px 상자 기준 위치·크기)
+const SHEET_IMAGES = {
+  purchase: { src: receiptImage, className: "inset-0 size-full object-cover" },
+  short: { src: creditShortImage, className: "top-[-8.7%] left-[-9.57%] size-[118.26%]" },
+};
 
 const formatCredit = (value) => value.toLocaleString("ko-KR");
 
@@ -10,6 +18,7 @@ const PurchaseSheet = ({ productName, ownedCredit, price, onClose, onPurchase, o
   return (
     <BottomSheet
       title={isShort ? "크레딧이 부족해요" : "구매하기"}
+      image={isShort ? SHEET_IMAGES.short : SHEET_IMAGES.purchase}
       onClose={onClose}
       footer={
         isShort ? (

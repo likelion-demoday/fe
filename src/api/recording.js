@@ -1,12 +1,17 @@
 import api from "./axios";
 
-export const uploadRecording = async (file) => {
+// onProgress: 업로드 진행률(0~100) 콜백, signal: 업로드 취소용 AbortSignal
+export const uploadRecording = async (file, { onProgress, signal } = {}) => {
   const formData = new FormData();
   formData.append("audioFile", file);
 
   return api.post("/api/v1/recordings", formData, {
     headers: {
       "Content-Type": "multipart/form-data",
+    },
+    signal,
+    onUploadProgress: (event) => {
+      if (onProgress && event.total) onProgress(Math.round((event.loaded / event.total) * 100));
     },
   });
 };
