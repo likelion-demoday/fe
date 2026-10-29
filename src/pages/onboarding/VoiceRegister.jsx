@@ -44,12 +44,15 @@ const useMicLevel = () => {
 
   const start = useCallback(async () => {
     setError(null);
+    // 권한 팝업을 기다리는 사이 클릭 직후 상태가 끝나면 Chrome이 AudioContext를 suspended로 만들어
+    // 입력이 계속 0으로 읽힘 → 클릭 시점에 만들고 권한을 받은 뒤 resume
+    const ctx = new AudioContext();
+    ctxRef.current = ctx;
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       streamRef.current = stream;
+      await ctx.resume();
 
-      const ctx = new AudioContext();
-      ctxRef.current = ctx;
       const analyser = ctx.createAnalyser();
       analyser.fftSize = 256;
       ctx.createMediaStreamSource(stream).connect(analyser);
@@ -59,7 +62,8 @@ const useMicLevel = () => {
         analyser.getByteTimeDomainData(data);
         let peak = 0;
         for (const v of data) peak = Math.max(peak, Math.abs(v - 128) / 128);
-        setLevel(Math.min(1, peak * 3));
+        // 말소리 피크는 보통 0.05~0.3이라 작은 소리도 보이게 키움
+        setLevel(Math.min(1, Math.sqrt(peak * 4)));
         rafRef.current = requestAnimationFrame(tick);
       };
       tick();
