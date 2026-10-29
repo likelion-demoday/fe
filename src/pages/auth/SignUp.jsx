@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import useAuthStore from "../../store/authStore";
+import { checkEmail } from "../../api/auth";
 
 import EmailInput from "../../components/feature/auth/EmailInput";
 import PasswordInput from "../../components/feature/auth/PasswordInput";
@@ -13,8 +14,11 @@ import { isValidEmail } from "../../utils/validation";
 const SignUp = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  // 회원가입 버튼을 눌렀을 때 중복 확인 결과. 이메일을 고치면 초기화
+  const [isEmailTaken, setIsEmailTaken] = useState(false);
+  const [checking, setChecking] = useState(false);
   const isPasswordValid = password.length >= 8;
-  const isFormValid = isValidEmail(email) && isPasswordValid;
+  const isFormValid = isValidEmail(email) && isPasswordValid && !isEmailTaken;
 
   const navigate = useNavigate();
 
@@ -24,9 +28,27 @@ const SignUp = () => {
     navigate(-1);
   };
 
-  const handleSignUp = () => {
-    setSignupData({ email, password, registerToken: "" });
-    navigate("/onboarding/nickname");
+  const changeEmail = (value) => {
+    setEmail(value);
+    setIsEmailTaken(false);
+  };
+
+  const handleSignUp = async () => {
+    if (checking) return;
+    setChecking(true);
+    try {
+      const { available } = await checkEmail(email);
+      if (!available) {
+        setIsEmailTaken(true);
+        return;
+      }
+      setSignupData({ email, password, registerToken: "" });
+      navigate("/onboarding/nickname");
+    } catch (error) {
+      alert(error.message ?? "이메일을 확인하지 못했어요. 다시 시도해 주세요.");
+    } finally {
+      setChecking(false);
+    }
   };
 
   return (
@@ -41,8 +63,9 @@ const SignUp = () => {
           <div className="flex w-full flex-col items-start gap-[56px]">
             <EmailInput
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              onClear={() => setEmail("")}
+              onChange={(e) => changeEmail(e.target.value)}
+              onClear={() => changeEmail("")}
+              error={isEmailTaken}
             />
             <PasswordInput
               value={password}
@@ -55,7 +78,7 @@ const SignUp = () => {
           <Button
             text="회원가입"
             onClick={handleSignUp}
-            disabled={!isFormValid}
+            disabled={!isFormValid || checking}
             className="flex h-[49px] w-[358px] items-center justify-center rounded-[12px] bg-[#262626] px-[26px] py-[14px] font-['Pretendard',sans-serif] text-[18px] font-semibold tracking-[-0.36px] text-white disabled:bg-[#d9d9d9]"
           />
           <SocialLoginButtons />

@@ -11,6 +11,11 @@ export const kakaoLogin = async (code) => {
   });
 };
 
+// 응답 { available }: false면 이미 가입된 이메일
+export const checkEmail = async (email) => {
+  return api.post("/api/v1/auth/email/check", { email });
+};
+
 // agreements: { terms, privacy, voice, marketing }
 export const signUp = async ({ email, password, nickname, agreements }) => {
   return api.post("/api/v1/auth/signup", { email, password, nickname, agreements });
