@@ -1,5 +1,14 @@
 import api from "./axios";
 
+export const getRecordings = ({ page = 0, size = 10, signal } = {}) =>
+  api.get("/api/v1/recordings", { params: { page, size }, signal });
+
+export const getRecording = (id, { signal } = {}) =>
+  api.get(`/api/v1/recordings/${id}`, { signal });
+
+export const getRecordingAudio = (id, { signal } = {}) =>
+  api.get(`/api/v1/recordings/${id}/audio`, { responseType: "blob", signal });
+
 // onProgress: 업로드 진행률(0~100) 콜백, signal: 업로드 취소용 AbortSignal
 export const uploadRecording = async (file, { onProgress, signal } = {}) => {
   const formData = new FormData();
