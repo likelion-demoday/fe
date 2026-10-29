@@ -71,14 +71,13 @@ const Consent = () => {
     const agreements = Object.fromEntries(AGREEMENTS.map(({ id }) => [id, Boolean(checked[id])]));
 
     try {
-      if (registerToken) {
-        const result = await oauthSignUp({ registerToken, nickname, agreements });
-        localStorage.setItem("accessToken", result.accessToken);
-        localStorage.setItem("refreshToken", result.refreshToken);
-        localStorage.setItem("isLogin", "true");
-      } else {
-        await signUp({ email, password, nickname, agreements });
-      }
+      // 이메일·소셜 가입 모두 응답으로 토큰을 받아 바로 로그인 상태로 전환
+      const result = registerToken
+        ? await oauthSignUp({ registerToken, nickname, agreements })
+        : await signUp({ email, password, nickname, agreements });
+      localStorage.setItem("accessToken", result.accessToken);
+      localStorage.setItem("refreshToken", result.refreshToken);
+      localStorage.setItem("isLogin", "true");
       clearAuthData();
       navigate("/home", { replace: true });
     } catch (error) {
