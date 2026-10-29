@@ -22,7 +22,8 @@ const Login = () => {
       localStorage.setItem("refreshToken", result.refreshToken);
       localStorage.setItem("isLogin", true);
 
-      navigate("/home");
+      // 로그인 화면을 기록에서 지워서 홈에서 뒤로가기로 돌아오지 않게 함
+      navigate("/home", { replace: true });
     } catch (error) {
       if (error.code === "AUTH401_1") {
         setErrorMessage("이메일 또는 비밀번호가 일치하지 않아요.");

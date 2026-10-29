@@ -2,16 +2,7 @@ import { useEffect, useState } from "react";
 import { Navigate, Outlet } from "react-router-dom";
 
 import { getMe } from "../../api/user";
-
-const hasStoredLogin = () => {
-  const accessToken = localStorage.getItem("accessToken");
-  return (
-    localStorage.getItem("isLogin") === "true" &&
-    Boolean(accessToken) &&
-    accessToken !== "undefined" &&
-    accessToken !== "null"
-  );
-};
+import { hasStoredLogin } from "../../utils/auth";
 
 function ProtectedRoute() {
   const [isLoggedIn] = useState(hasStoredLogin);

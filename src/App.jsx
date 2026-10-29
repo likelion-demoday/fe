@@ -1,5 +1,6 @@
 import { Routes, Route } from "react-router-dom";
 import ProtectedRoute from "./components/common/ProtectedRoute";
+import PublicOnlyRoute from "./components/common/PublicOnlyRoute";
 
 import Splash from "./pages/Splash";
 import Home from "./pages/Home";
@@ -79,8 +80,10 @@ function App() {
 
       <Route path="/oauth/kakao/callback" element={<KakaoCallbackPage />} />
       <Route path="/oauth/google/callback" element={<GoogleCallbackPage />} />
-      <Route path="/auth/login" element={<Login />} />
-      <Route path="/auth/signup" element={<SignUp />} />
+      <Route element={<PublicOnlyRoute />}>
+        <Route path="/auth/login" element={<Login />} />
+        <Route path="/auth/signup" element={<SignUp />} />
+      </Route>
 
       <Route path="/onboarding/nickname" element={<Nickname />} />
       <Route path="/onboarding/consent" element={<Consent />} />
