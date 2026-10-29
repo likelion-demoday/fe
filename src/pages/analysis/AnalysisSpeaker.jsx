@@ -147,7 +147,7 @@ const AnalysisSpeaker = () => {
     if (!audio) return;
     clipEndRef.current = endMs / 1000;
     audio.currentTime = startMs / 1000;
-    audio.play();
+    audio.play().catch((e) => console.error(e.message));
   };
 
   const handleTimeUpdate = () => {
@@ -169,7 +169,10 @@ const AnalysisSpeaker = () => {
     setSheet(null);
   };
 
+  // 카드를 누르면 확인 모달을 열면서 그 화자의 첫 번째 음성 구간을 들려줌
   const handleSelectSpeaker = (id) => {
+    const clip = speakers.find((speaker) => speaker.id === id)?.clips[0];
+    if (clip) playClip(clip.startMs, clip.endMs);
     setSpeakerId(id);
     setSheet("confirm");
   };
