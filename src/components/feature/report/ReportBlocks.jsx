@@ -53,8 +53,13 @@ export const SpectrumBar = ({ position, tone }) => {
 
 // 화자 선택 카드: 이름 + 점수. 선택하지 않은 쪽은 흐리게
 // scores 값이 숫자면 "%"를 붙이고, 문자열이면 그대로 표시 (예: "T 87%")
+// 점수 문구가 길어 화면보다 넓어지면 가로 스크롤 (그림자가 잘리지 않게 바깥 여백까지 스크롤 영역으로 씀)
 export const SpeakerScoreSelector = ({ speakers, scores, selected, onSelect }) => (
-  <div className="flex items-start gap-[16px]" role="tablist" aria-label="화자 선택">
+  <div
+    className="no-scrollbar -mx-[24px] -my-[20px] flex max-w-[calc(100%+48px)] items-start gap-[16px] self-stretch overflow-x-auto px-[24px] py-[20px]"
+    role="tablist"
+    aria-label="화자 선택"
+  >
     {["me", "partner"].map((key) => (
       <button
         key={key}
