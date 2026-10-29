@@ -83,6 +83,34 @@ const AnalysisRecord = () => {
     return () => clearInterval(timer);
   }, [isRunning]);
 
+  // 녹음 중(일시정지 포함) 화면 꺼짐 방지. 탭이 숨겨지면 브라우저가 해제하므로 다시 보일 때 재요청
+  const keepAwake = status === "recording" || status === "paused";
+  useEffect(() => {
+    if (!keepAwake || !("wakeLock" in navigator)) return;
+    let lock = null;
+    let released = false;
+
+    const request = async () => {
+      try {
+        lock = await navigator.wakeLock.request("screen");
+        if (released) lock.release().catch(() => {});
+      } catch {
+        // 저전력 모드 등으로 거부되면 무시
+      }
+    };
+    const handleVisibility = () => {
+      if (document.visibilityState === "visible") request();
+    };
+
+    request();
+    document.addEventListener("visibilitychange", handleVisibility);
+    return () => {
+      released = true;
+      document.removeEventListener("visibilitychange", handleVisibility);
+      lock?.release().catch(() => {});
+    };
+  }, [keepAwake]);
+
   const endRecording = async () => {
     if (endingRef.current) return;
     endingRef.current = true;
@@ -282,7 +310,7 @@ const AnalysisRecord = () => {
           <div className="flex w-full flex-col items-center gap-[80px] [@media(max-height:843px)]:gap-[24px]">
             <div className="flex w-full flex-col items-center gap-[8px] text-center">
               {isIdle && (
-                <p className="text-body text-[#6b6b6b]">화면을 꺼도 녹음은 유지돼요</p>
+                <p className="text-body text-[#6b6b6b]">녹음 중에는 화면이 꺼지지 않아요</p>
               )}
               <p className="text-heading w-full text-black">
                 {formatTime(elapsed)} / {formatTime(MAX_SECONDS)}
