@@ -29,6 +29,9 @@ const PARTNER_LABELS = {
   family: "상대방을",
 };
 
+// 부모·자녀 관계에서 "부모님이신가요?" 답변 → speaker-mapping selfRole
+const SELF_ROLES = { parent: "PARENT", child: "CHILD" };
+
 const SPEAKER_LAYOUTS = [
   {
     align: "left",
@@ -111,11 +114,12 @@ const AnalysisSpeaker = () => {
   const audioRef = useRef(null);
   const clipEndRef = useRef(null);
 
-  // null | "confirm"(화자 확인) | "name"(상대방 호칭 입력)
+  // null | "confirm"(화자 확인) | "parent"(부모 여부, 부모·자녀 관계만) | "name"(상대방 호칭 입력)
   const [sheet, setSheet] = useState(null);
   const [speakerId, setSpeakerId] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [partnerName, setPartnerName] = useState("");
+  const [selfRole, setSelfRole] = useState(null);
   const [speakers, setSpeakers] = useState([]);
   const [audioUrl, setAudioUrl] = useState(null);
   const [submitting, setSubmitting] = useState(false);
@@ -123,6 +127,7 @@ const AnalysisSpeaker = () => {
   const userName = nickname || FALLBACK_NAME;
 
   const partnerLabel = PARTNER_LABELS[state?.relation] ?? "상대방을";
+  const isFamily = state?.relation === "family";
   const recordingId = state?.recordingId;
 
   useEffect(() => {
@@ -177,6 +182,13 @@ const AnalysisSpeaker = () => {
     setSheet("confirm");
   };
 
+  const handleConfirmSpeaker = () => setSheet(isFamily ? "parent" : "name");
+
+  const handleSelectRole = (role) => {
+    setSelfRole(SELF_ROLES[role]);
+    setSheet("name");
+  };
+
   const handleStartEditing = () => {
     setIsEditing(true);
     // 입력창이 렌더링된 뒤 포커스
@@ -188,6 +200,7 @@ const AnalysisSpeaker = () => {
     setSheet(null);
     setIsEditing(false);
     setPartnerName("");
+    setSelfRole(null);
   };
 
   const handleSubmit = async () => {
@@ -199,6 +212,7 @@ const AnalysisSpeaker = () => {
       await mapSpeakers(recordingId, {
         selfSpeakerLabel: selected.label,
         partnerNickname: partnerName.trim(),
+        ...(selfRole && { selfRole }),
       });
       navigate("/analysis/loading", {
         replace: true,
@@ -236,10 +250,30 @@ const AnalysisSpeaker = () => {
           onClose={handleCloseConfirmSheet}
           headerGap="gap-[30px]"
           contentGap="gap-[4px]"
-          footer={<SheetButton text="확인" onClick={() => setSheet("name")} />}
+          footer={<SheetButton text="확인" onClick={handleConfirmSpeaker} />}
         >
           <div className="flex w-full flex-col items-center gap-[21px] whitespace-nowrap">
             <h3 className="text-heading text-black">{userName}님이 맞으신가요?</h3>
+            <p className="text-label text-[#595959]">잘못 골랐어도 이후에 수정 가능해요</p>
+          </div>
+        </BottomSheet>
+      )}
+
+      {sheet === "parent" && (
+        <BottomSheet
+          title={`화자 ${speakerId}`}
+          onClose={handleCloseNameSheet}
+          headerGap="gap-[30px]"
+          contentGap="gap-[4px]"
+          footer={
+            <>
+              <SheetButton text="아니요" onClick={() => handleSelectRole("child")} />
+              <SheetButton text="예" onClick={() => handleSelectRole("parent")} />
+            </>
+          }
+        >
+          <div className="flex w-full flex-col items-center gap-[21px] whitespace-nowrap">
+            <h3 className="text-heading text-black">{userName}님은 부모님이신가요?</h3>
             <p className="text-label text-[#595959]">잘못 골랐어도 이후에 수정 가능해요</p>
           </div>
         </BottomSheet>
