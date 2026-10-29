@@ -1,5 +1,7 @@
+import cardBg from "../../../assets/icons/character-card-bg-medium.svg";
+
 // 닉네임 + 캐릭터 카드 (디자인 기준 카드 160.839 x 198.022)
-// imageUrl: 배경까지 포함된 카드 이미지 (위쪽이 비어 있어 이름·설명을 겹쳐 띄움). 생성 전이면 그라데이션 배경만
+// 배경(그라데이션 + 위쪽 흰 물결)은 프론트에서 그리고, imageUrl(배경 투명 캐릭터)을 아래쪽에 올림
 const ReportCharacterCard = ({ nickname, nicknameColor, character }) => (
   <div className="flex shrink-0 flex-col items-start gap-[6px] rounded-[16px] border-[0.865px] border-[#eee] bg-white pt-[8px] drop-shadow-[0px_4px_5.85px_rgba(0,0,0,0.05)] drop-shadow-[0px_0px_23.85px_rgba(0,0,0,0.1)]">
     <p
@@ -10,16 +12,20 @@ const ReportCharacterCard = ({ nickname, nicknameColor, character }) => (
     </p>
     <div
       className="relative h-[198.022px] w-[160.839px] overflow-clip rounded-[13.836px] shadow-[0px_-1.729px_9.04px_0px_rgba(0,0,0,0.05),0px_0px_36.854px_0px_rgba(0,0,0,0.05)]"
-      style={{ backgroundImage: character.imageUrl ? undefined : character.background }}
+      style={{ backgroundImage: character.background }}
     >
+      <div className="absolute top-[-0.97px] left-[-0.87px] h-[107.226px] w-[165.162px]">
+        <img src={cardBg} alt="" className="absolute inset-[-38.47%_-24.97%] block max-w-none" />
+      </div>
+      {/* 캐릭터는 카드 바닥에 붙이고, 이름·설명은 그 위에 겹쳐 표시 */}
       {character.imageUrl && (
         <img
           src={character.imageUrl}
           alt={`${character.name} 캐릭터`}
-          className="pointer-events-none absolute inset-0 block size-full max-w-none object-cover"
+          className="pointer-events-none absolute bottom-0 left-1/2 block size-[156px] max-w-none -translate-x-1/2 object-contain"
         />
       )}
-      <div className="absolute top-0 left-0 flex w-full flex-col gap-[5.188px] px-[13.836px] py-[12.106px]">
+      <div className="relative flex w-full flex-col gap-[5.188px] px-[13.836px] pt-[12.106px]">
         <h3
           className="text-[15.565px] font-semibold tracking-[0.6226px] whitespace-nowrap"
           style={{ color: character.titleColor }}

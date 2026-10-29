@@ -1,11 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 
+import cardBg from "../../../assets/icons/character-card-bg-large.svg";
 import { getAnalyses, getAnalysisReport } from "../../../api/analysis";
 import { getCharacterImageUrls } from "../../../api/character";
+import { CHARACTER_STYLES } from "../../../constants/report";
 
-const TITLE_COLOR = "#3d465d";
+// 배경(그라데이션 + 위쪽 흰 물결)은 프론트에서 그리고, 배경 투명 캐릭터 이미지를 아래쪽에 올림
+const CARD_STYLE = CHARACTER_STYLES.me;
 
-// 카드 이미지는 배경까지 포함 (186 x 229 비율). 위쪽 공백에 이름·설명을 겹쳐 띄움
 const loadCharacter = async ({ recordingId, createdAt }) => {
   const [analysis, imageUrls] = await Promise.all([
     getAnalysisReport(recordingId),
@@ -24,7 +26,6 @@ const loadCharacter = async ({ recordingId, createdAt }) => {
     image: imageUrls.SELF,
   };
 };
-
 
 const SIDE_SCALE = 130 / 186;
 const POSITIONS = {
@@ -54,24 +55,32 @@ const CharacterCard = ({ character, offset, dragX, isDragging, onSelect }) => {
         transform: `translateX(${dragX}px) ${baseTransform}`,
         opacity: isVisible ? 1 : 0,
         pointerEvents: isVisible ? "auto" : "none",
+        backgroundImage: CARD_STYLE.background,
       }}
     >
       <div
         className="absolute inset-0 transition-[filter] duration-500"
         style={{ filter: isActive ? "blur(0px)" : "blur(2.56px)" }}
       >
+        <div className="absolute top-[-1.12px] left-[-1px] h-[124px] w-[191px]">
+          <img
+            src={cardBg}
+            alt=""
+            className="absolute inset-[-38.47%_-24.97%] block max-w-none"
+          />
+        </div>
+        {/* 캐릭터는 카드 바닥에 붙이고, 이름·설명은 그 위에 겹쳐 표시 */}
         <img
           src={character.image}
           alt={isActive ? `${character.name} 캐릭터` : ""}
           draggable={false}
-          className="pointer-events-none absolute inset-0 block size-full max-w-none object-cover"
+          className="pointer-events-none absolute bottom-0 left-1/2 block size-[181px] max-w-none -translate-x-1/2 object-contain"
         />
-
-        <div className="absolute top-0 left-0 flex w-full flex-col gap-[6px] px-[16px] py-[14px]">
+        <div className="relative flex w-full flex-col gap-[6px] px-[16px] pt-[14px]">
           <div className="flex w-full items-center justify-between whitespace-nowrap">
             <h3
               className={`font-bold transition-[font-size] duration-500 ${isActive ? "text-[16.083px] tracking-[0.6433px]" : "text-[18px] tracking-[0.72px]"}`}
-              style={{ color: TITLE_COLOR }}
+              style={{ color: CARD_STYLE.titleColor }}
             >
               {character.name}
             </h3>
@@ -165,7 +174,9 @@ const CharacterCarousel = () => {
     return (
       <div className="flex h-[263px] w-[338px] justify-center">
         <div className="flex h-[229px] w-[186px] items-center justify-center rounded-[16px] border-[0.893px] border-[#eee] bg-white shadow-[0px_3.574px_10.454px_0px_rgba(0,0,0,0.05),0px_0px_42.62px_0px_rgba(0,0,0,0.05)]">
-          <p className="text-caption text-[#595959]">아직 분석된 대화가 없어요</p>
+          <p className="text-caption text-[#595959]">
+            아직 분석된 대화가 없어요
+          </p>
         </div>
       </div>
     );

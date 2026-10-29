@@ -88,7 +88,7 @@ export const METRIC_LABELS = {
 // PERCENT 지표는 전체 발화 비율이 아니라 관찰된 정도 (API 명세 안내 문구)
 export const PERCENT_METRIC_CAPTION = "이번 대화에서 해당 표현이 관찰된 정도예요.";
 
-// 캐릭터 카드 글자색 · 이미지 생성 전 배경 (나/상대 고정)
+// 캐릭터 카드 글자색 · 배경 그라데이션 (나/상대 고정, 캐릭터별 색상 API 나오면 교체)
 export const CHARACTER_STYLES = {
   me: {
     titleColor: "#3d465d",
