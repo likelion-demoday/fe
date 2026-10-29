@@ -1,11 +1,14 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { googleLogin } from "../../api/auth";
+import useAuthStore from "../../store/authStore";
 
 function GoogleCallbackPage() {
   const { hash } = useLocation();
   const searchParams = new URLSearchParams(hash.slice(1));
   const navigate = useNavigate();
+  const clearAuthData = useAuthStore((state) => state.clearAuthData);
+  const setAuthData = useAuthStore((state) => state.setAuthData);
   const [errorMessage, setErrorMessage] = useState("");
   const isRequested = useRef(false); // 백엔드로 요청 두 번 보내기 방지용
   const [expectedState] = useState(() => sessionStorage.getItem("googleOAuthState"));
@@ -38,6 +41,13 @@ function GoogleCallbackPage() {
           throw new Error("로그인 요청 정보가 일치하지 않습니다. 로그인 화면에서 다시 시도해주세요.");
         }
         const data = await googleLogin(idToken);
+        // 신규 회원은 토큰 대신 registerToken → 온보딩(닉네임·약관) 후 가입
+        if (data?.isNewUser) {
+          clearAuthData();
+          setAuthData({ registerToken: data.registerToken });
+          navigate("/onboarding/nickname", { replace: true });
+          return;
+        }
         if (!data?.accessToken || !data?.refreshToken) {
           throw new Error("로그인 응답에 토큰이 없습니다.");
         }
@@ -50,7 +60,7 @@ function GoogleCallbackPage() {
       }
     };
     login();
-  }, [idToken, expectedNonce, callbackError, navigate]);
+  }, [idToken, expectedNonce, callbackError, navigate, clearAuthData, setAuthData]);
 
   return (
     <div className="flex h-screen w-full flex-col items-center justify-center gap-4 px-4">

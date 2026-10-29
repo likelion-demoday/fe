@@ -10,7 +10,7 @@ const MAX_FRAME_SEC = 1 / 30;
 const SLEEP_SPEED = 8; 
 const SLEEP_AFTER_SEC = 0.6;
 
-const KICK_UP_MIN = 300;
+const KICK_UP_MIN = 500;
 const KICK_UP_RANGE = 110;
 const KICK_SIDE = 150;
 const NEIGHBOR_JOLT_RATIO = 0.45;

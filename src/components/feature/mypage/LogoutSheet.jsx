@@ -4,8 +4,7 @@ import accountExitImage from "../../../assets/images/account-exit.png";
 const LogoutSheet = ({ onClose, onLogout, isLoggingOut = false, error }) => (
   <BottomSheet
     title="로그아웃"
-    characterSrc={accountExitImage}
-    characterClassName="pointer-events-none block size-full object-cover"
+    image={{ src: accountExitImage, className: "inset-0 size-full object-cover" }}
     onClose={onClose}
     footer={
       <>
