@@ -30,13 +30,13 @@ const BottomSheet = ({
   }, []);
 
   return createPortal(
-    <div className="fixed inset-x-0 top-0 z-50 mx-auto flex h-dvh w-full max-w-[390px] items-end justify-center overflow-hidden overscroll-none" role="dialog" aria-modal="true">
+    <div className="fixed inset-x-0 top-0 z-50 flex h-dvh w-full items-end justify-center overflow-hidden overscroll-none" role="dialog" aria-modal="true">
       <div
         className="absolute inset-0 bg-[rgba(0,0,0,0.3)] backdrop-blur-[2px]"
         onClick={onClose}
         aria-hidden="true"
       />
-      <div className="relative flex h-[539px] max-h-[calc(100dvh-16px)] w-full max-w-[390px] flex-col gap-[20px] overflow-hidden rounded-t-[32px] bg-white px-[24px] pt-[24px] pb-[max(30px,env(safe-area-inset-bottom))]">
+      <div className="relative flex h-[539px] max-h-[calc(100dvh-16px)] w-full sm:max-w-[390px] flex-col gap-[20px] overflow-hidden rounded-t-[32px] bg-white px-[24px] pt-[24px] pb-[max(30px,env(safe-area-inset-bottom))]">
         <div className={`flex min-h-0 w-full flex-1 flex-col ${headerGap}`}>
           <div className="flex w-full shrink-0 justify-end">
             <button type="button" onClick={onClose} aria-label="닫기" className="press-control size-[24px] shrink-0 rounded-[6px]">
