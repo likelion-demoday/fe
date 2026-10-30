@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Navigate, useLocation, useNavigate } from "react-router-dom";
 
 import { getAnalysisReport } from "../../api/analysis";
 import { getRecordingStatus } from "../../api/recording";
@@ -79,6 +79,9 @@ const AnalysisLoading = () => {
 
   const goToHome = () => navigate("/home", { replace: true });
   const goToReport = () => navigate(`/report/${state.recordingId}`, { replace: true });
+
+  // 새로고침 등으로 화면 이동 정보(state)가 사라지면 상태 조회를 못 해 "분석중"에 멈춤 → 홈에서 이어하기로 다시 진입
+  if (!state?.recordingId) return <Navigate to="/home" replace />;
 
   return (
     <main className="relative mx-auto h-[min(844px,100dvh)] w-[390px] overflow-hidden bg-white">
