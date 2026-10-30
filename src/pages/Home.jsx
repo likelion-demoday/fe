@@ -43,7 +43,8 @@ const Home = () => {
     // 휴대폰처럼 화면이 844px보다 짧으면 화면 높이에 맞춰 줄여서 하단 버튼이 항상 보이게 함
     <div className="relative mx-auto h-[min(844px,100dvh)] w-[390px] bg-white">
       {/* 하단 고정 버튼에 마지막 내용이 가리지 않도록 아래 여백 확보 */}
-      <main className="flex h-full w-full flex-col gap-[20px] overflow-x-hidden overflow-y-auto no-scrollbar px-[24px] pt-[16px] pb-[120px]">
+      {/* isolate: 캐릭터 카드의 z-index가 이 영역 안에서만 작동해서 하단 고정 버튼 아래로 지나가게 함 */}
+      <main className="isolate flex h-full w-full flex-col gap-[20px] overflow-x-hidden overflow-y-auto no-scrollbar px-[24px] pt-[16px] pb-[120px]">
         <AppHeader />
 
         <div className="flex w-full flex-col gap-[36px]">
