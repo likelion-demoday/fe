@@ -76,13 +76,14 @@ const CharacterCard = ({ character, offset, dragX, isDragging, onSelect }) => {
           className="pointer-events-none absolute bottom-0 left-1/2 block size-[181px] max-w-none -translate-x-1/2 object-contain"
         />
         <div className="relative flex w-full flex-col gap-[6px] px-[16px] pt-[14px]">
+          {/* 이름·설명은 서버가 길이를 줄이지 않으므로 이름은 한 줄 말줄임, 설명은 두 줄까지 (캐릭터 이미지를 가리지 않게) */}
           <h3
-            className={`font-bold whitespace-nowrap transition-[font-size] duration-500 ${isActive ? "text-[16.083px] tracking-[0.6433px]" : "text-[18px] tracking-[0.72px]"}`}
+            className={`truncate font-bold transition-[font-size] duration-500 ${isActive ? "text-[16.083px] tracking-[0.6433px]" : "text-[18px] tracking-[0.72px]"}`}
             style={{ color: CARD_STYLE.titleColor }}
           >
             {character.name}
           </h3>
-          <p className="w-[154px] text-[11.615px] font-medium tracking-[0.3485px] break-keep text-[#595959]">
+          <p className="line-clamp-2 w-[154px] text-[11.615px] font-medium tracking-[0.3485px] break-keep text-[#595959]">
             {character.description}
           </p>
         </div>

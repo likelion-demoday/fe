@@ -235,7 +235,7 @@ const ReportPage = () => {
 
   if (!report) {
     return (
-      <main className="mx-auto flex h-[844px] w-[390px] flex-col bg-white px-[24px] py-[16px]">
+      <main className="mx-auto flex h-[min(844px,100dvh)] w-[390px] flex-col bg-white px-[24px] py-[16px]">
         <AppHeader />
         <div className="flex flex-1 flex-col items-center justify-center gap-[20px]">
           <p className="text-title-medium text-center whitespace-pre-line text-[#595959]">{message ?? "보고서를 불러오는 중이에요"}</p>
@@ -256,7 +256,7 @@ const ReportPage = () => {
   const { Component: SectionContent, gap } = SECTION_CONTENT[currentSection];
 
   return (
-    <main className="mx-auto flex h-[844px] w-[390px] flex-col bg-white">
+    <main className="mx-auto flex h-[min(844px,100dvh)] w-[390px] flex-col bg-white">
       <div className="no-scrollbar flex min-h-0 flex-1 flex-col gap-[20px] overflow-x-hidden overflow-y-auto px-[24px] py-[16px]">
         <AppHeader />
 

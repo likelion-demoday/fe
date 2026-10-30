@@ -49,11 +49,20 @@ const countOf = (qualitative, role, type) => findMetric(qualitative, role, type,
 
 const percentOf = (qualitative, role, type) => findMetric(qualitative, role, type, "PERCENT")?.value ?? 0;
 
+// evidenceQuotes(대표 발화, 최대 3개) → 칩에 표시할 문장. 화면에는 보정된 displayContent 사용
+const quoteTexts = (quotes = []) =>
+  quotes.map(({ displayContent, originalContent }) => displayContent || originalContent).filter(Boolean);
+
 const countItems = (qualitative, role, types) =>
   types
     .map((type) => findMetric(qualitative, role, type, "COUNT"))
     .filter(Boolean)
-    .map((metric) => ({ title: metricTitle(metric), count: metric.value, description: metric.description ?? "" }));
+    .map((metric) => ({
+      title: metricTitle(metric),
+      count: metric.value,
+      description: metric.description ?? "",
+      examples: quoteTexts(metric.evidenceQuotes),
+    }));
 
 const percentAxes = (qualitative, role, types) =>
   types
@@ -145,11 +154,11 @@ const toInterest = (role, partnerRole, qualitative, chipsSpec) => {
     summary: { title: INTEREST_TITLES[asked ? "asked" : "answered"], description: insight.description ?? "" },
     groups: INTEREST_GROUPS.map((group) => ({
       title: group.title,
-      items: pickByCategory(patterns, group.patterns).map(({ title, count, description }) => ({
+      items: pickByCategory(patterns, group.patterns).map(({ title, count, description, evidenceQuotes }) => ({
         title,
         count,
         description,
-        examples: [],
+        examples: quoteTexts(evidenceQuotes),
       })),
       summary: pickByCategory(insight.observations, group.observations)[0],
     })).filter(({ items }) => items.length > 0),
@@ -195,7 +204,7 @@ const toBehavior = (role, qualitative, { groups, chips }) => {
   const groupList = groups
     .map(({ title, types, insights }) => ({
       title,
-      items: countItems(qualitative, role, types).map((item) => ({ ...item, examples: [] })),
+      items: countItems(qualitative, role, types),
       summary: scenarioSummary(qualitative, role, insights),
     }))
     .filter(({ items }) => items.length > 0);
@@ -322,12 +331,43 @@ const PARENT_CHILD_BEHAVIOR = {
 };
 const PARENT_CHILD_INTENSITY = ["ADVICE", "ASSERTIVE_EXPRESSION", "EMOTION_CHECK", "SOFTENING_EXPRESSION"];
 
+// 서버 분석 문장에 화자 역할 코드(SELF, PARTNER 등)가 그대로 섞여 오는 경우가 있어 닉네임으로 바꿈
+const ROLE_TOKEN = /(?<![A-Za-z_])(SELF|PARTNER|FRIEND|PARENT|CHILD)(?![A-Za-z_])([가는를와]?)/g;
+const ENUM_VALUE = /^[A-Z0-9_]+$/;
+// 실제 발화는 바꾸지 않음
+const RAW_TEXT_KEYS = new Set(["originalContent", "displayContent"]);
+// 받침 있는 이름 뒤에서는 가/는/를/와 → 이/은/을/과
+const BATCHIM_PARTICLES = { 가: "이", 는: "은", 를: "을", 와: "과" };
+
+const hasBatchim = (name) => {
+  const code = name.charCodeAt(name.length - 1) - 0xac00;
+  return code >= 0 && code <= 11171 && code % 28 !== 0;
+};
+
+const replaceRoleTokens = (value, nameOf, key) => {
+  if (typeof value === "string") {
+    if (RAW_TEXT_KEYS.has(key) || ENUM_VALUE.test(value)) return value;
+    return value.replace(ROLE_TOKEN, (_, role, particle) => {
+      const name = nameOf(role);
+      return name + (particle && hasBatchim(name) ? BATCHIM_PARTICLES[particle] : particle);
+    });
+  }
+  if (Array.isArray(value)) return value.map((item) => replaceRoleTokens(item, nameOf, key));
+  if (value && typeof value === "object") {
+    return Object.fromEntries(Object.entries(value).map(([k, v]) => [k, replaceRoleTokens(v, nameOf, k)]));
+  }
+  return value;
+};
+
 // GET /api/v1/analyses/{id} 응답의 report → 보고서 화면 데이터
 export const toReportView = (report) => {
   const recordingInfo = report.recordingInfo ?? {};
   const quantitative = report.quantitativeAnalysis ?? {};
-  const qualitative = report.qualitativeAnalysis ?? {};
   const { me, partner } = resolveRoles(recordingInfo.speakers);
+  // SELF 또는 내 역할 코드면 내 닉네임, 그 외 역할 코드는 상대 닉네임
+  const qualitative = replaceRoleTokens(report.qualitativeAnalysis ?? {}, (role) =>
+    role === "SELF" || role === me?.speakerRole ? me?.speakerName ?? "나" : partner?.speakerName ?? "상대",
+  );
   const meRole = me?.speakerRole;
   const partnerRole = partner?.speakerRole;
   const partnerName = partner?.speakerName ?? "상대";

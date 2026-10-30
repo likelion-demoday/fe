@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Navigate, useLocation, useNavigate } from "react-router-dom";
 
 import { getSpeakerSamples, mapSpeakers } from "../../api/recording";
 import { getMe } from "../../api/user";
@@ -224,8 +224,11 @@ const AnalysisSpeaker = () => {
     }
   };
 
+  // 새로고침 등으로 화면 이동 정보(state)가 사라지면 녹음을 알 수 없음 → 홈에서 이어하기로 다시 진입
+  if (!recordingId) return <Navigate to="/home" replace />;
+
   return (
-    <main className="relative mx-auto flex h-[844px] w-[390px] flex-col gap-[30px] overflow-y-auto no-scrollbar bg-white px-[24px] py-[16px]">
+    <main className="relative mx-auto flex h-[min(844px,100dvh)] w-[390px] flex-col gap-[30px] overflow-y-auto no-scrollbar bg-white px-[24px] py-[16px]">
       <AppHeader title="대화 분석" />
 
       <section className="flex w-full flex-col gap-[36px]">

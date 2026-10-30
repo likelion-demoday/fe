@@ -107,15 +107,15 @@ const AnalysisStart = () => {
 
   if (upload) {
     return (
-      <main className="mx-auto flex h-[844px] w-[390px] flex-col justify-between bg-white">
-        <div className="flex w-full flex-col items-center gap-[84px]">
+      <main className="mx-auto flex h-[min(844px,100dvh)] w-[390px] flex-col bg-white">
+        <div className="no-scrollbar flex min-h-0 w-full flex-1 flex-col items-center gap-[84px] overflow-y-auto">
           <div className="w-full px-[24px] py-[16px]">
             <AppHeader title="대화 분석" onBack={cancelUpload} onLogoClick={() => navigate("/home")} />
           </div>
           <UploadCard {...upload} />
         </div>
 
-        <div className="w-full px-[24px] pb-[30px]">
+        <div className="w-full shrink-0 px-[24px] pt-[20px] pb-[30px]">
           <Button
             text="다음"
             disabled={!upload.recordingId}
@@ -128,7 +128,7 @@ const AnalysisStart = () => {
   }
 
   return (
-    <main className="mx-auto flex h-[844px] w-[390px] flex-col gap-[30px] overflow-y-auto no-scrollbar bg-white px-[24px] py-[16px]">
+    <main className="mx-auto flex h-[min(844px,100dvh)] w-[390px] flex-col gap-[30px] overflow-y-auto no-scrollbar bg-white px-[24px] py-[16px]">
       <AppHeader title="대화 분석" onBack={() => navigate(-1)} onLogoClick={() => navigate("/home")} />
 
       <div className="flex w-full flex-col gap-[60px]">

@@ -26,14 +26,15 @@ const ReportCharacterCard = ({ nickname, nicknameColor, character }) => (
         />
       )}
       <div className="relative flex w-full flex-col gap-[5.188px] px-[13.836px] pt-[12.106px]">
+        {/* 이름·설명은 서버가 길이를 줄이지 않으므로 이름은 한 줄 말줄임, 설명은 두 줄까지 (캐릭터 이미지를 가리지 않게) */}
         <h3
-          className="text-[15.565px] font-semibold tracking-[0.6226px] whitespace-nowrap"
+          className="truncate text-[15.565px] font-semibold tracking-[0.6226px]"
           style={{ color: character.titleColor }}
         >
           {character.name}
         </h3>
         {/* description: 줄 단위 배열. 한 줄이 길면 카드 폭에 맞춰 줄바꿈 */}
-        <p className="text-[11.241px] font-medium tracking-[0.3372px] break-keep text-[#595959]">
+        <p className="line-clamp-2 text-[11.241px] font-medium tracking-[0.3372px] break-keep text-[#595959]">
           {character.description.map((line, index) => (
             <span key={index} className="block">
               {line}
