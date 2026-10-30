@@ -13,25 +13,85 @@
   }
 }
 
-@keyframes analysis-float {
-  0%,
-  100% {
-    transform: translateY(0);
+/* 대화 분석 로딩 모션 (LoadingMotion) - 0~18% 왼쪽 점, 18~54% S자 그리기, 54~72% 오른쪽 점 */
+@keyframes loading-pop-left {
+  0% {
+    opacity: 1;
+    transform: translateY(0) scale(0);
   }
-  50% {
-    transform: translateY(-14px);
+  6% {
+    opacity: 1;
+    transform: translateY(-2.2px) scale(1.2, 1.2);
+    animation-timing-function: ease-in;
+  }
+  12% {
+    transform: translateY(0) scale(1.18, 0.78);
+  }
+  18% {
+    transform: translateY(0) scale(1, 1);
+  }
+  88% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  95%,
+  100% {
+    opacity: 0;
+    transform: scale(0.7);
   }
 }
 
-@keyframes analysis-shadow {
+@keyframes loading-draw {
   0%,
-  100% {
-    transform: scaleX(1);
-    opacity: 0.35;
+  18% {
+    stroke-dashoffset: 1;
+    animation-timing-function: cubic-bezier(0.65, 0, 0.35, 1);
   }
-  50% {
-    transform: scaleX(0.75);
-    opacity: 0.2;
+  54%,
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes loading-fade {
+  0%,
+  88% {
+    opacity: 1;
+  }
+  95%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes loading-pop-right {
+  0%,
+  53% {
+    opacity: 0;
+    transform: scale(0);
+  }
+  54% {
+    opacity: 1;
+    transform: translateY(0) scale(0);
+  }
+  60% {
+    transform: translateY(-2.2px) scale(1.2, 1.2);
+    animation-timing-function: ease-in;
+  }
+  66% {
+    transform: translateY(0) scale(1.18, 0.78);
+  }
+  72% {
+    transform: translateY(0) scale(1, 1);
+  }
+  88% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  95%,
+  100% {
+    opacity: 0;
+    transform: scale(0.7);
   }
 }
 
@@ -56,6 +116,24 @@
 }
 
 @layer base {
+  html,
+  body {
+    width: 100%;
+    overflow-x: hidden;
+    overscroll-behavior-x: none;
+  }
+
+  #root {
+    width: 100%;
+    overflow-x: clip;
+  }
+
+  #root > * {
+    max-width: 100%;
+    overflow-x: hidden;
+    overscroll-behavior-x: none;
+  }
+
   body {
     font-family: "SUITE", sans-serif;
     font-weight: 500;
