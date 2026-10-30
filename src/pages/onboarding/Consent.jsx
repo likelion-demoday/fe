@@ -116,8 +116,8 @@ const Consent = () => {
   }
 
   return (
-    <div className="mx-auto flex h-[844px] w-[390px] overflow-y-auto no-scrollbar flex-col items-start justify-between bg-white">
-      <div className="flex w-full flex-col items-center gap-[80px] p-[16px]">
+    <div className="mx-auto flex h-[min(844px,100dvh)] w-[390px] flex-col items-start bg-white">
+      <div className="no-scrollbar flex min-h-0 w-full flex-1 flex-col items-center gap-[80px] overflow-y-auto p-[16px]">
         <div className="flex w-full flex-col items-start">
           <BackButton onClick={handleBack} />
         </div>
@@ -180,7 +180,7 @@ const Consent = () => {
         </div>
       </div>
 
-      <div className="flex w-full flex-col items-center justify-center gap-[24px] px-[16px] pt-[10px] pb-[30px]">
+      <div className="flex w-full shrink-0 flex-col items-center justify-center gap-[24px] px-[16px] pt-[10px] pb-[30px]">
         <div className="flex items-center justify-center gap-[12px]">
           <span className="size-[8px] rounded-[99px] bg-[#454545]" />
           <span className="size-[8px] rounded-[99px] bg-[#454545]" />

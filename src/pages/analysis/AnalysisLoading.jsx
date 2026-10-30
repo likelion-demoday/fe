@@ -81,7 +81,7 @@ const AnalysisLoading = () => {
   const goToReport = () => navigate(`/report/${state.recordingId}`, { replace: true });
 
   return (
-    <main className="relative mx-auto h-[844px] w-[390px] overflow-hidden bg-white">
+    <main className="relative mx-auto h-[min(844px,100dvh)] w-[390px] overflow-hidden bg-white">
       <div className="px-[24px] py-[16px]">
         <AppHeader />
       </div>
