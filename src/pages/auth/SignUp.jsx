@@ -52,7 +52,7 @@ const SignUp = () => {
   };
 
   return (
-    <div className="mx-auto flex h-[844px] w-[390px] overflow-y-auto no-scrollbar flex-col items-start gap-[30px] bg-white p-[16px]">
+    <div className="mx-auto flex h-[min(844px,100dvh)] w-[390px] overflow-y-auto no-scrollbar flex-col items-start gap-[30px] bg-white p-[16px]">
       <BackButton onClick={handleBack} />
 
       <div className="flex w-full flex-col items-center gap-[80px]">

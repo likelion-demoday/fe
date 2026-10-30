@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+// 개발 서버에서는 같은 주소로 요청하고 vite.config.js의 프록시가 API 서버로 전달 (CORS 우회)
+const BASE_URL = import.meta.env.DEV ? "" : import.meta.env.VITE_API_BASE_URL;
 
 const api = axios.create({
   baseURL: BASE_URL,

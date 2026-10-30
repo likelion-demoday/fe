@@ -19,9 +19,9 @@ const InterestItem = ({ title, count, description, examples }) => (
     <p className="text-[12px] leading-[18px] font-medium tracking-[0.24px] break-keep text-[#6b6b6b]">{description}</p>
     {examples.length > 0 && (
       <div className="flex flex-wrap items-start gap-x-[16px] gap-y-[8px]">
-        {/* 첫 번째 예시를 대표 예시로 강조 */}
+        {/* 첫 번째 예시를 대표 예시로 강조. 실제 발화 문장이라 길면 줄바꿈, 같은 문장이 반복될 수 있어 index로 key */}
         {examples.map((example, index) => (
-          <KeywordPill key={example} label={example} highlighted={index === 0} />
+          <KeywordPill key={index} label={example} highlighted={index === 0} wrap />
         ))}
       </div>
     )}

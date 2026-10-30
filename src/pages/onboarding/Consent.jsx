@@ -117,8 +117,8 @@ const Consent = ({ accountMode = false }) => {
   }
 
   return (
-    <div className="mx-auto flex h-[844px] w-[390px] overflow-y-auto no-scrollbar flex-col items-start justify-between bg-white">
-      <div className={`flex w-full flex-col items-center gap-[80px] ${accountMode ? "px-[24px] py-[16px]" : "p-[16px]"}`}>
+    <div className="mx-auto flex h-[min(844px,100dvh)] w-[390px] flex-col items-start bg-white">
+      <div className={`no-scrollbar flex min-h-0 w-full flex-1 flex-col items-center gap-[80px] overflow-y-auto ${accountMode ? "px-[24px] py-[16px]" : "p-[16px]"}`}>
         <div className="flex w-full flex-col items-start">
           {accountMode ? (
             <MyPageHeader title="개인정보 동의" titleClassName="text-heading" onBack={handleBack} />
@@ -183,7 +183,7 @@ const Consent = ({ accountMode = false }) => {
         </div>
       </div>
 
-      <div className="flex w-full flex-col items-center justify-center gap-[24px] px-[16px] pt-[10px] pb-[30px]">
+      <div className="flex w-full shrink-0 flex-col items-center justify-center gap-[24px] px-[16px] pt-[10px] pb-[30px]">
         <div className="flex h-[8px] items-center justify-center gap-[12px]">
           {!accountMode && <>
             <span className="size-[8px] rounded-[99px] bg-[#454545]" />
