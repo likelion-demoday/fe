@@ -13,6 +13,7 @@ import MarketingConsent from "../mypage/MarketingConsent";
 import VoiceInformationConsent from "../mypage/VoiceInformationConsent";
 import ServiceTerms from "../mypage/ServiceTerms";
 import PersonalInformationConsent from "../mypage/PersonalInformationConsent";
+import MyPageHeader from "../../components/feature/mypage/MyPageHeader";
 
 const AGREEMENT_PAGES = {
   terms: ServiceTerms,
@@ -28,9 +29,9 @@ const AGREEMENTS = [
   { id: "marketing", label: "[선택] 마케팅 정보 수신 동의", required: false },
 ];
 
-const CheckCircle = ({ checked }) => {
+const CheckCircle = ({ checked, accountMode = false }) => {
   if (checked) {
-    return <span className="size-[20px] shrink-0 rounded-full bg-[#454545]" />;
+    return <span className={`size-[20px] shrink-0 rounded-full ${accountMode ? "bg-[#6b6b6b]" : "bg-[#454545]"}`} />;
   }
   return (
     <span className="relative size-[20px] shrink-0">
@@ -51,7 +52,7 @@ const Divider = () => (
   />
 );
 
-const Consent = () => {
+const Consent = ({ accountMode = false }) => {
   const { email, password, nickname, registerToken } = useAuthStore();
   const clearAuthData = useAuthStore((state) => state.clearAuthData);
   const [errorMessage, setErrorMessage] = useState("");
@@ -75,8 +76,8 @@ const Consent = () => {
   };
 
   const handleBack = () => {
-    console.log("뒤로가기 버튼 클릭");
-    navigate(-1);
+    if (accountMode) navigate("/mypage/account");
+    else navigate(-1);
   };
 
   const handleNext = async () => {
@@ -117,18 +118,20 @@ const Consent = () => {
 
   return (
     <div className="mx-auto flex h-[min(844px,100dvh)] w-[390px] flex-col items-start bg-white">
-      <div className="no-scrollbar flex min-h-0 w-full flex-1 flex-col items-center gap-[80px] overflow-y-auto p-[16px]">
+      <div className={`no-scrollbar flex min-h-0 w-full flex-1 flex-col items-center gap-[80px] overflow-y-auto ${accountMode ? "px-[24px] py-[16px]" : "p-[16px]"}`}>
         <div className="flex w-full flex-col items-start">
-          <BackButton onClick={handleBack} />
+          {accountMode ? (
+            <MyPageHeader title="개인정보 동의" titleClassName="text-heading" onBack={handleBack} />
+          ) : <BackButton onClick={handleBack} />}
         </div>
 
         <div className="flex w-full flex-col items-start gap-[60px] px-[16px]">
-          <h1 className="font-['SUITE',sans-serif] text-[24px] font-bold whitespace-nowrap text-black">
+          {!accountMode && <h1 className="font-['SUITE',sans-serif] text-[24px] font-bold whitespace-nowrap text-black">
             <span className="block leading-normal">서비스 이용을 위해</span>
             <span className="block leading-normal">
               아래의 정보 활용에 동의해주세요
             </span>
-          </h1>
+          </h1>}
 
           <div className="flex w-full flex-col items-start gap-[16px]">
             <button
@@ -137,7 +140,7 @@ const Consent = () => {
               aria-pressed={allChecked}
               className="flex items-center gap-[12px]"
             >
-              <CheckCircle checked={allChecked} />
+              <CheckCircle checked={allChecked} accountMode={accountMode} />
               <span className="font-['SUITE',sans-serif] text-[18px] font-semibold tracking-[0.72px] whitespace-nowrap text-[#262626]">
                 전체 동의
               </span>
@@ -146,14 +149,14 @@ const Consent = () => {
             {AGREEMENTS.map(({ id, label }, index) => (
               <div key={id} className="contents">
                 {index === 0 && <Divider />}
-                <div className="flex w-full items-center justify-between">
+                <div className={`flex items-center justify-between ${accountMode ? "w-[326px]" : "w-full"}`}>
                   <button
                     type="button"
                     onClick={() => toggle(id)}
                     aria-pressed={Boolean(checked[id])}
                     className="flex items-center gap-[12px]"
                   >
-                    <CheckCircle checked={Boolean(checked[id])} />
+                    <CheckCircle checked={Boolean(checked[id])} accountMode={accountMode} />
                     <span className="font-['SUITE',sans-serif] text-[16px] font-semibold whitespace-nowrap text-[#262626]">
                       {label}
                     </span>
@@ -181,18 +184,22 @@ const Consent = () => {
       </div>
 
       <div className="flex w-full shrink-0 flex-col items-center justify-center gap-[24px] px-[16px] pt-[10px] pb-[30px]">
-        <div className="flex items-center justify-center gap-[12px]">
-          <span className="size-[8px] rounded-[99px] bg-[#454545]" />
-          <span className="size-[8px] rounded-[99px] bg-[#454545]" />
-          <span className="size-[8px] rounded-[99px] bg-[#454545]" />
+        <div className="flex h-[8px] items-center justify-center gap-[12px]">
+          {!accountMode && <>
+            <span className="size-[8px] rounded-[99px] bg-[#454545]" />
+            <span className="size-[8px] rounded-[99px] bg-[#454545]" />
+            <span className="size-[8px] rounded-[99px] bg-[#454545]" />
+          </>}
         </div>
         <div className="flex w-full max-w-[358px] flex-col items-start gap-[4px]">
           {errorMessage && <p className="...">{errorMessage}</p>}
           <Button
-            text="다음"
-            onClick={handleNext}
-            disabled={!requiredChecked}
-            className="flex h-[49px] w-full max-w-[358px] items-center justify-center rounded-[12px] bg-[#262626] px-[26px] py-[14px] font-['Pretendard',sans-serif] text-[18px] font-semibold tracking-[-0.36px] text-white disabled:bg-[#d9d9d9]"
+            text={accountMode ? "완료" : "다음"}
+            onClick={accountMode ? handleBack : handleNext}
+            disabled={!accountMode && !requiredChecked}
+            className={accountMode
+              ? "flex w-full max-w-[358px] items-center justify-center rounded-[16px] bg-[#262626] px-[26px] py-[16px] text-[20px] font-semibold tracking-[0.8px] text-white"
+              : "flex h-[49px] w-full max-w-[358px] items-center justify-center rounded-[12px] bg-[#262626] px-[26px] py-[14px] font-['Pretendard',sans-serif] text-[18px] font-semibold tracking-[-0.36px] text-white disabled:bg-[#d9d9d9]"}
           />
         </div>
       </div>

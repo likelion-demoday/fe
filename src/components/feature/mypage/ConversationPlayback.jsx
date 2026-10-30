@@ -14,7 +14,7 @@ const formatTime = (value) => {
   return `${String(Math.floor(seconds / 60)).padStart(2, "0")}:${String(seconds % 60).padStart(2, "0")}`;
 };
 
-const ConversationPlayback = ({ conversation, onClose }) => {
+const ConversationPlayback = ({ conversation, onClose, loading = false, loadError = "", onRetry }) => {
   const audioRef = useRef(null);
   const [playing, setPlaying] = useState(false);
   const [elapsed, setElapsed] = useState(0);
@@ -42,7 +42,7 @@ const ConversationPlayback = ({ conversation, onClose }) => {
     <main className="mx-auto flex h-[844px] w-[390px] flex-col justify-between bg-white">
       <div className="flex min-h-0 flex-1 flex-col items-center justify-between pb-[50px]">
         <div className="w-full px-[24px] py-[16px]">
-          <MyPageHeader title="대화 보관함" titleClassName="text-heading" />
+          <MyPageHeader title="대화 보관함" titleClassName="text-heading" onBack={onClose} />
         </div>
         <div className="flex flex-col items-center gap-[4px]">
           <p className="text-title-semibold text-[#262626]">{conversation.date}</p>
@@ -56,16 +56,21 @@ const ConversationPlayback = ({ conversation, onClose }) => {
           <div className="mt-[15px] w-full">
             <RecordingWaveform levels={LEVELS} head={elapsed > 0 && duration > 0 ? Math.floor(elapsed / duration * LEVELS.length) : -1} inactiveColor="#eee" />
           </div>
-          <RecordingControl variant="listen" active={playing} onClick={togglePlayback} disabled={!audioUrl} label={playing ? "녹음 일시정지" : "녹음 재생"} iconIncludesShadow>
+          <RecordingControl variant="listen" active={playing} onClick={togglePlayback} disabled={loading || !!loadError || !audioUrl} label={playing ? "녹음 일시정지" : "녹음 재생"} iconIncludesShadow>
             <img src={playIcon} alt="" className="pointer-events-none absolute left-[-54.56%] top-[-54.56%] w-[209.12%] max-w-none" />
           </RecordingControl>
         </div>
-        {(!audioUrl || error) && <p role="status" className="text-caption px-[24px] text-center text-[#787878]">{error || "재생할 음성 파일이 없어요."}</p>}
+        {(loading || !audioUrl || error || loadError) && (
+          <div className="text-caption px-[24px] text-center text-[#787878]">
+            <p role={loadError || error ? "alert" : "status"}>{loading ? "녹음을 불러오는 중..." : loadError || error || "재생할 음성 파일이 없어요."}</p>
+            {!loading && (loadError || error) && <button type="button" className="mt-[8px] underline" onClick={onRetry}>다시 시도</button>}
+          </div>
+        )}
       </div>
       <div className="w-full px-[24px] pb-[30px] pt-[20px]">
         <Button text="확인" onClick={onClose} className="flex w-full items-center justify-center rounded-[16px] bg-[#262626] px-[26px] py-[16px] text-[20px] font-semibold tracking-[0.8px] text-white" />
       </div>
-      {audioUrl && <audio ref={audioRef} src={audioUrl} preload="metadata" onLoadedMetadata={(event) => { if (Number.isFinite(event.currentTarget.duration)) setDuration(event.currentTarget.duration); }} onTimeUpdate={(event) => setElapsed(event.currentTarget.currentTime)} onPlay={() => setPlaying(true)} onPause={() => setPlaying(false)} onEnded={() => setPlaying(false)} onError={() => { setPlaying(false); setError("녹음을 불러오지 못했어요. 다시 시도해주세요."); }} />}
+      {audioUrl && <audio ref={audioRef} src={audioUrl} preload="metadata" onLoadStart={() => { setError(""); setPlaying(false); setElapsed(0); }} onLoadedMetadata={(event) => { if (Number.isFinite(event.currentTarget.duration)) setDuration(event.currentTarget.duration); }} onTimeUpdate={(event) => setElapsed(event.currentTarget.currentTime)} onPlay={() => setPlaying(true)} onPause={() => setPlaying(false)} onEnded={() => setPlaying(false)} onError={() => { setPlaying(false); setError("녹음을 불러오지 못했어요. 다시 시도해주세요."); }} />}
     </main>
   );
 };

@@ -116,6 +116,24 @@
 }
 
 @layer base {
+  html,
+  body {
+    width: 100%;
+    overflow-x: hidden;
+    overscroll-behavior-x: none;
+  }
+
+  #root {
+    width: 100%;
+    overflow-x: clip;
+  }
+
+  #root > * {
+    max-width: 100%;
+    overflow-x: hidden;
+    overscroll-behavior-x: none;
+  }
+
   body {
     font-family: "SUITE", sans-serif;
     font-weight: 500;
