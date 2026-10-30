@@ -3,12 +3,17 @@ import { getRecording, getRecordingAudio, getRecordings } from "../../api/record
 import RecordingArchive from "../../components/feature/mypage/RecordingArchive";
 import ConversationPlayback from "../../components/feature/mypage/ConversationPlayback";
 
+const RETENTION_MS = 3 * 24 * 60 * 60 * 1000;
+const isRecordingUnavailable = (recording) =>
+  recording.audioAvailable === false ||
+  Date.now() >= new Date(recording.createdAt).getTime() + RETENTION_MS;
+
 const mapRecording = (recording) => ({
   ...recording,
   id: recording.recordingId,
   date: new Date(recording.createdAt).toLocaleDateString("ko-KR"),
   durationMinutes: Math.round(recording.durationSeconds / 60),
-  statusLabel: recording.audioAvailable ? undefined : "재생할 음성 파일이 없어요",
+  disabled: isRecordingUnavailable(recording),
 });
 
 const SavedConversations = () => {
@@ -22,6 +27,17 @@ const SavedConversations = () => {
   const [playbackError, setPlaybackError] = useState("");
   const pending = useRef(false);
   const controllerRef = useRef(null);
+
+  useEffect(() => {
+    const expirations = recordings
+      .map((recording) => new Date(recording.createdAt).getTime() + RETENTION_MS)
+      .filter((expiration) => expiration > Date.now());
+    if (!expirations.length) return;
+    const timer = setTimeout(() => {
+      setRecordings((current) => [...current]);
+    }, Math.min(Math.min(...expirations) - Date.now(), 2147483647));
+    return () => clearTimeout(timer);
+  }, [recordings]);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -71,15 +87,22 @@ const SavedConversations = () => {
   };
 
   const selectRecording = async (id) => {
+    const recording = recordings.find((item) => item.recordingId === id);
+    if (!recording || isRecordingUnavailable(recording)) return;
     controllerRef.current?.abort();
     const controller = new AbortController();
     controllerRef.current = controller;
-    setSelected({ ...mapRecording(recordings.find((item) => item.recordingId === id)), audioUrl: undefined });
+    setSelected({ ...mapRecording(recording), audioUrl: undefined });
     setPlaybackLoading(true);
     setPlaybackError("");
     try {
       const detail = await getRecording(id, { signal: controller.signal });
       if (controller.signal.aborted) return;
+      if (isRecordingUnavailable({ ...recording, ...detail })) {
+        setRecordings((current) => current.map((item) => item.recordingId === id ? { ...item, audioAvailable: false } : item));
+        setSelected(null);
+        return;
+      }
       setSelected(mapRecording(detail));
       if (detail.audioAvailable && !detail.audioUrl) {
         const blob = await getRecordingAudio(id, { signal: controller.signal });
