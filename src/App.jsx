@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import ProtectedRoute from "./components/common/ProtectedRoute";
 import PublicOnlyRoute from "./components/common/PublicOnlyRoute";
 
@@ -80,8 +80,13 @@ function App() {
           path="/mypage/recordings/conversations"
           element={<SavedConversations />}
         />
-        <Route path="/mypage/recordings/reports" element={<ReportArchive />} />
+        <Route path="/recordings/reports" element={<ReportArchive />} />
+        <Route
+          path="/mypage/recordings/reports"
+          element={<Navigate to="/recordings/reports" replace />}
+        />
         <Route path="/mypage/account" element={<Account />} />
+        <Route path="/mypage/account/consent" element={<Consent accountMode />} />
         <Route path="/mypage/support" element={<Support />} />
         <Route path="/mypage/support/contact" element={<Contact />} />
         <Route path="/mypage/support/policies" element={<Policies />} />

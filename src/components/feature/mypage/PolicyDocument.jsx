@@ -1,13 +1,14 @@
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import MyPageHeader from "./MyPageHeader";
 
 const PolicyDocument = ({ title, description, sections, footer, compact = false, onBack }) => {
   const navigate = useNavigate();
+  const location = useLocation();
 
   return (
     <main className="mx-auto flex h-[844px] w-[390px] flex-col overflow-y-auto bg-white">
       <div className="shrink-0 px-[24px] py-[16px]">
-        <MyPageHeader title={title} titleClassName="text-heading" onBack={onBack || (() => navigate("/mypage/support/policies"))} />
+        <MyPageHeader title={title} titleClassName="text-heading" onBack={onBack || (() => location.state?.fromCreditPayment ? navigate(-1) : navigate("/mypage/support/policies"))} />
       </div>
       <article className={`mt-[20px] flex shrink-0 flex-col gap-[19px] px-[24px] pb-[42px] ${compact ? "font-['Noto_Sans_KR',sans-serif] text-[12.6px] leading-[1.58] font-normal" : "font-['SUIT',sans-serif] text-[14px] leading-[20px] font-medium tracking-[-0.14px]"}`}>
         {description && <p className="text-[#787878]">{description}</p>}

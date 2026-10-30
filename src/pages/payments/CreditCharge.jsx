@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { getMyCredits } from "../../api/credit";
 import { createPaymentOrder, getPaymentProducts, requestNicePay } from "../../api/payment";
 import AppHeader from "../../components/common/AppHeader";
@@ -11,10 +11,13 @@ import TextBackButton from "../../components/common/TextBackButton";
 
 const CreditCharge = ({ onViewAgreement }) => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const checkout = location.state?.checkout;
+  const [agreements, setAgreements] = useState(checkout?.agreements ?? {});
   const [balance, setBalance] = useState(null);
   const [creditError, setCreditError] = useState("");
-  const [selectedProduct, setSelectedProduct] = useState(null);
-  const [paymentOpen, setPaymentOpen] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState(checkout?.product ?? null);
+  const [paymentOpen, setPaymentOpen] = useState(Boolean(checkout));
   const [products, setProducts] = useState(null);
   const [productError, setProductError] = useState("");
   const [paymentError, setPaymentError] = useState("");
@@ -116,11 +119,26 @@ const CreditCharge = ({ onViewAgreement }) => {
       {paymentOpen && selectedProduct && (
         <CreditPaymentSheet
           product={selectedProduct}
+          checked={agreements}
+          onCheckedChange={setAgreements}
           onClose={() => { if (!paymentPending.current) setPaymentOpen(false); }}
           isPaying={isPaying}
           error={paymentError}
           onPurchase={() => handlePurchase(selectedProduct)}
-          onViewAgreement={onViewAgreement}
+          onViewAgreement={(id) => {
+            if (onViewAgreement) {
+              onViewAgreement(id);
+              return;
+            }
+            const path = id === "refund"
+              ? "/mypage/support/policies/payment-refund"
+              : "/mypage/support/policies/terms";
+            navigate(location.pathname, {
+              replace: true,
+              state: { ...location.state, checkout: { product: selectedProduct, agreements } },
+            });
+            navigate(path, { state: { fromCreditPayment: true } });
+          }}
         />
       )}
     </main>

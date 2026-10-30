@@ -16,7 +16,7 @@ const Recordings = ({ onConversations, onReports }) => {
         />
         <PurchaseHistory
           label="보고서 보관함"
-          to={onReports ? undefined : "/mypage/recordings/reports"}
+          to={onReports ? undefined : "/recordings/reports"}
           onClick={onReports}
         />
       </div>

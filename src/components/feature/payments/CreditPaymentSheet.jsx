@@ -9,8 +9,10 @@ const AGREEMENTS = [
   { id: "refund", label: "[필수] 환불 및 취소 정책 확인" },
 ];
 
-const CreditPaymentSheet = ({ product, onClose, onPurchase, onViewAgreement, isPaying = false, error }) => {
-  const [checked, setChecked] = useState({});
+const CreditPaymentSheet = ({ product, onClose, onPurchase, onViewAgreement, isPaying = false, error, checked: controlledChecked, onCheckedChange }) => {
+  const [localChecked, setLocalChecked] = useState({});
+  const checked = controlledChecked ?? localChecked;
+  const setChecked = onCheckedChange ?? setLocalChecked;
   const format = (value) => value.toLocaleString("ko-KR");
   const allChecked = AGREEMENTS.every(({ id }) => checked[id]);
 
