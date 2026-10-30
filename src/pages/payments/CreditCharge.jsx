@@ -73,8 +73,8 @@ const CreditCharge = ({ onViewAgreement }) => {
   };
 
   return (
-    <main className="relative mx-auto flex min-h-[844px] w-full max-w-[390px] flex-col bg-white">
-      <div className="flex flex-col gap-[20px] px-[24px] pt-[16px]">
+    <main className="relative mx-auto flex h-[min(844px,100dvh)] w-full max-w-[390px] flex-col bg-white">
+      <div className="no-scrollbar flex min-h-0 flex-1 flex-col gap-[20px] overflow-y-auto px-[24px] pt-[16px]">
         <AppHeader title="크레딧 충전" onLogoClick={() => navigate("/home")} />
         <TextBackButton onClick={() => navigate("/mypage/payments")} />
         <div className="flex flex-col gap-[30px]">
@@ -108,7 +108,7 @@ const CreditCharge = ({ onViewAgreement }) => {
           </section>
         </div>
       </div>
-      <footer className="sticky bottom-0 mt-auto bg-gradient-to-b from-transparent to-white to-[15.614%] px-[24px] pt-[20px] pb-[30px]">
+      <footer className="shrink-0 bg-gradient-to-b from-transparent to-white to-[15.614%] px-[24px] pt-[20px] pb-[max(30px,env(safe-area-inset-bottom))]">
         <Button
           text="결제하기"
           disabled={!selectedProduct || isPaying}
