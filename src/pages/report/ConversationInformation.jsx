@@ -64,7 +64,7 @@ const ConversationInformation = ({ report, labels = INFO_LABELS }) => {
       </Section>
 
       <Section title={labels.timeline}>
-        <div className="flex w-full flex-col items-start gap-[16px] rounded-[24px] border border-[#eee] bg-white p-[20px] drop-shadow-[0px_4px_5.85px_rgba(0,0,0,0.05)] drop-shadow-[0px_0px_23.85px_rgba(0,0,0,0.1)]">
+        <div className="flex w-full flex-col items-start gap-[16px] rounded-[24px] border border-[#eee] bg-white p-[20px] drop-shadow-[0px_4px_5.85px_rgba(0,0,0,0.05)] drop-shadow-[0px_0px_24.55px_rgba(0,0,0,0.1)]">
           {timeline.map(({ time, title, description, keywords }, index) => (
             <Fragment key={time}>
               {index > 0 && (

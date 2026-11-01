@@ -3,7 +3,7 @@ import cardBg from "../../../assets/icons/character-card-bg-medium.svg";
 // 닉네임 + 캐릭터 카드 (디자인 기준 카드 160.839 x 198.022)
 // 배경(그라데이션 + 위쪽 흰 물결)은 프론트에서 그리고, imageUrl(배경 투명 캐릭터)을 아래쪽에 올림
 const ReportCharacterCard = ({ nickname, nicknameColor, character }) => (
-  <div className="flex shrink-0 flex-col items-start gap-[6px] rounded-[16px] border-[0.865px] border-[#eee] bg-white pt-[8px] drop-shadow-[0px_4px_5.85px_rgba(0,0,0,0.05)] drop-shadow-[0px_0px_23.85px_rgba(0,0,0,0.1)]">
+  <div className="flex shrink-0 flex-col items-start gap-[6px] rounded-[16px] border-[0.865px] border-[#eee] bg-white pt-[8px] drop-shadow-[0px_4px_5.85px_rgba(0,0,0,0.05)] drop-shadow-[0px_0px_24.55px_rgba(0,0,0,0.1)]">
     <p
       className="px-[10.377px] font-['SUIT',sans-serif] text-[16px] font-bold tracking-[-0.32px] whitespace-nowrap"
       style={{ color: nicknameColor }}

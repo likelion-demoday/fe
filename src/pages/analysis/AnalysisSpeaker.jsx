@@ -68,7 +68,7 @@ const SpeakerRow = ({ speaker, onSelect, onPlay }) => {
     <button
       type="button"
       onClick={() => onSelect(speaker.id)}
-      className="flex w-[130px] shrink-0 items-center justify-center self-stretch overflow-clip rounded-[16px] border border-[#eee] bg-white px-[42px] py-[30px] shadow-[0px_4px_11.7px_0px_rgba(0,0,0,0.05),0px_0px_47.7px_0px_rgba(0,0,0,0.1)]"
+      className="flex w-[130px] shrink-0 items-center justify-center self-stretch overflow-clip rounded-[16px] border border-[#eee] bg-white px-[42px] py-[30px] shadow-[0px_4px_11.7px_0px_rgba(0,0,0,0.05),0px_0px_49.1px_0px_rgba(0,0,0,0.1)]"
     >
       <span className="text-heading whitespace-nowrap text-black">화자 {speaker.id}</span>
     </button>
@@ -326,7 +326,9 @@ const AnalysisSpeaker = () => {
         >
           <div className="flex w-full flex-col items-center gap-[21px] whitespace-nowrap">
             <h3 className="text-heading text-center text-black">
-              {partnerLabel} 보고서에서 어떻게 부를까요?
+              {partnerLabel} 보고서에서
+              <br />
+              어떻게 부를까요?
             </h3>
             <p className="text-label text-[#595959]">잘못 골랐어도 이후에 수정 가능해요</p>
           </div>

@@ -1,6 +1,5 @@
 import { useState } from "react";
 
-import chevronRightIcon from "../../../assets/icons/chevron-right.svg";
 import bubbleLine from "../../../assets/icons/home-bubble-line.svg";
 import useBubblePhysics from "../../../hooks/useBubblePhysics";
 
@@ -51,7 +50,7 @@ const toBubbles = (expressions) =>
     }));
 
 // 물리 시뮬레이션은 처음 마운트 때 말풍선 배치를 고정하므로, 데이터가 다 온 뒤에 렌더해야 함
-const FrequentWordsCard = ({ count, expressions = [], onDetail }) => {
+const FrequentWordsCard = ({ count, expressions = [] }) => {
   const [bubbles] = useState(() => toBubbles(expressions));
   const { setElement, kick } = useBubblePhysics(
     bubbles,
@@ -61,19 +60,11 @@ const FrequentWordsCard = ({ count, expressions = [], onDetail }) => {
   );
 
   return (
-    <section className="flex w-full flex-col items-center h-full gap-[20px] rounded-[16px] border border-[#eee] bg-white px-[24px] pt-[16px] pb-[48px] drop-shadow-[0px_4px_5.85px_rgba(0,0,0,0.05)] drop-shadow-[0px_0px_23.85px_rgba(0,0,0,0.1)]">
+    <section className="flex w-full flex-col items-center h-full gap-[20px] rounded-[16px] border border-[#eee] bg-white px-[24px] pt-[16px] pb-[48px] drop-shadow-[0px_4px_5.85px_rgba(0,0,0,0.05)] drop-shadow-[0px_0px_24.55px_rgba(0,0,0,0.1)]">
       <div className="flex w-full flex-col gap-[4px]">
         <p className="text-caption text-[#bfbfbf]">최근 {count}회 분석 기준</p>
         <div className="flex w-full items-center justify-between">
           <h3 className="text-title-semibold flex-1 text-black">자주 사용하는 말</h3>
-          <button
-            type="button"
-            onClick={onDetail}
-            className="flex items-center justify-center gap-[2px] rounded-[6px] px-[6px]"
-          >
-            <span className="text-caption whitespace-nowrap text-[#8c8c8c]">자세히 보기</span>
-            <img src={chevronRightIcon} alt="" className="block h-[11px] w-[7px] max-w-none shrink-0" />
-          </button>
         </div>
       </div>
 

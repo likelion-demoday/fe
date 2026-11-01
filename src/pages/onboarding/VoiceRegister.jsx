@@ -118,7 +118,7 @@ const VoiceRegister = () => {
   };
 
   return (
-    <div className="mx-auto flex h-[min(844px,100dvh)] w-[390px] flex-col items-start bg-[#fafafa]">
+    <div className="mx-auto flex h-[min(844px,100dvh)] w-[390px] flex-col items-start bg-[#ffffff]">
       <div className="no-scrollbar flex min-h-0 w-full flex-1 flex-col items-center gap-[80px] overflow-y-auto p-[16px]">
         <div className="flex w-full flex-col items-start">
           <BackButton onClick={handleBack} />
@@ -163,7 +163,7 @@ const VoiceRegister = () => {
           className={`flex size-[90px] items-center justify-center overflow-clip rounded-[20px] ${
             isRecording
               ? "bg-[#ffb0a0] shadow-[0px_0px_30px_0px_rgba(255,118,91,0.3)]"
-              : "bg-white shadow-[0px_4px_11.7px_0px_rgba(0,0,0,0.05),0px_0px_47.7px_0px_rgba(0,0,0,0.1)]"
+              : "bg-white shadow-[0px_4px_11.7px_0px_rgba(0,0,0,0.05),0px_0px_49.1px_0px_rgba(0,0,0,0.1)]"
           }`}
         >
           {isRecording ? (
