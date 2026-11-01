@@ -72,7 +72,7 @@ const percentAxes = (qualitative, role, types) =>
     .map((metric) => ({ label: metricTitle(metric), value: metric.value, description: metric.description ?? "" }));
 
 
-const resolveRoles = (speakers = []) => {
+export const resolveRoles = (speakers = []) => {
   const me = speakers.find((s) => s.speakerRole === "SELF") ?? speakers[0];
   const partner = speakers.find((s) => s !== me);
   return { me, partner };
@@ -234,7 +234,7 @@ const toIntensity = (role, qualitative, types) => ({
 
 const evidenceText = ({ evidence = {} }) => evidence.displayContent || evidence.originalContent || "";
 
-// 대표 발화(representativeEvidences)를 화자 선택별 말풍선으로. 선택한 화자의 발화를 강조
+// 대표 발화(representativeEvidences)를 화자 선택별 말풍선으로. 선택한 화자의 발화만 표시
 const evidenceQuotes = (qualitative, roles, specs) => {
   const evidences = qualitative.representativeEvidences ?? [];
   const build = (selectedRole) =>

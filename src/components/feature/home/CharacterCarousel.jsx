@@ -4,6 +4,7 @@ import cardBg from "../../../assets/icons/character-card-bg-large.svg";
 import { getAnalyses, getAnalysisReport } from "../../../api/analysis";
 import { getCharacterImageUrls } from "../../../api/character";
 import { CHARACTER_STYLES } from "../../../constants/report";
+import { resolveRoles } from "../../../utils/reportMapper";
 
 // 배경(그라데이션 + 위쪽 흰 물결)은 프론트에서 그리고, 배경 투명 캐릭터 이미지를 아래쪽에 올림
 const CARD_STYLE = CHARACTER_STYLES.me;
@@ -13,16 +14,18 @@ const loadCharacter = async ({ recordingId }) => {
     getAnalysisReport(recordingId),
     getCharacterImageUrls(recordingId),
   ]);
+  // 부모·자녀 분석은 SELF 대신 CHILD/PARENT로 와서 보고서와 같은 기준으로 '나'를 정함
+  const myRole = resolveRoles(analysis.report?.recordingInfo?.speakers).me?.speakerRole ?? "SELF";
   const insight = analysis.report?.qualitativeAnalysis?.characterInsights?.find(
-    (item) => item.speakerRole === "SELF",
+    (item) => item.speakerRole === myRole,
   );
-  if (!insight || !imageUrls.SELF) return null;
+  if (!insight || !imageUrls[myRole]) return null;
 
   return {
     id: recordingId,
     name: insight.name,
     description: insight.description,
-    image: imageUrls.SELF,
+    image: imageUrls[myRole],
   };
 };
 
