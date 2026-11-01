@@ -62,7 +62,7 @@ const AnalysisType = () => {
               key={id}
               type="button"
               onClick={() => handleSelect(id)}
-              className="flex w-full flex-col items-start gap-[30px] overflow-clip rounded-[16px] border border-[#eee] bg-white px-[24px] pt-[24px] pb-[28px] text-left shadow-[0px_4px_11.7px_0px_rgba(0,0,0,0.05),0px_0px_47.7px_0px_rgba(0,0,0,0.1)]"
+              className="flex w-full flex-col items-start gap-[30px] overflow-clip rounded-[16px] border border-[#eee] bg-white px-[24px] pt-[24px] pb-[28px] text-left shadow-[0px_4px_11.7px_0px_rgba(0,0,0,0.05),0px_0px_49.1px_0px_rgba(0,0,0,0.1)]"
             >
               <div className="flex flex-col items-start gap-[8px]">
                 <div className="flex items-center gap-[6px]">

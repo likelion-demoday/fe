@@ -68,7 +68,7 @@ const SpeakerRow = ({ speaker, onSelect, onPlay }) => {
     <button
       type="button"
       onClick={() => onSelect(speaker.id)}
-      className="flex w-[130px] shrink-0 items-center justify-center self-stretch overflow-clip rounded-[16px] border border-[#eee] bg-white px-[42px] py-[30px] shadow-[0px_4px_11.7px_0px_rgba(0,0,0,0.05),0px_0px_47.7px_0px_rgba(0,0,0,0.1)]"
+      className="flex w-[130px] shrink-0 items-center justify-center self-stretch overflow-clip rounded-[16px] border border-[#eee] bg-white px-[42px] py-[30px] shadow-[0px_4px_11.7px_0px_rgba(0,0,0,0.05),0px_0px_49.1px_0px_rgba(0,0,0,0.1)]"
     >
       <span className="text-heading whitespace-nowrap text-black">화자 {speaker.id}</span>
     </button>
