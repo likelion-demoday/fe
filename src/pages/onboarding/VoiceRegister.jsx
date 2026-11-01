@@ -118,7 +118,7 @@ const VoiceRegister = () => {
   };
 
   return (
-    <div className="mx-auto flex h-[min(844px,100dvh)] w-[390px] flex-col items-start bg-[#fafafa]">
+    <div className="mx-auto flex h-[min(844px,100dvh)] w-[390px] flex-col items-start bg-[#ffffff]">
       <div className="no-scrollbar flex min-h-0 w-full flex-1 flex-col items-center gap-[80px] overflow-y-auto p-[16px]">
         <div className="flex w-full flex-col items-start">
           <BackButton onClick={handleBack} />
