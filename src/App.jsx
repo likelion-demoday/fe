@@ -37,6 +37,7 @@ import SignUp from "./pages/auth/SignUp";
 import Nickname from "./pages/onboarding/Nickname";
 import Consent from "./pages/onboarding/Consent";
 import VoiceRegister from "./pages/onboarding/VoiceRegister";
+import NotificationEmail from "./pages/onboarding/NotificationEmail";
 import KakaoCallbackPage from "./pages/auth/KakaoCallbackPage";
 import GoogleCallbackPage from "./pages/auth/GoogleCallbackPage";
 //analysis
@@ -55,6 +56,7 @@ function App() {
       <Route path="/" element={<Splash />} />
 
       <Route element={<ProtectedRoute />}>
+        <Route path="/onboarding/email" element={<NotificationEmail />} />
         <Route path="/home" element={<Home />} />
 
         <Route path="/analysis" element={<AnalysisStart />} />

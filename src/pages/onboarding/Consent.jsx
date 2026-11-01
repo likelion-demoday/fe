@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import useAuthStore from "../../store/authStore";
 import { oauthSignUp, signUp } from "../../api/auth";
@@ -58,7 +58,8 @@ const Consent = ({ accountMode = false }) => {
   const [errorMessage, setErrorMessage] = useState("");
 
   const navigate = useNavigate();
-  const [checked, setChecked] = useState({});
+  const location = useLocation();
+  const [checked, setChecked] = useState(location.state?.agreements ?? {});
   const [activeAgreement, setActiveAgreement] = useState(null);
 
   const allChecked = AGREEMENTS.every(({ id }) => checked[id]);
@@ -83,6 +84,11 @@ const Consent = ({ accountMode = false }) => {
   const handleNext = async () => {
     const agreements = Object.fromEntries(AGREEMENTS.map(({ id }) => [id, Boolean(checked[id])]));
 
+    if (location.state?.signupComplete) {
+      navigate("/onboarding/email", { replace: true, state: { agreements } });
+      return;
+    }
+
     try {
       // 이메일·소셜 가입 모두 응답으로 토큰을 받아 바로 로그인 상태로 전환
       const result = registerToken
@@ -92,7 +98,7 @@ const Consent = ({ accountMode = false }) => {
       localStorage.setItem("refreshToken", result.refreshToken);
       localStorage.setItem("isLogin", "true");
       clearAuthData();
-      navigate("/home", { replace: true });
+      navigate("/onboarding/email", { replace: true, state: { agreements } });
     } catch (error) {
       if (error.code === "AUTH401_4") {
         // registerToken 만료(30분) 또는 재사용 → 소셜 로그인부터 다시
@@ -189,6 +195,7 @@ const Consent = ({ accountMode = false }) => {
             <span className="size-[8px] rounded-[99px] bg-[#454545]" />
             <span className="size-[8px] rounded-[99px] bg-[#454545]" />
             <span className="size-[8px] rounded-[99px] bg-[#454545]" />
+            <span className="size-[8px] rounded-[99px] bg-[#d9d9d9]" />
           </>}
         </div>
         <div className="flex w-full max-w-[358px] flex-col items-start gap-[4px]">
