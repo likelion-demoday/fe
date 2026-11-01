@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import useAuthStore from "../../store/authStore";
 import { oauthSignUp, signUp } from "../../api/auth";
@@ -53,13 +53,13 @@ const Divider = () => (
 );
 
 const Consent = ({ accountMode = false }) => {
-  const { email, password, nickname, registerToken } = useAuthStore();
+  const { email, password, nickname, registerToken, signupComplete, agreements: savedAgreements } = useAuthStore();
   const clearAuthData = useAuthStore((state) => state.clearAuthData);
+  const setSignupComplete = useAuthStore((state) => state.setSignupComplete);
   const [errorMessage, setErrorMessage] = useState("");
 
   const navigate = useNavigate();
-  const location = useLocation();
-  const [checked, setChecked] = useState(location.state?.agreements ?? {});
+  const [checked, setChecked] = useState(savedAgreements);
   const [activeAgreement, setActiveAgreement] = useState(null);
 
   const allChecked = AGREEMENTS.every(({ id }) => checked[id]);
@@ -84,8 +84,10 @@ const Consent = ({ accountMode = false }) => {
   const handleNext = async () => {
     const agreements = Object.fromEntries(AGREEMENTS.map(({ id }) => [id, Boolean(checked[id])]));
 
-    if (location.state?.signupComplete) {
-      navigate("/onboarding/email", { replace: true, state: { agreements } });
+    // 새로고침으로 store가 초기화된 경우는 로그인 여부로 판단
+    if (signupComplete || localStorage.getItem("isLogin") === "true") {
+      setSignupComplete(agreements);
+      navigate("/onboarding/email", { replace: true });
       return;
     }
 
@@ -98,7 +100,8 @@ const Consent = ({ accountMode = false }) => {
       localStorage.setItem("refreshToken", result.refreshToken);
       localStorage.setItem("isLogin", "true");
       clearAuthData();
-      navigate("/onboarding/email", { replace: true, state: { agreements } });
+      setSignupComplete(agreements);
+      navigate("/onboarding/email", { replace: true });
     } catch (error) {
       if (error.code === "AUTH401_4") {
         // registerToken 만료(30분) 또는 재사용 → 소셜 로그인부터 다시
