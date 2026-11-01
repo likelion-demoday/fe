@@ -138,7 +138,11 @@ const AnalysisStart = () => {
               <li key={notice}>{notice}</li>
             ))}
           </ul>
-          <button type="button" className="text-label-small border-b border-[#f5f5f5] text-[#d9d9d9]">
+          <button
+            type="button"
+            onClick={() => navigate("/mypage/support/policies/privacy")}
+            className="text-label-small border-b border-[#f5f5f5] text-[#d9d9d9]"
+          >
             개인정보 처리방침 · 녹음 데이터 처리 안내
           </button>
         </div>

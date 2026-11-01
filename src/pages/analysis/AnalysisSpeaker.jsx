@@ -326,7 +326,9 @@ const AnalysisSpeaker = () => {
         >
           <div className="flex w-full flex-col items-center gap-[21px] whitespace-nowrap">
             <h3 className="text-heading text-center text-black">
-              {partnerLabel} 보고서에서 어떻게 부를까요?
+              {partnerLabel} 보고서에서
+              <br />
+              어떻게 부를까요?
             </h3>
             <p className="text-label text-[#595959]">잘못 골랐어도 이후에 수정 가능해요</p>
           </div>
