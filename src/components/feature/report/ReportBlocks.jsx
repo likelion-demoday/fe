@@ -56,7 +56,7 @@ export const SpectrumBar = ({ position, tone }) => {
 // 점수 문구가 길어 화면보다 넓어지면 가로 스크롤 (그림자가 잘리지 않게 바깥 여백까지 스크롤 영역으로 씀)
 export const SpeakerScoreSelector = ({ speakers, scores, selected, onSelect }) => (
   <div
-    className="flex items-start gap-[16px] self-stretch"
+    className="flex items-stretch gap-[16px] self-stretch"
     role="tablist"
     aria-label="화자 선택"
   >
@@ -75,7 +75,7 @@ export const SpeakerScoreSelector = ({ speakers, scores, selected, onSelect }) =
         {/* '원인 분석형' 같은 유형 텍스트는 숫자보다 길어서 작게 */}
         <span
           className={`font-['SUITE',sans-serif] font-bold ${
-            typeof scores[key] === "number" ? "text-[30px]" : "text-[24px]"
+            typeof scores[key] === "number" ? "text-[30px]" : "text-right text-[24px] leading-[32px] break-keep whitespace-normal"
           } ${SPEAKER_TONES[key].text}`}
         >
           {typeof scores[key] === "number" ? `${scores[key]}%` : scores[key]}
