@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Button from "../../components/common/Button";
 import TextBackButton from "../../components/common/TextBackButton";
 import EmailInput from "../../components/feature/auth/EmailInput";
@@ -7,7 +7,6 @@ import { isValidEmail } from "../../utils/validation";
 
 const NotificationEmail = () => {
   const navigate = useNavigate();
-  const location = useLocation();
   const [email, setEmail] = useState(() => localStorage.getItem("notificationEmail") ?? "");
   const trimmedEmail = email.trim();
   const canContinue = !trimmedEmail || isValidEmail(trimmedEmail);
@@ -28,10 +27,7 @@ const NotificationEmail = () => {
           <p className="font-['SUIT',sans-serif] text-[20px] leading-normal font-extrabold tracking-[-0.8px] text-black">
             RE<span className="text-[#ff765b]">:S</span><span className="tracking-[-1.28px]">AY</span>
           </p>
-          <TextBackButton onClick={() => navigate("/onboarding/consent", {
-            replace: true,
-            state: { signupComplete: true, agreements: location.state?.agreements },
-          })} />
+          <TextBackButton onClick={() => navigate("/onboarding/consent", { replace: true })} />
         </header>
         <section className="flex flex-col gap-[60px] pl-[16px]">
           <div className="flex flex-col gap-[6px]">

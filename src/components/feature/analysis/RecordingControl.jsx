@@ -10,7 +10,7 @@ const RecordingControl = ({ active, onClick, disabled, label, children, iconIncl
         ? variant === "listen"
           ? "bg-white shadow-[0px_4px_11.7px_0px_rgba(0,0,0,0.05),0px_0px_49.1px_0px_rgba(0,0,0,0.1)]"
           : "bg-[#ffb0a0] shadow-[0px_0px_30px_0px_rgba(255,118,91,0.3)]"
-        : iconIncludesShadow ? "bg-white" : "bg-white shadow-[0px_4px_11.7px_0px_rgba(0,0,0,0.05),0px_0px_47.7px_0px_rgba(0,0,0,0.1)]"
+        : iconIncludesShadow ? "bg-white" : "bg-white shadow-[0px_4px_11.7px_0px_rgba(0,0,0,0.05),0px_0px_49.1px_0px_rgba(0,0,0,0.1)]"
     }`}
   >
     {active ? (

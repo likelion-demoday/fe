@@ -133,7 +133,7 @@ const AnalysisStart = () => {
 
       <div className="flex w-full flex-col gap-[60px]">
         <div className="flex w-full flex-col items-end gap-[8px]">
-          <ul className="text-label w-full list-disc space-y-[19px] rounded-[16px] border border-[#eee] bg-white py-[24px] pr-[24px] pl-[48px] text-black drop-shadow-[0px_4px_5.85px_rgba(0,0,0,0.05)] drop-shadow-[0px_0px_23.85px_rgba(0,0,0,0.1)]">
+          <ul className="text-label w-full list-disc space-y-[19px] rounded-[16px] border border-[#eee] bg-white py-[24px] pr-[24px] pl-[48px] text-black drop-shadow-[0px_4px_5.85px_rgba(0,0,0,0.05)] drop-shadow-[0px_0px_24.55px_rgba(0,0,0,0.1)]">
             {NOTICES.map((notice) => (
               <li key={notice}>{notice}</li>
             ))}

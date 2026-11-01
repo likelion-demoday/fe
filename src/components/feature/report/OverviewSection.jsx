@@ -22,7 +22,7 @@ const OverviewSection = ({ report }) => {
 
       <ScoreCompareBars scores={overview.scores} speakers={speakers} />
 
-      <div className="flex w-full flex-col gap-[8px] overflow-clip rounded-[20px] border border-[#eee] bg-white p-[20px] font-['SUIT',sans-serif] shadow-[0px_4px_11.7px_0px_rgba(0,0,0,0.05),0px_0px_47.7px_0px_rgba(0,0,0,0.1)]">
+      <div className="flex w-full flex-col gap-[8px] overflow-clip rounded-[20px] border border-[#eee] bg-white p-[20px] font-['SUIT',sans-serif] shadow-[0px_4px_11.7px_0px_rgba(0,0,0,0.05),0px_0px_49.1px_0px_rgba(0,0,0,0.1)]">
         <p className="text-[20px] font-bold text-[#262626]">{overview.summary.title}</p>
         <p className="text-[14px] leading-[20px] font-medium tracking-[-0.14px] text-[#8c8c8c]">
           {overview.summary.description}

@@ -44,7 +44,7 @@ const LABEL = "font-['SUIT',sans-serif] text-[16px] font-bold tracking-[-0.32px]
  * @param scores [{ label, me, partner }] 값은 0~100
  */
 const ScoreCompareBars = ({ scores, speakers }) => (
-  <div className="flex w-full flex-col gap-[16px] overflow-clip rounded-[24px] border border-[#eee] bg-white p-[20px] shadow-[0px_4px_11.7px_0px_rgba(0,0,0,0.05),0px_0px_47.7px_0px_rgba(0,0,0,0.1)]">
+  <div className="flex w-full flex-col gap-[16px] overflow-clip rounded-[24px] border border-[#eee] bg-white p-[20px] shadow-[0px_4px_11.7px_0px_rgba(0,0,0,0.05),0px_0px_49.1px_0px_rgba(0,0,0,0.1)]">
     {scores.map(({ label, me, partner }) => (
       <div key={label} className="flex w-full flex-col gap-[8px]">
         <p className={`${LABEL} text-[#262626]`}>{label}</p>

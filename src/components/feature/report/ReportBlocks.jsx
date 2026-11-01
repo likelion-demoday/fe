@@ -1,7 +1,7 @@
 // 보고서 섹션들이 함께 쓰는 블록
 import { SPEAKER_TONES } from "../../../constants/report";
 
-export const CARD_SHADOW = "shadow-[0px_4px_11.7px_0px_rgba(0,0,0,0.05),0px_0px_47.7px_0px_rgba(0,0,0,0.1)]";
+export const CARD_SHADOW = "shadow-[0px_4px_11.7px_0px_rgba(0,0,0,0.05),0px_0px_49.1px_0px_rgba(0,0,0,0.1)]";
 export const DIVIDER_GRADIENT =
   "linear-gradient(90deg, rgba(238,238,238,0) 0%, #eee 5%, #eee 95%, rgba(238,238,238,0) 100%)";
 
@@ -56,7 +56,7 @@ export const SpectrumBar = ({ position, tone }) => {
 // 점수 문구가 길어 화면보다 넓어지면 가로 스크롤 (그림자가 잘리지 않게 바깥 여백까지 스크롤 영역으로 씀)
 export const SpeakerScoreSelector = ({ speakers, scores, selected, onSelect }) => (
   <div
-    className="no-scrollbar -mx-[24px] -my-[20px] flex max-w-[calc(100%+48px)] items-start gap-[16px] self-stretch overflow-x-auto px-[24px] py-[20px]"
+    className="flex items-stretch gap-[16px] self-stretch"
     role="tablist"
     aria-label="화자 선택"
   >
@@ -67,12 +67,17 @@ export const SpeakerScoreSelector = ({ speakers, scores, selected, onSelect }) =
         role="tab"
         aria-selected={selected === key}
         onClick={() => onSelect(key)}
-        className={`flex shrink-0 flex-col items-end gap-[12px] overflow-clip rounded-[20px] border border-[#eee] bg-white px-[18px] py-[20px] whitespace-nowrap transition-opacity ${CARD_SHADOW} ${
+        className={`flex min-w-0 flex-1 flex-col items-end gap-[12px] overflow-clip rounded-[20px] border border-[#eee] bg-white px-[18px] py-[20px] whitespace-nowrap transition-opacity ${CARD_SHADOW} ${
           selected === key ? "opacity-100" : "opacity-30"
         }`}
       >
-        <span className="text-[20px] font-bold text-[#454545]">{speakers[key].nickname}</span>
-        <span className={`font-['SUITE',sans-serif] text-[30px] font-bold ${SPEAKER_TONES[key].text}`}>
+        <span className="max-w-full truncate text-[20px] font-bold text-[#454545]">{speakers[key].nickname}</span>
+        {/* '원인 분석형' 같은 유형 텍스트는 숫자보다 길어서 작게 */}
+        <span
+          className={`font-['SUITE',sans-serif] font-bold ${
+            typeof scores[key] === "number" ? "text-[30px]" : "text-right text-[24px] leading-[32px] break-keep whitespace-normal"
+          } ${SPEAKER_TONES[key].text}`}
+        >
           {typeof scores[key] === "number" ? `${scores[key]}%` : scores[key]}
         </span>
       </button>
