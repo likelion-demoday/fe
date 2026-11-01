@@ -408,8 +408,8 @@ export const toReportView = (report) => {
           { type: "RECOVERY_START", label: "회복의 시작" },
         ]),
       },
-      coachingSection("대화 개선 힌트"),
     ].filter(hasQuotes),
+    coaching: [coachingSection("대화 개선 힌트")].filter(hasQuotes),
   };
 
   const affection = scenario === "COUPLE_DAILY" &&

@@ -72,6 +72,7 @@ const SECTIONS = [
   { key: "conflictReaction", label: "갈등 반응" },
   { key: "intensity", label: "표현 강도" },
   { key: "missedWords", label: "놓친 말" },
+  { key: "coaching", label: "대화 개선" },
   { key: "questionAdvice", label: "질문·조언" },
   { key: "conflictExpression", label: "갈등 표현" },
   { key: "retry", label: "다시 대화" },
@@ -82,7 +83,7 @@ const SECTIONS = [
 const SCENARIO_SECTIONS = {
   FRIEND_DAILY: ["overview", "info", "style", "interest", "expression", "extra"],
   COUPLE_DAILY: ["overview", "info", "style", "interest", "affection", "extra"],
-  COUPLE_CONFLICT: ["overview", "conflictInfo", "style", "conflictReaction", "intensity", "missedWords"],
+  COUPLE_CONFLICT: ["overview", "conflictInfo", "style", "conflictReaction", "intensity", "missedWords", "coaching"],
   PARENT_CHILD_CONFLICT: ["overview", "conflictFlow", "parentStyle", "questionAdvice", "conflictExpression", "retry"],
 };
 
@@ -129,6 +130,10 @@ const SECTION_CONTENT = {
     gap: "gap-[20px]",
   },
   missedWords: { Component: MissedWords, gap: "gap-[20px]" },
+  coaching: {
+    Component: ({ report }) => <MissedWords report={report} sections={report.conflict.coaching} />,
+    gap: "gap-[20px]",
+  },
   // 부모·자녀 갈등 전용 탭 (데이터: report.parentConflict)
   conflictFlow: {
     Component: ({ report }) => <ConversationInformation report={report} labels={PARENT_CONFLICT_INFO_LABELS} />,
