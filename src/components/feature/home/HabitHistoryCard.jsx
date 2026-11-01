@@ -1,6 +1,5 @@
 import { useId, useState } from "react";
 
-import chevronRightIcon from "../../../assets/icons/chevron-right.svg";
 import dotImage from "../../../assets/icons/habit-history-dot.svg";
 
 
@@ -43,7 +42,7 @@ const dotDelay = (x) => {
 };
 
 
-const HabitHistoryCard = ({ count, history = [], active = true, onDetail }) => {
+const HabitHistoryCard = ({ count, history = [], active = true }) => {
   const [revealed, setRevealed] = useState(active);
   if (active && !revealed) setRevealed(true);
   const gradientId = useId();
@@ -61,14 +60,6 @@ const HabitHistoryCard = ({ count, history = [], active = true, onDetail }) => {
         <p className="text-caption text-[#bfbfbf]">최근 {count}회 분석 기준</p>
         <div className="flex w-full items-center justify-between">
           <h3 className="text-title-semibold flex-1 text-black">습관 히스토리</h3>
-          <button
-            type="button"
-            onClick={onDetail}
-            className="flex items-center justify-center gap-[2px] rounded-[6px] px-[6px]"
-          >
-            <span className="text-caption whitespace-nowrap text-[#8c8c8c]">자세히 보기</span>
-            <img src={chevronRightIcon} alt="" className="block h-[11px] w-[7px] max-w-none shrink-0" />
-          </button>
         </div>
       </div>
 

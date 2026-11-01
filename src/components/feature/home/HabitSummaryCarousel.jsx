@@ -1,12 +1,10 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 
 import FrequentWordsCard from "./FrequentWordsCard";
 import SpeakingSpeedCard from "./SpeakingSpeedCard";
 import SpeakingLengthCard from "./SpeakingLengthCard";
 import ProfanityRateCard from "./ProfanityRateCard";
 import HabitHistoryCard from "./HabitHistoryCard";
-import chevronRightIcon from "../../../assets/icons/chevron-right.svg";
 
 import { getAnalysisSummary } from "../../../api/analysis";
 
@@ -15,10 +13,9 @@ const SLIDE_GAP = 24;
 const SLIDES = [
   {
     id: "frequent-words",
-    render: (active, summary, onDetail) => (
+    render: (active, summary) => (
       <FrequentWordsCard
         active={active}
-        onDetail={onDetail}
         count={summary.analysisCount}
         expressions={summary.frequentExpressions ?? []}
       />
@@ -26,10 +23,9 @@ const SLIDES = [
   },
   {
     id: "speaking-speed",
-    render: (active, summary, onDetail) => (
+    render: (active, summary) => (
       <SpeakingSpeedCard
         active={active}
-        onDetail={onDetail}
         count={summary.analysisCount}
         diffPercent={summary.speakingSpeed?.differencePercent ?? 0}
       />
@@ -37,10 +33,9 @@ const SLIDES = [
   },
   {
     id: "profanity-rate",
-    render: (active, summary, onDetail) => (
+    render: (active, summary) => (
       <ProfanityRateCard
         active={active}
-        onDetail={onDetail}
         count={summary.analysisCount}
         rate={summary.swearWordUsage?.ratePercent ?? null}
       />
@@ -48,10 +43,9 @@ const SLIDES = [
   },
   {
     id: "habit-history",
-    render: (active, summary, onDetail) => (
+    render: (active, summary) => (
       <HabitHistoryCard
         active={active}
-        onDetail={onDetail}
         count={summary.analysisCount}
         history={summary.speakingRatioHistory ?? []}
       />
@@ -59,24 +53,16 @@ const SLIDES = [
   },
   {
     id: "speaking-length",
-    render: (active, summary, onDetail) => <SpeakingLengthCard active={active} onDetail={onDetail} count={summary.analysisCount} />,
+    render: (active, summary) => <SpeakingLengthCard active={active} count={summary.analysisCount} />,
   },
 ];
 
-const EmptySummaryCard = ({ onDetail }) => (
+const EmptySummaryCard = () => (
   <section className="flex w-full flex-col items-center gap-[20px] rounded-[16px] border border-[#eee] bg-white px-[24px] pt-[16px] pb-[20px] drop-shadow-[0px_4px_5.85px_rgba(0,0,0,0.05)] drop-shadow-[0px_0px_24.55px_rgba(0,0,0,0.1)]">
     <div className="flex w-full flex-col gap-[4px]">
       <p className="text-caption invisible text-[#bfbfbf]">최근 n회 분석 기준</p>
       <div className="flex w-full items-center justify-between">
         <h3 className="text-title-semibold flex-1 text-black">자주 사용하는 말</h3>
-        <button
-          type="button"
-          onClick={onDetail}
-          className="flex items-center justify-center gap-[2px] rounded-[6px] px-[6px]"
-        >
-          <span className="text-caption whitespace-nowrap text-[#8c8c8c]">자세히 보기</span>
-          <img src={chevronRightIcon} alt="" className="block h-[11px] w-[7px] max-w-none shrink-0" />
-        </button>
       </div>
     </div>
 
@@ -87,12 +73,9 @@ const EmptySummaryCard = ({ onDetail }) => (
 );
 
 const HabitSummaryCarousel = () => {
-  const navigate = useNavigate();
   const [activeIndex, setActiveIndex] = useState(0);
   const [summary, setSummary] = useState(null);
   const [loaded, setLoaded] = useState(false);
-
-  const goToReports = () => navigate("/recordings/reports");
 
   const handleScroll = (e) => {
     const { scrollLeft, clientWidth } = e.currentTarget;
@@ -122,7 +105,7 @@ const HabitSummaryCarousel = () => {
       </div>
     );
   }
-  if (!summary || !summary.analysisCount) return <EmptySummaryCard onDetail={goToReports} />;
+  if (!summary || !summary.analysisCount) return <EmptySummaryCard />;
 
   return (
     <div className="relative w-full">
@@ -133,7 +116,7 @@ const HabitSummaryCarousel = () => {
       >
         {SLIDES.map(({ id, render }, index) => (
           <div key={id} className="w-full shrink-0 snap-start">
-            {render(index === activeIndex, summary, goToReports)}
+            {render(index === activeIndex, summary)}
           </div>
         ))}
       </div>

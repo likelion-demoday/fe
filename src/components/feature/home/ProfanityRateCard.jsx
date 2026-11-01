@@ -1,6 +1,5 @@
 import { useState } from "react";
 
-import chevronRightIcon from "../../../assets/icons/chevron-right.svg";
 import emoji1Off from "../../../assets/icons/profanity-emoji-1-off.svg";
 import emoji1On from "../../../assets/icons/profanity-emoji-1-on.svg";
 import emoji2Off from "../../../assets/icons/profanity-emoji-2-off.svg";
@@ -44,7 +43,7 @@ const popStyle = (revealed, delayMs) => ({
  * @param rate 비속어 사용률(%). null이면 강조 없이 회색 이모지만 표시 (디자인의 default 상태)
  * @param active 캐러셀에서 이 카드가 보이는지 여부 (처음 보일 때 한 번 재생)
  */
-const ProfanityRateCard = ({ count, rate = null, active = true, onDetail }) => {
+const ProfanityRateCard = ({ count, rate = null, active = true }) => {
   const activeIndex = rate === null ? -1 : getLevelIndex(rate);
   const [revealed, setRevealed] = useState(active);
   if (active && !revealed) setRevealed(true);
@@ -55,14 +54,6 @@ const ProfanityRateCard = ({ count, rate = null, active = true, onDetail }) => {
         <p className="text-caption text-[#bfbfbf]">최근 {count}회 분석 기준</p>
         <div className="flex w-full items-center justify-between">
           <h3 className="text-title-semibold flex-1 text-black">비속어 사용률</h3>
-          <button
-            type="button"
-            onClick={onDetail}
-            className="flex items-center justify-center gap-[2px] rounded-[6px] px-[6px]"
-          >
-            <span className="text-caption whitespace-nowrap text-[#8c8c8c]">자세히 보기</span>
-            <img src={chevronRightIcon} alt="" className="block h-[11px] w-[7px] max-w-none shrink-0" />
-          </button>
         </div>
       </div>
 

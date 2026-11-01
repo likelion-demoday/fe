@@ -1,4 +1,3 @@
-import chevronRightIcon from "../../../assets/icons/chevron-right.svg";
 import useRevealProgress from "../../../hooks/useRevealProgress";
 
 const GAUGE_PATH =
@@ -16,7 +15,7 @@ const formatPercent = (value) => {
 };
 
 
-const SpeakingSpeedCard = ({ count, diffPercent = 0, active = true, onDetail }) => {
+const SpeakingSpeedCard = ({ count, diffPercent = 0, active = true }) => {
   const progress = useRevealProgress(active, ANIMATION_DURATION_MS);
   const angle = toGaugeAngle(diffPercent) * progress;
 
@@ -29,14 +28,6 @@ const SpeakingSpeedCard = ({ count, diffPercent = 0, active = true, onDetail }) 
         <p className="text-caption text-[#bfbfbf]">최근 {count}회 분석 기준</p>
         <div className="flex w-full items-center justify-between">
           <h3 className="text-title-semibold flex-1 text-black">말하는 속도</h3>
-          <button
-            type="button"
-            onClick={onDetail}
-            className="flex items-center justify-center gap-[2px] rounded-[6px] px-[6px]"
-          >
-            <span className="text-caption whitespace-nowrap text-[#8c8c8c]">자세히 보기</span>
-            <img src={chevronRightIcon} alt="" className="block h-[11px] w-[7px] max-w-none shrink-0" />
-          </button>
         </div>
       </div>
 

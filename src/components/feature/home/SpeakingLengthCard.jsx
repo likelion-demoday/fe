@@ -1,6 +1,5 @@
 import { useId } from "react";
 
-import chevronRightIcon from "../../../assets/icons/chevron-right.svg";
 import trackImage from "../../../assets/icons/speaking-length-track.svg";
 import useRevealProgress from "../../../hooks/useRevealProgress";
 
@@ -18,7 +17,7 @@ const FILL_PATH =
 const DIFF_PERCENT = 12;
 const ANIMATION_DURATION_MS = 1200;
 
-const SpeakingLengthCard = ({ count, active = true, onDetail }) => {
+const SpeakingLengthCard = ({ count, active = true }) => {
   const progress = useRevealProgress(active, ANIMATION_DURATION_MS);
   const maskId = useId();
 
@@ -28,14 +27,6 @@ const SpeakingLengthCard = ({ count, active = true, onDetail }) => {
         <p className="text-caption text-[#bfbfbf]">최근 {count}회 분석 기준</p>
         <div className="flex w-full items-center justify-between">
           <h3 className="text-title-semibold flex-1 text-black">말하는 길이</h3>
-          <button
-            type="button"
-            onClick={onDetail}
-            className="flex items-center justify-center gap-[2px] rounded-[6px] px-[6px]"
-          >
-            <span className="text-caption whitespace-nowrap text-[#8c8c8c]">자세히 보기</span>
-            <img src={chevronRightIcon} alt="" className="block h-[11px] w-[7px] max-w-none shrink-0" />
-          </button>
         </div>
       </div>
 
