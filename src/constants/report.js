@@ -52,19 +52,19 @@ export const SPICINESS_CONTEXT_CATEGORIES = ["ATTACK_TARGET", "PLAYFUL_CONTEXT",
 
 export const REACTION_TYPES = { THINKING: "T", FEELING: "F", MIXED: "T/F" };
 
-// reportMetrics type → 화면 표시 이름 (API title이 비어 있을 때 사용)
+// reportMetrics type → 화면 표시 이름 (디자인 기준). API title은 분석마다 문구가 달라져서 이 이름을 우선 사용
 export const METRIC_LABELS = {
   COMPLIMENT: "칭찬",
   ENCOURAGEMENT: "응원",
   CARING_EXPRESSION: "챙기는 말",
   FRIENDLY_ADDRESS: "친근한 호칭",
-  DIRECT_AFFECTION: "직접 표현",
-  JOY_OR_GRATITUDE: "기쁨·고마움",
+  DIRECT_AFFECTION: "직접적인 호감",
+  JOY_OR_GRATITUDE: "반가움",
   COMPLIMENT_OR_ENCOURAGEMENT: "칭찬·응원",
   AFFECTIONATE_ADDRESS: "다정한 호칭",
   POSITION_EXPLANATION: "입장 설명",
   REBUTTAL: "반박",
-  AVOIDANCE: "대화 피하기",
+  AVOIDANCE: "회피",
   APOLOGY: "사과",
   YIELDING: "양보",
   EMOTION_CHECK: "감정 확인",

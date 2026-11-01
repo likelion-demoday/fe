@@ -43,7 +43,8 @@ const findMetric = (qualitative, role, type, unit) =>
     (metric) => metric.speakerRole === role && metric.type === type && metric.unit === unit,
   );
 
-const metricTitle = ({ type, title }) => title || METRIC_LABELS[type] || type;
+// labels: 시나리오별로 디자인 이름이 다른 지표만 덮어씀 (예: 연인 일상의 JOY_OR_GRATITUDE → 고마움)
+const metricTitle = ({ type, title }, labels = {}) => labels[type] || METRIC_LABELS[type] || title || type;
 
 const countOf = (qualitative, role, type) => findMetric(qualitative, role, type, "COUNT")?.value ?? 0;
 
@@ -53,12 +54,12 @@ const percentOf = (qualitative, role, type) => findMetric(qualitative, role, typ
 const quoteTexts = (quotes = []) =>
   quotes.map(({ displayContent, originalContent }) => displayContent || originalContent).filter(Boolean);
 
-const countItems = (qualitative, role, types) =>
+const countItems = (qualitative, role, types, labels) =>
   types
     .map((type) => findMetric(qualitative, role, type, "COUNT"))
     .filter(Boolean)
     .map((metric) => ({
-      title: metricTitle(metric),
+      title: metricTitle(metric, labels),
       count: metric.value,
       description: metric.description ?? "",
       examples: quoteTexts(metric.evidenceQuotes),
@@ -165,7 +166,10 @@ const toInterest = (role, partnerRole, qualitative, chipsSpec) => {
     chips: {
       title: chipsSpec.title,
       caption: chipsSpec.caption,
-      items: countItems(qualitative, role, chipsSpec.types).map(({ title, count }) => ({ label: title, count })),
+      items: countItems(qualitative, role, chipsSpec.types, chipsSpec.labels).map(({ title, count }) => ({
+        label: title,
+        count,
+      })),
       summary: affection,
     },
   };
@@ -216,7 +220,7 @@ const toBehavior = (role, qualitative, { groups, chips }) => {
     chips: {
       title: chips.title,
       caption: chips.caption,
-      items: countItems(qualitative, role, chips.types).map(({ title, count }) => ({ label: title, count })),
+      items: countItems(qualitative, role, chips.types, chips.labels).map(({ title, count }) => ({ label: title, count })),
       summary: scenarioSummary(qualitative, role, chips.insights),
     },
   };
@@ -286,6 +290,7 @@ const COUPLE_DAILY_CHIPS = {
   title: "애정 표현",
   caption: "대화에서 직접 확인되는 표현만 모았어요.",
   types: ["COMPLIMENT", "ENCOURAGEMENT", "CARING_EXPRESSION", "DIRECT_AFFECTION", "JOY_OR_GRATITUDE"],
+  labels: { DIRECT_AFFECTION: "보고 싶다는 말", JOY_OR_GRATITUDE: "고마움" },
 };
 
 const COUPLE_DAILY_AFFECTION = ["DIRECT_AFFECTION", "CARING_EXPRESSION", "COMPLIMENT_OR_ENCOURAGEMENT", "AFFECTIONATE_ADDRESS"];
@@ -317,15 +322,8 @@ const PARENT_CHILD_BEHAVIOR = {
   chips: {
     title: "대화가 닫히는 신호",
     caption: "대화에서 확인되는 표현만 정리했어요.",
-    types: [
-      "SHORT_RESPONSE",
-      "TOPIC_AVOIDANCE",
-      "REBUTTAL",
-      "EMOTION_EXPRESSION",
-      "APOLOGY",
-      "CHILD_EXPRESSION",
-      "PARENT_CONFIRMATION",
-    ],
+    // 디자인 칩: 짧은 대답 · 침묵 · 주제 피하기 · 반박 · 감정 표현 · 사과 (침묵은 대응 지표가 없어 제외)
+    types: ["SHORT_RESPONSE", "TOPIC_AVOIDANCE", "REBUTTAL", "EMOTION_EXPRESSION", "APOLOGY"],
     insights: ["CONVERSATION_OPENNESS"],
   },
 };
