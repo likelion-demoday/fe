@@ -2,10 +2,17 @@ import { useId } from "react";
 
 import chevronRightIcon from "../../../assets/icons/chevron-right.svg";
 import trackImage from "../../../assets/icons/speaking-length-track.svg";
-import fillImage from "../../../assets/icons/speaking-length-fill.svg";
 import useRevealProgress from "../../../hooks/useRevealProgress";
 
 
+// 회색 트랙과 같은 path를 구간별로 나눠 경로를 따라 그라데이션을 입힌다
+const FILL_SEGMENTS = [
+  { d: "M4 4H230.5", cap: "round", x1: 4, y1: 4, x2: 230.5, y2: 4, from: "#FFF0EF", to: "#FFDBD1" },
+  { d: "M230.5 4C236.023 4 240.5 8.47715 240.5 14C240.5 19.5228 236.023 24 230.5 24", x1: 0, y1: 4, x2: 0, y2: 24, from: "#FFDBD1", to: "#FFC2B2" },
+  { d: "M230.5 24H14", x1: 230.5, y1: 0, x2: 14, y2: 0, from: "#FFC2B2", to: "#FFAA96" },
+  { d: "M14 24C8.47715 24 4 28.4772 4 34C4 39.5228 8.47715 44 14 44", x1: 0, y1: 24, x2: 0, y2: 44, from: "#FFAA96", to: "#FF9177" },
+  { d: "M14 44H70.5", cap: "round", x1: 14, y1: 0, x2: 70.5, y2: 0, from: "#FF9177", to: "#FF765B" },
+];
 const FILL_PATH =
   "M4 4H230.5C236.023 4 240.5 8.47715 240.5 14C240.5 19.5228 236.023 24 230.5 24H14C8.47715 24 4 28.4772 4 34C4 39.5228 8.47715 44 14 44H70.5";
 const DIFF_PERCENT = 12;
@@ -54,12 +61,32 @@ const SpeakingLengthCard = ({ count, active = true, onDetail }) => {
               pathLength="1"
               fill="none"
               stroke="white"
-              strokeWidth="9"
+              strokeWidth="8"
               strokeLinecap="round"
               strokeDasharray={`${progress} 1`}
             />
           </mask>
-          <image href={fillImage} width="244.5" height="48" mask={`url(#${maskId})`} />
+          <defs>
+            {FILL_SEGMENTS.map(({ x1, y1, x2, y2, from, to }, i) => (
+              <linearGradient
+                key={i}
+                id={`${maskId}-g${i}`}
+                gradientUnits="userSpaceOnUse"
+                x1={x1}
+                y1={y1}
+                x2={x2}
+                y2={y2}
+              >
+                <stop offset="0" stopColor={from} />
+                <stop offset="1" stopColor={to} />
+              </linearGradient>
+            ))}
+          </defs>
+          <g mask={`url(#${maskId})`} fill="none" strokeWidth="8">
+            {FILL_SEGMENTS.map(({ d, cap = "butt" }, i) => (
+              <path key={i} d={d} stroke={`url(#${maskId}-g${i})`} strokeLinecap={cap} />
+            ))}
+          </g>
         </svg>
       </div>
     </section>
