@@ -240,7 +240,8 @@ const evidenceQuotes = (qualitative, roles, specs) => {
   const build = (selectedRole) =>
     specs.flatMap(({ type, label }) =>
       evidences
-        .filter((item) => item.type === type)
+        // 선택한 화자의 발화만. 화자가 없는 근거는 양쪽 모두에 표시
+        .filter((item) => item.type === type && (!item.speakerRole || item.speakerRole === selectedRole))
         .map((item) => ({
           label: typeof label === "function" ? label(item) : label,
           text: evidenceText(item),
