@@ -291,11 +291,12 @@ const ReportPage = () => {
 
           <SectionContent report={report} />
         </div>
-      </div>
 
-      <div className="flex w-full shrink-0 gap-[12px] bg-white px-[20px] py-[30px]">
-        <SheetButton text="공유하기" onClick={() => shareCurrentPage("RE:SAY 대화 분석 보고서")} />
-        <SheetButton text="완료" onClick={() => navigate("/home")} />
+        {/* 화면 하단 고정이 아니라 보고서 맨 끝에 붙는 버튼 */}
+        <div className="-mx-[4px] mt-auto flex shrink-0 gap-[12px] py-[14px]">
+          <SheetButton text="공유하기" onClick={() => shareCurrentPage("RE:SAY 대화 분석 보고서")} />
+          <SheetButton text="완료" onClick={() => navigate("/home")} />
+        </div>
       </div>
     </main>
   );
