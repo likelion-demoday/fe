@@ -294,8 +294,10 @@ const AnalysisRecord = () => {
         <div className="flex w-[343.5px] flex-col items-center gap-[72px] [@media(max-height:843px)]:gap-[24px]">
           <div className="flex w-full flex-col items-center gap-[80px] [@media(max-height:843px)]:gap-[24px]">
             <div className="flex w-full flex-col items-center gap-[8px] text-center">
-              {isIdle && (
+              {isIdle ? (
                 <p className="text-body text-[#6b6b6b]">녹음 중에는 화면이 꺼지지 않아요</p>
+              ) : (
+                <p className="text-body text-[#6b6b6b]">흥미로운 분석을 위해 5분 이상 녹음해주세요</p>
               )}
               <p className="text-heading w-full text-black">
                 {formatTime(elapsed)} / {formatTime(MAX_SECONDS)}

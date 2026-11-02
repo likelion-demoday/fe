@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 
 const BAR_COUNT = 63;
 const TIMESLICE_MS = 250;
-const HEAD_INDEX = Math.floor(BAR_COUNT / 2);
+const HEAD_INDEX = BAR_COUNT - 1;
 
 const idleBar = () => 0.05 + Math.random() ** 1.5 * 0.45;
 const createIdleLevels = () => Array.from({ length: BAR_COUNT }, idleBar);
