@@ -22,6 +22,7 @@ import { getFailureMessage } from "../../constants/analysis";
 import { CONFLICT_INFO_LABELS, PARENT_CONFLICT_INFO_LABELS, PERCENT_METRIC_CAPTION } from "../../constants/report";
 import { mockAnalysisReportResponse } from "../../mocks/analysisReportResponse";
 import { buildMockReportExtras } from "../../mocks/reportExtras";
+import { saveChargeReturn } from "../../utils/chargeReturn";
 import { toReportView } from "../../utils/reportMapper";
 import { shareCurrentPage } from "../../utils/share";
 
@@ -248,6 +249,11 @@ const ReportPage = () => {
     };
   }, [reportId, imagePollKey]);
 
+  const goToCharge = () => {
+    saveChargeReturn(`/report/${reportId}`);
+    navigate("/mypage/payments");
+  };
+
   const openCharacterPurchase = async () => {
     try {
       const [credits, prices] = await Promise.all([getMyCredits(), getCreditPrices()]);
@@ -272,7 +278,7 @@ const ReportPage = () => {
       setCharacterImages((prev) => ({ ...prev, locked: false }));
       setImagePollKey((key) => key + 1);
     } catch (e) {
-      if (e.code === "CREDIT402_1") navigate("/mypage/payments");
+      if (e.code === "CREDIT402_1") goToCharge();
       else alert(e.message ?? "요청에 실패했어요. 다시 시도해 주세요.");
     } finally {
       setPaying(false);
@@ -353,7 +359,7 @@ const ReportPage = () => {
           purchaseText={characterPurchase.isFree ? "무료로 열기" : undefined}
           onClose={() => setCharacterPurchase(null)}
           onPurchase={handleCharacterPurchase}
-          onCharge={() => navigate("/mypage/payments")}
+          onCharge={goToCharge}
         />
       )}
     </main>

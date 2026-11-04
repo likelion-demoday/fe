@@ -3,6 +3,7 @@ import { Navigate, useLocation, useNavigate } from "react-router-dom";
 
 import { payRecording, selectRecordingType } from "../../api/recording";
 import { getCreditPrices, getMyCredits } from "../../api/credit";
+import { saveChargeReturn } from "../../utils/chargeReturn";
 
 import AppHeader from "../../components/common/AppHeader";
 import BottomSheet from "../../components/common/BottomSheet";
@@ -150,7 +151,10 @@ const AnalysisRelation = () => {
           price={price}
           onClose={() => setSheet(null)}
           onPurchase={handlePurchase}
-          onCharge={() => navigate("/mypage/payments")}
+          onCharge={() => {
+            saveChargeReturn("/analysis/relation", state);
+            navigate("/mypage/payments");
+          }}
         />
       )}
       {sheet === "complete" && <BottomSheet title="구매완료!" image={COMPLETE_IMAGE} onClose={goToLoading} />}
