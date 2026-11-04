@@ -1,5 +1,6 @@
 import cardBg from "../../../assets/icons/character-card-bg-medium.svg";
 import lockedCharacterImage from "../../../assets/images/character-explainer.png";
+import { CARD_SHADOW } from "./ReportBlocks";
 
 const LockIcon = () => (
   <svg width="30" height="30" viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -15,7 +16,7 @@ const ReportCharacterCard = ({ nickname, nicknameColor, character, onUnlock }) =
   const imageUrl = character.locked ? lockedCharacterImage : character.imageUrl;
 
   return (
-    <div className="flex shrink-0 flex-col items-start gap-[6px] rounded-[16px] border-[0.865px] border-[#eee] bg-white pt-[8px] drop-shadow-[0px_4px_5.85px_rgba(0,0,0,0.05)] drop-shadow-[0px_0px_24.55px_rgba(0,0,0,0.1)]">
+    <div className={`flex shrink-0 flex-col items-start gap-[6px] rounded-[16px] border-[0.865px] border-[#eee] bg-white pt-[8px] ${CARD_SHADOW}`}>
       <p
         className="px-[10.377px] font-['SUIT',sans-serif] text-[16px] font-bold tracking-[-0.32px] whitespace-nowrap"
         style={{ color: nicknameColor }}
@@ -64,7 +65,7 @@ const ReportCharacterCard = ({ nickname, nicknameColor, character, onUnlock }) =
             type="button"
             onClick={onUnlock}
             aria-label={`${nickname} 캐릭터 잠금 해제`}
-            className="press-control absolute top-1/2 left-1/2 flex size-[52px] -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-white/90"
+            className="press-control absolute top-1/2 left-1/2 flex size-[52px] -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 shadow-[0px_4px_11.7px_0px_rgba(0,0,0,0.05),0px_0px_20px_0px_rgba(0,0,0,0.1)]"
           >
             <LockIcon />
           </button>
