@@ -347,7 +347,7 @@ const ReportPage = () => {
 
       {characterPurchase && (
         <PurchaseSheet
-          productName="캐릭터 카드 열기"
+          productName="캐릭터 카드 보기"
           ownedCredit={characterPurchase.ownedCredit}
           price={characterPurchase.price}
           purchaseText={characterPurchase.isFree ? "무료로 열기" : undefined}
