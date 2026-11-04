@@ -2,7 +2,7 @@ import ReportCharacterCard from "./ReportCharacterCard";
 import ScoreCompareBars from "./ScoreCompareBars";
 
 // 한번에 보기: 두 사람의 캐릭터 + 핵심 점수 비교 + 한 줄 요약
-const OverviewSection = ({ report }) => {
+const OverviewSection = ({ report, onUnlockCharacter }) => {
   const { speakers, overview } = report;
 
   return (
@@ -12,11 +12,13 @@ const OverviewSection = ({ report }) => {
           nickname={speakers.me.nickname}
           nicknameColor="#ff765b"
           character={speakers.me.character}
+          onUnlock={onUnlockCharacter}
         />
         <ReportCharacterCard
           nickname={speakers.partner.nickname}
           nicknameColor="#6d8cff"
           character={speakers.partner.character}
+          onUnlock={onUnlockCharacter}
         />
       </div>
 

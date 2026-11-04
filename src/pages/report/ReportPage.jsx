@@ -2,10 +2,12 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 import { getAnalysisReport } from "../../api/analysis";
-import { getCharacterImageStatus, getCharacterImages } from "../../api/character";
+import { getCharacterImageStatus, getCharacterImages, requestCharacterImage } from "../../api/character";
+import { getCreditPrices, getMyCredits } from "../../api/credit";
 
 import AppHeader from "../../components/common/AppHeader";
 import { SheetButton } from "../../components/common/BottomSheet";
+import PurchaseSheet from "../../components/feature/analysis/PurchaseSheet";
 import ReportSectionTabs from "../../components/feature/report/ReportSectionTabs";
 import OverviewSection from "../../components/feature/report/OverviewSection";
 import ConversationInformation from "./ConversationInformation";
@@ -51,10 +53,10 @@ const fetchReport = (reportId) => {
 const IMAGE_POLLING_MS = 3000;
 const IMAGE_POLLING_LIMIT = 60; // 최대 3분
 
-const withCharacterImages = (report, images) => {
+const withCharacterImages = (report, images, locked) => {
   const attach = (speaker) => ({
     ...speaker,
-    character: { ...speaker.character, ...images[speaker.role] },
+    character: { ...speaker.character, ...images[speaker.role], locked },
   });
   return { ...report, speakers: { me: attach(report.speakers.me), partner: attach(report.speakers.partner) } };
 };
@@ -178,10 +180,17 @@ const ReportPage = () => {
   const { reportId } = useParams();
   const [section, setSection] = useState("overview");
   const [loaded, setLoaded] = useState({ id: null, report: null, message: null });
-  const [characterImages, setCharacterImages] = useState({ id: null, images: {} });
+  const [characterImages, setCharacterImages] = useState({ id: null, images: {}, locked: false });
+  const [imagePollKey, setImagePollKey] = useState(0);
+  // 캐릭터 결제 시트: { ownedCredit, price, isFree }
+  const [characterPurchase, setCharacterPurchase] = useState(null);
+  const [paying, setPaying] = useState(false);
   const isCurrent = loaded.id === reportId;
-  const images = characterImages.id === reportId ? characterImages.images : {};
-  const report = isCurrent && loaded.report ? withCharacterImages(loaded.report, images) : null;
+  const isImagesCurrent = characterImages.id === reportId;
+  const images = isImagesCurrent ? characterImages.images : {};
+  const report = isCurrent && loaded.report
+    ? withCharacterImages(loaded.report, images, isImagesCurrent && characterImages.locked)
+    : null;
   const message = isCurrent ? loaded.message : null;
 
   useEffect(() => {
@@ -207,7 +216,8 @@ const ReportPage = () => {
     };
   }, [reportId]);
 
-  // 캐릭터 이미지는 분석 완료 후 비동기 생성 → 생성 중이면 끝날 때까지 폴링 (없어도 보고서는 보여줌)
+  // 캐릭터 이미지는 비동기 생성 → 생성 중이면 끝날 때까지 폴링 (없어도 보고서는 보여줌)
+  // 생성 요청 전이면 images가 빈 배열로 오므로 잠금 카드로 표시
   useEffect(() => {
     if (import.meta.env.DEV && DEV_MOCK_SCENARIOS[reportId]) return;
     let timer;
@@ -220,7 +230,7 @@ const ReportPage = () => {
         const isPending = images.some(({ status }) => status === "PENDING" || status === "GENERATING");
         if (!isPending) {
           const characters = await getCharacterImages(reportId);
-          if (!cancelled) setCharacterImages({ id: reportId, images: characters });
+          if (!cancelled) setCharacterImages({ id: reportId, images: characters, locked: images.length === 0 });
           return;
         }
       } catch {
@@ -236,7 +246,38 @@ const ReportPage = () => {
       cancelled = true;
       clearTimeout(timer);
     };
-  }, [reportId]);
+  }, [reportId, imagePollKey]);
+
+  const openCharacterPurchase = async () => {
+    try {
+      const [credits, prices] = await Promise.all([getMyCredits(), getCreditPrices()]);
+      const isFree = credits.characterFreeAvailable;
+      setCharacterPurchase({
+        ownedCredit: credits.balance ?? 0,
+        price: isFree ? 0 : prices.character ?? 0,
+        isFree,
+      });
+    } catch (e) {
+      alert(e.message ?? "크레딧 정보를 불러오지 못했어요.");
+    }
+  };
+
+  // 생성 요청이 곧 결제 (나·상대방 캐릭터 한 세트). 실패하면 서버가 크레딧을 환급
+  const handleCharacterPurchase = async () => {
+    if (paying) return;
+    setPaying(true);
+    try {
+      await requestCharacterImage(reportId);
+      setCharacterPurchase(null);
+      setCharacterImages((prev) => ({ ...prev, locked: false }));
+      setImagePollKey((key) => key + 1);
+    } catch (e) {
+      if (e.code === "CREDIT402_1") navigate("/mypage/payments");
+      else alert(e.message ?? "요청에 실패했어요. 다시 시도해 주세요.");
+    } finally {
+      setPaying(false);
+    }
+  };
 
   if (!report) {
     return (
@@ -294,7 +335,7 @@ const ReportPage = () => {
             </div>
           )}
 
-          <SectionContent report={report} />
+          <SectionContent report={report} onUnlockCharacter={openCharacterPurchase} />
         </div>
 
         {/* 화면 하단 고정이 아니라 보고서 맨 끝에 붙는 버튼 */}
@@ -303,6 +344,18 @@ const ReportPage = () => {
           <SheetButton text="완료" onClick={() => navigate("/home")} />
         </div>
       </div>
+
+      {characterPurchase && (
+        <PurchaseSheet
+          productName="캐릭터 카드 열기"
+          ownedCredit={characterPurchase.ownedCredit}
+          price={characterPurchase.price}
+          purchaseText={characterPurchase.isFree ? "무료로 열기" : undefined}
+          onClose={() => setCharacterPurchase(null)}
+          onPurchase={handleCharacterPurchase}
+          onCharge={() => navigate("/mypage/payments")}
+        />
+      )}
     </main>
   );
 };
