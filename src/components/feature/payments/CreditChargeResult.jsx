@@ -2,8 +2,8 @@ import Button from "../../common/Button";
 import character from "../../../assets/images/credit-charge-result.png";
 
 const CreditChargeResult = ({ title, buttonText, onClick, successImage }) => (
-  <main className="relative mx-auto flex min-h-[844px] w-full max-w-[390px] flex-col bg-white">
-    <section className="absolute top-[calc(50%+0.5px)] left-[16px] flex w-[calc(100%-48px)] -translate-y-1/2 flex-col items-center gap-[10px]">
+  <main className="relative mx-auto flex h-dvh w-full max-w-[390px] flex-col bg-white">
+    <section className="absolute inset-x-[24px] top-1/2 flex -translate-y-1/2 flex-col items-center gap-[10px]">
       <h1 className="text-display w-full text-center text-black">{title}</h1>
       <div className="relative size-[136px] shrink-0 overflow-hidden">
         <img
@@ -15,7 +15,7 @@ const CreditChargeResult = ({ title, buttonText, onClick, successImage }) => (
         />
       </div>
     </section>
-    <footer className="mt-auto bg-gradient-to-b from-transparent to-white to-[15.614%] px-[24px] pt-[20px] pb-[30px]">
+    <footer className="absolute inset-x-0 bottom-0 bg-gradient-to-b from-transparent to-white to-[15.614%] px-[24px] pt-[20px] pb-[max(30px,env(safe-area-inset-bottom))]">
       <Button
         text={buttonText}
         onClick={onClick}
