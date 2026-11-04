@@ -16,7 +16,7 @@ export const getCharacterImageBlob = async (contentUrl) => {
 const toCardStyle = ({ characterNameTextColor, cardBackgroundGradientColors: colors }) => ({
   ...(characterNameTextColor && { titleColor: characterNameTextColor }),
   ...(colors?.length >= 2 && {
-    background: `linear-gradient(146.42deg, ${colors[0]} 40.138%, ${colors[1]} 89.392%)`,
+    background: `linear-gradient(154.64deg, ${colors[0]} 43.136%, ${colors[1]} 87.54%)`,
   }),
 });
 
