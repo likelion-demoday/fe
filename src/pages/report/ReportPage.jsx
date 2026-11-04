@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 import { getAnalysisReport } from "../../api/analysis";
-import { getCharacterImageStatus, getCharacterImageUrls } from "../../api/character";
+import { getCharacterImageStatus, getCharacterImages } from "../../api/character";
 
 import AppHeader from "../../components/common/AppHeader";
 import { SheetButton } from "../../components/common/BottomSheet";
@@ -51,10 +51,10 @@ const fetchReport = (reportId) => {
 const IMAGE_POLLING_MS = 3000;
 const IMAGE_POLLING_LIMIT = 60; // 최대 3분
 
-const withCharacterImages = (report, imageUrls) => {
+const withCharacterImages = (report, images) => {
   const attach = (speaker) => ({
     ...speaker,
-    character: { ...speaker.character, imageUrl: imageUrls[speaker.role] },
+    character: { ...speaker.character, ...images[speaker.role] },
   });
   return { ...report, speakers: { me: attach(report.speakers.me), partner: attach(report.speakers.partner) } };
 };
@@ -178,10 +178,10 @@ const ReportPage = () => {
   const { reportId } = useParams();
   const [section, setSection] = useState("overview");
   const [loaded, setLoaded] = useState({ id: null, report: null, message: null });
-  const [characterImages, setCharacterImages] = useState({ id: null, urls: {} });
+  const [characterImages, setCharacterImages] = useState({ id: null, images: {} });
   const isCurrent = loaded.id === reportId;
-  const imageUrls = characterImages.id === reportId ? characterImages.urls : {};
-  const report = isCurrent && loaded.report ? withCharacterImages(loaded.report, imageUrls) : null;
+  const images = characterImages.id === reportId ? characterImages.images : {};
+  const report = isCurrent && loaded.report ? withCharacterImages(loaded.report, images) : null;
   const message = isCurrent ? loaded.message : null;
 
   useEffect(() => {
@@ -219,8 +219,8 @@ const ReportPage = () => {
         const { images = [] } = await getCharacterImageStatus(reportId);
         const isPending = images.some(({ status }) => status === "PENDING" || status === "GENERATING");
         if (!isPending) {
-          const urls = await getCharacterImageUrls(reportId);
-          if (!cancelled) setCharacterImages({ id: reportId, urls });
+          const characters = await getCharacterImages(reportId);
+          if (!cancelled) setCharacterImages({ id: reportId, images: characters });
           return;
         }
       } catch {
