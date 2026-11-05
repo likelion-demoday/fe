@@ -1,14 +1,17 @@
 // 보고서 섹션들이 함께 쓰는 블록
 import { SPEAKER_TONES } from "../../../constants/report";
 
-export const CARD_SHADOW = "shadow-[0px_4px_11.7px_0px_rgba(0,0,0,0.05),0px_0px_49.1px_0px_rgba(0,0,0,0.1)]";
+// 피그마 이펙트 스타일. drop-shadow-[]는 두 개 겹치면 하나만 적용되므로 box-shadow로 씀
+export const CARD_SHADOW = "shadow-[0px_4px_11.7px_0px_rgba(0,0,0,0.05),0px_0px_49.1px_0px_rgba(0,0,0,0.1)]"; // 2번
+export const CHIP_SHADOW = "shadow-[0px_2px_6px_0px_rgba(0,0,0,0.05),0px_0px_11.4px_0px_rgba(0,0,0,0.05)]"; // 1번
+export const DETAIL_CARD_SHADOW = "shadow-[0px_4px_6px_0px_rgba(0,0,0,0.05),0px_0px_20px_0px_rgba(0,0,0,0.07)]"; // Card/표현 습관 전용
 export const DIVIDER_GRADIENT =
   "linear-gradient(90deg, rgba(238,238,238,0) 0%, #eee 5%, #eee 95%, rgba(238,238,238,0) 100%)";
 
 // wrap: 긴 문구(주제명 등)를 한 줄로 두지 않고 부모 폭 안에서 줄바꿈
 export const KeywordPill = ({ label, highlighted = false, wrap = false }) => (
   <span
-    className={`flex items-center justify-center rounded-[12px] border border-[#eee] bg-white px-[12px] py-[4px] text-[14px] leading-[22px] font-semibold tracking-[0.28px] drop-shadow-[0px_2px_3px_rgba(0,0,0,0.05)] drop-shadow-[0px_0px_5.7px_rgba(0,0,0,0.05)] ${
+    className={`flex items-center justify-center rounded-[12px] border border-[#eee] bg-white px-[12px] py-[4px] text-[14px] leading-[22px] font-semibold tracking-[0.28px] ${CHIP_SHADOW} ${
       wrap ? "max-w-full text-center break-keep" : "shrink-0 whitespace-nowrap"
     } ${highlighted ? "text-[#ff765b]" : "text-[#595959]"}`}
   >

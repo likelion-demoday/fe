@@ -6,10 +6,12 @@ import { getMe } from "../../api/user";
 
 import AppHeader from "../../components/common/AppHeader";
 import BottomSheet, { SheetButton } from "../../components/common/BottomSheet";
-import clipLeft1 from "../../assets/icons/voice-clip-left-1.svg";
-import clipLeft2 from "../../assets/icons/voice-clip-left-2.svg";
-import clipRight1 from "../../assets/icons/voice-clip-right-1.svg";
-import clipRight2 from "../../assets/icons/voice-clip-right-2.svg";
+import clipLeftDefault from "../../assets/icons/voice-clip-left-default.svg";
+import clipLeftLocked from "../../assets/icons/voice-clip-left-locked.svg";
+import clipLeftPlayed from "../../assets/icons/voice-clip-left-played.svg";
+import clipRightDefault from "../../assets/icons/voice-clip-right-default.svg";
+import clipRightLocked from "../../assets/icons/voice-clip-right-locked.svg";
+import clipRightPlayed from "../../assets/icons/voice-clip-right-played.svg";
 import partnerNameImage from "../../assets/images/partner-name.png";
 
 
@@ -32,38 +34,39 @@ const PARTNER_LABELS = {
 // 부모·자녀 관계에서 "부모님이신가요?" 답변 → speaker-mapping selfRole
 const SELF_ROLES = { parent: "PARENT", child: "CHILD" };
 
+// 음성 버튼 상태별 이미지. default: 아직 안 들음, locked: 앞 음성을 듣기 전, played: 한 번이라도 들음
 const SPEAKER_LAYOUTS = [
   {
     align: "left",
-    clips: [
-      { src: clipLeft1, inset: "inset-[-50%_-10.53%_-50%_-15.79%]" },
-      { src: clipLeft2, inset: "inset-[-50%_-10.53%_-50%_-15.79%]" },
-    ],
+    inset: "inset-[-50%_-10.53%_-50%_-15.79%]",
+    images: { default: clipLeftDefault, locked: clipLeftLocked, played: clipLeftPlayed },
   },
   {
     align: "right",
-    clips: [
-      { src: clipRight1, inset: "inset-[-50%_-15.79%_-50%_-10.53%]" },
-      { src: clipRight2, inset: "inset-[-28.5%_-11.26%_-28.5%_-6%]" },
-    ],
+    inset: "inset-[-50%_-15.79%_-50%_-10.53%]",
+    images: { default: clipRightDefault, locked: clipRightLocked, played: clipRightPlayed },
   },
 ];
 
+const CLIPS_PER_SPEAKER = 2;
 
 const toSpeakers = (apiSpeakers) =>
-  apiSpeakers.slice(0, SPEAKER_LAYOUTS.length).map(({ speakerLabel, samples }, index) => {
-    const layout = SPEAKER_LAYOUTS[index];
-    return {
-      id: index + 1,
-      label: speakerLabel,
-      align: layout.align,
-      clips: layout.clips
-        .slice(0, samples.length)
-        .map((clip, clipIndex) => ({ ...clip, ...samples[clipIndex] })),
-    };
-  });
+  apiSpeakers.slice(0, SPEAKER_LAYOUTS.length).map(({ speakerLabel, samples }, index) => ({
+    ...SPEAKER_LAYOUTS[index],
+    id: index + 1,
+    label: speakerLabel,
+    clips: samples.slice(0, CLIPS_PER_SPEAKER),
+  }));
 
-const SpeakerRow = ({ speaker, onSelect, onPlay }) => {
+const clipKey = (speakerId, clipIndex) => `${speakerId}-${clipIndex}`;
+
+const getClipState = (playedClips, speakerId, clipIndex) => {
+  if (playedClips[clipKey(speakerId, clipIndex)]) return "played";
+  if (clipIndex > 0 && !playedClips[clipKey(speakerId, clipIndex - 1)]) return "locked";
+  return "default";
+};
+
+const SpeakerRow = ({ speaker, playedClips, onSelect, onPlay }) => {
   const card = (
     <button
       type="button"
@@ -76,17 +79,21 @@ const SpeakerRow = ({ speaker, onSelect, onPlay }) => {
 
   const clips = (
     <div className="flex w-[190px] shrink-0 flex-col justify-center gap-[16px]">
-      {speaker.clips.map(({ src, inset, startMs, endMs }, index) => (
-        <button
-          key={src}
-          type="button"
-          onClick={() => onPlay(startMs, endMs)}
-          aria-label={`화자 ${speaker.id} 음성 ${index + 1} 듣기`}
-          className="relative h-[40px] w-full"
-        >
-          <img src={src} alt="" className={`absolute block max-w-none ${inset}`} />
-        </button>
-      ))}
+      {speaker.clips.map((_, index) => {
+        const clipState = getClipState(playedClips, speaker.id, index);
+        return (
+          <button
+            key={index}
+            type="button"
+            onClick={() => onPlay(speaker.id, index)}
+            disabled={clipState === "locked"}
+            aria-label={`화자 ${speaker.id} 음성 ${index + 1} 듣기`}
+            className="relative h-[40px] w-full"
+          >
+            <img src={speaker.images[clipState]} alt="" className={`absolute block max-w-none ${speaker.inset}`} />
+          </button>
+        );
+      })}
     </div>
   );
 
@@ -121,6 +128,8 @@ const AnalysisSpeaker = () => {
   const [partnerName, setPartnerName] = useState("");
   const [selfRole, setSelfRole] = useState(null);
   const [speakers, setSpeakers] = useState([]);
+  // 한 번이라도 들은 음성: { [clipKey]: true }
+  const [playedClips, setPlayedClips] = useState({});
   const [audioUrl, setAudioUrl] = useState(null);
   const [submitting, setSubmitting] = useState(false);
   const [nickname, setNickname] = useState("");
@@ -155,6 +164,13 @@ const AnalysisSpeaker = () => {
     audio.play().catch((e) => console.error(e.message));
   };
 
+  const handlePlayClip = (id, clipIndex) => {
+    const clip = speakers.find((speaker) => speaker.id === id)?.clips[clipIndex];
+    if (!clip) return;
+    playClip(clip.startMs, clip.endMs);
+    setPlayedClips((prev) => ({ ...prev, [clipKey(id, clipIndex)]: true }));
+  };
+
   const handleTimeUpdate = () => {
     const audio = audioRef.current;
     if (clipEndRef.current !== null && audio.currentTime >= clipEndRef.current) {
@@ -176,8 +192,7 @@ const AnalysisSpeaker = () => {
 
   // 카드를 누르면 확인 모달을 열면서 그 화자의 첫 번째 음성 구간을 들려줌
   const handleSelectSpeaker = (id) => {
-    const clip = speakers.find((speaker) => speaker.id === id)?.clips[0];
-    if (clip) playClip(clip.startMs, clip.endMs);
+    handlePlayClip(id, 0);
     setSpeakerId(id);
     setSheet("confirm");
   };
@@ -238,8 +253,9 @@ const AnalysisSpeaker = () => {
             <SpeakerRow
               key={speaker.id}
               speaker={speaker}
+              playedClips={playedClips}
               onSelect={handleSelectSpeaker}
-              onPlay={playClip}
+              onPlay={handlePlayClip}
             />
           ))}
         </div>

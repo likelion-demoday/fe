@@ -2,6 +2,7 @@ import { Fragment, useState } from "react";
 
 import {
   CARD_SHADOW,
+  DETAIL_CARD_SHADOW,
   DIVIDER_GRADIENT,
   KeywordPill,
   ReportSection,
@@ -88,7 +89,7 @@ const ConversationStyle = ({ report, expressionTitle = "자주 쓰는 표현" })
 
         <ReportSection title={expressionTitle}>
           <div className="flex w-full flex-col gap-[12px]">
-            <div className="flex w-full flex-col items-start gap-[20px] rounded-[20px] border border-[#eee] bg-white p-[20px] drop-shadow-[0px_0px_10px_rgba(0,0,0,0.07)] drop-shadow-[0px_4px_3px_rgba(0,0,0,0.05)]">
+            <div className={`flex w-full flex-col items-start gap-[20px] rounded-[20px] border border-[#eee] bg-white p-[20px] ${DETAIL_CARD_SHADOW}`}>
               {expressions.map(({ category, items }) => (
                 <div key={category} className="flex flex-col items-start gap-[8px]">
                   <p className="text-[16px] font-bold tracking-[-0.32px] whitespace-nowrap text-[#2d3038]">{category}</p>

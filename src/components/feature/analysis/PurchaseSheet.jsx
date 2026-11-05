@@ -11,7 +11,7 @@ const SHEET_IMAGES = {
 
 const formatCredit = (value) => value.toLocaleString("ko-KR");
 
-const PurchaseSheet = ({ productName, ownedCredit, price, onClose, onPurchase, onCharge }) => {
+const PurchaseSheet = ({ productName, ownedCredit, price, purchaseText, onClose, onPurchase, onCharge }) => {
   const remaining = ownedCredit - price;
   const isShort = remaining < 0;
 
@@ -24,7 +24,7 @@ const PurchaseSheet = ({ productName, ownedCredit, price, onClose, onPurchase, o
         isShort ? (
           <SheetButton text="크레딧 충전하러 가기" onClick={onCharge} />
         ) : (
-          <SheetButton text={`${formatCredit(price)}크레딧 결제하기`} onClick={onPurchase} />
+          <SheetButton text={purchaseText ?? `${formatCredit(price)}크레딧 결제하기`} onClick={onPurchase} />
         )
       }
     >

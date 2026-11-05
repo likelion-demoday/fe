@@ -66,7 +66,7 @@ const BadLevel = ({
               <p className="text-[12px] leading-[18px] font-medium tracking-[0.24px] text-[#8c8c8c]">{axisCaption}</p>
             )}
           </div>
-          <div className="flex w-full flex-col items-start gap-[20px] rounded-[16px] border border-[#eee] bg-white p-[20px] drop-shadow-[0px_4px_5.85px_rgba(0,0,0,0.05)] drop-shadow-[0px_0px_24.55px_rgba(0,0,0,0.1)]">
+          <div className={`flex w-full flex-col items-start gap-[20px] rounded-[16px] border border-[#eee] bg-white p-[20px] ${CARD_SHADOW}`}>
             {axes.map((axis, index) => (
               <Fragment key={axis.label}>
                 {index > 0 && <div className="h-px w-full shrink-0" style={{ backgroundImage: DIVIDER_GRADIENT }} />}
