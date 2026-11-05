@@ -2,30 +2,29 @@ import { useEffect, useRef, useState } from "react";
 
 import cardBg from "../../../assets/icons/character-card-bg-large.svg";
 import { getAnalyses, getAnalysisReport } from "../../../api/analysis";
-import { getCharacterImageUrls } from "../../../api/character";
+import { getCharacterImages } from "../../../api/character";
 import { CHARACTER_STYLES } from "../../../constants/report";
 import { resolveRoles } from "../../../utils/reportMapper";
 
-// 배경(그라데이션 + 위쪽 흰 물결)은 프론트에서 그리고, 배경 투명 캐릭터 이미지를 아래쪽에 올림
-const CARD_STYLE = CHARACTER_STYLES.me;
-
+// 배경(서버 색상 그라데이션 + 위쪽 흰 물결)은 프론트에서 그리고, 배경 투명 캐릭터 이미지를 아래쪽에 올림
 const loadCharacter = async ({ recordingId }) => {
-  const [analysis, imageUrls] = await Promise.all([
+  const [analysis, images] = await Promise.all([
     getAnalysisReport(recordingId),
-    getCharacterImageUrls(recordingId),
+    getCharacterImages(recordingId),
   ]);
   // 부모·자녀 분석은 SELF 대신 CHILD/PARENT로 와서 보고서와 같은 기준으로 '나'를 정함
   const myRole = resolveRoles(analysis.report?.recordingInfo?.speakers).me?.speakerRole ?? "SELF";
   const insight = analysis.report?.qualitativeAnalysis?.characterInsights?.find(
     (item) => item.speakerRole === myRole,
   );
-  if (!insight || !imageUrls[myRole]) return null;
+  if (!insight || !images[myRole]) return null;
 
   return {
+    ...CHARACTER_STYLES.me,
+    ...images[myRole],
     id: recordingId,
     name: insight.name,
     description: insight.description,
-    image: imageUrls[myRole],
   };
 };
 
@@ -57,7 +56,7 @@ const CharacterCard = ({ character, offset, dragX, isDragging, onSelect }) => {
         transform: `translateX(${dragX}px) ${baseTransform}`,
         opacity: isVisible ? 1 : 0,
         pointerEvents: isVisible ? "auto" : "none",
-        backgroundImage: CARD_STYLE.background,
+        backgroundImage: character.background,
       }}
     >
       <div
@@ -73,7 +72,7 @@ const CharacterCard = ({ character, offset, dragX, isDragging, onSelect }) => {
         </div>
         {/* 캐릭터는 카드 바닥에 붙이고, 이름·설명은 그 위에 겹쳐 표시 */}
         <img
-          src={character.image}
+          src={character.imageUrl}
           alt={isActive ? `${character.name} 캐릭터` : ""}
           draggable={false}
           className="pointer-events-none absolute bottom-0 left-1/2 block size-[181px] max-w-none -translate-x-1/2 object-contain"
@@ -82,7 +81,7 @@ const CharacterCard = ({ character, offset, dragX, isDragging, onSelect }) => {
           {/* 이름·설명은 서버가 길이를 줄이지 않으므로 이름은 한 줄 말줄임, 설명은 두 줄까지 (캐릭터 이미지를 가리지 않게) */}
           <h3
             className={`truncate font-bold transition-[font-size] duration-500 ${isActive ? "text-[16.083px] tracking-[0.6433px]" : "text-[18px] tracking-[0.72px]"}`}
-            style={{ color: CARD_STYLE.titleColor }}
+            style={{ color: character.titleColor }}
           >
             {character.name}
           </h3>

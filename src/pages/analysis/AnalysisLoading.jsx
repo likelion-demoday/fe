@@ -4,6 +4,7 @@ import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import { getAnalysisReport } from "../../api/analysis";
 import { getRecordingStatus } from "../../api/recording";
 import { requestCharacterImage } from "../../api/character";
+import { getMyCredits } from "../../api/credit";
 import { getFailureMessage } from "../../constants/analysis";
 import { clearPendingAnalysis, savePendingAnalysis } from "../../utils/pendingAnalysis";
 
@@ -43,8 +44,12 @@ const AnalysisLoading = () => {
           return;
         }
         if (isAnalyzing && step === "COMPLETED") {
-          // 캐릭터 이미지는 비동기 생성. 중복 요청은 서버에서 alreadyRequested로 처리
-          requestCharacterImage(recordingId).catch((error) => console.error(error.message));
+          // 캐릭터 생성 요청은 크레딧을 쓰므로 무료 기회가 있을 때만 자동 요청 (없으면 보고서 잠금 카드에서 결제)
+          // 보고서가 생성 중 상태를 바로 읽도록 요청이 끝난 뒤 완료 처리
+          await getMyCredits()
+            .then(({ characterFreeAvailable }) => characterFreeAvailable && requestCharacterImage(recordingId))
+            .catch((error) => console.error(error.message));
+          if (cancelled) return;
           clearPendingAnalysis();
           setIsDone(true);
           return;

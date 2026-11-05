@@ -1,14 +1,15 @@
 import { useState } from "react";
 
 import {
+  CHIP_SHADOW,
+  DETAIL_CARD_SHADOW,
   KeywordPill,
   ReportSection,
   SpeakerScoreSelector,
   SummaryCard,
 } from "../../components/feature/report/ReportBlocks";
 
-const DETAIL_CARD =
-  "flex w-full flex-col items-start rounded-[20px] border border-[#eee] bg-white p-[20px] drop-shadow-[0px_0px_10px_rgba(0,0,0,0.07)] drop-shadow-[0px_4px_3px_rgba(0,0,0,0.05)]";
+const DETAIL_CARD = `flex w-full flex-col items-start rounded-[20px] border border-[#eee] bg-white p-[20px] ${DETAIL_CARD_SHADOW}`;
 
 const InterestItem = ({ title, count, description, examples }) => (
   <div className="flex w-full flex-col items-start gap-[8px]">
@@ -81,7 +82,7 @@ const InterestLevel = ({ report, data = report.interest, title = "관심을 보�
                     {chips.items.map(({ label, count }) => (
                       <div
                         key={label}
-                        className="flex items-center justify-between rounded-[12px] bg-white px-[12px] py-[8px] drop-shadow-[0px_2px_3px_rgba(0,0,0,0.05)] drop-shadow-[0px_0px_5.7px_rgba(0,0,0,0.05)]"
+                        className={`flex items-center justify-between rounded-[12px] bg-white px-[12px] py-[8px] ${CHIP_SHADOW}`}
                       >
                         <span className="text-[#2d3038]">{label}</span>
                         <span className="text-[#ff765b]">{count}회</span>
