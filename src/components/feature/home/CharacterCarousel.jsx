@@ -75,7 +75,7 @@ const CharacterCard = ({ character, offset, dragX, isDragging, onSelect }) => {
           src={character.imageUrl}
           alt={isActive ? `${character.name} 캐릭터` : ""}
           draggable={false}
-          className="pointer-events-none absolute bottom-0 left-1/2 block size-[181px] max-w-none -translate-x-1/2 object-contain"
+          className="pointer-events-none absolute top-[65px] left-[29px] block size-[160px] max-w-none object-contain"
         />
         <div className="relative flex w-full flex-col gap-[6px] px-[16px] pt-[14px]">
           {/* 이름·설명은 서버가 길이를 줄이지 않으므로 이름은 한 줄 말줄임, 설명은 두 줄까지 (캐릭터 이미지를 가리지 않게) */}
