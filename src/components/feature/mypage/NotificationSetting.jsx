@@ -1,6 +1,6 @@
 import Input from "../../common/Input";
 
-const NotificationSetting = ({ label, checked, onChange }) => {
+const NotificationSetting = ({ label, checked, onChange, disabled = false }) => {
   return (
     <label className="mypage-press-row flex w-full cursor-pointer items-center justify-between py-[12px]">
       <span className="text-label text-[#262626]">{label}</span>
@@ -8,6 +8,7 @@ const NotificationSetting = ({ label, checked, onChange }) => {
         <Input
           type="checkbox"
           checked={checked}
+          disabled={disabled}
           onChange={(event) => onChange(event.target.checked)}
           className="peer m-0 block h-[24px] w-[42px] cursor-pointer appearance-none rounded-[71px] bg-[#bfbfbf] checked:bg-[#454545] checked:shadow-[0_0_11.4px_rgba(0,0,0,0.05)]"
         />
