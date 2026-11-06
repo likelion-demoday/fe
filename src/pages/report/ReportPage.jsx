@@ -54,10 +54,10 @@ const fetchReport = (reportId) => {
 const IMAGE_POLLING_MS = 3000;
 const IMAGE_POLLING_LIMIT = 60; // 최대 3분
 
-const withCharacterImages = (report, images, locked) => {
+const withCharacterImages = (report, images, locked, generating) => {
   const attach = (speaker) => ({
     ...speaker,
-    character: { ...speaker.character, ...images[speaker.role], locked },
+    character: { ...speaker.character, ...images[speaker.role], locked, generating },
   });
   return { ...report, speakers: { me: attach(report.speakers.me), partner: attach(report.speakers.partner) } };
 };
@@ -181,7 +181,7 @@ const ReportPage = () => {
   const { reportId } = useParams();
   const [section, setSection] = useState("overview");
   const [loaded, setLoaded] = useState({ id: null, report: null, message: null });
-  const [characterImages, setCharacterImages] = useState({ id: null, images: {}, locked: false });
+  const [characterImages, setCharacterImages] = useState({ id: null, images: {}, locked: false, generating: false });
   const [imagePollKey, setImagePollKey] = useState(0);
   // 캐릭터 결제 시트: { ownedCredit, price, isFree }
   const [characterPurchase, setCharacterPurchase] = useState(null);
@@ -190,7 +190,12 @@ const ReportPage = () => {
   const isImagesCurrent = characterImages.id === reportId;
   const images = isImagesCurrent ? characterImages.images : {};
   const report = isCurrent && loaded.report
-    ? withCharacterImages(loaded.report, images, isImagesCurrent && characterImages.locked)
+    ? withCharacterImages(
+        loaded.report,
+        images,
+        isImagesCurrent && characterImages.locked,
+        isImagesCurrent && characterImages.generating,
+      )
     : null;
   const message = isCurrent ? loaded.message : null;
 
@@ -231,9 +236,13 @@ const ReportPage = () => {
         const isPending = images.some(({ status }) => status === "PENDING" || status === "GENERATING");
         if (!isPending) {
           const characters = await getCharacterImages(reportId);
-          if (!cancelled) setCharacterImages({ id: reportId, images: characters, locked: images.length === 0 });
+          if (!cancelled) {
+            setCharacterImages({ id: reportId, images: characters, locked: images.length === 0, generating: false });
+          }
           return;
         }
+        // 생성 중이면 "생성중..." 카드로 표시하고 계속 확인
+        if (!cancelled) setCharacterImages({ id: reportId, images: {}, locked: false, generating: true });
       } catch {
         // 일시적인 오류는 다음 주기에 다시 시도
       }
@@ -275,7 +284,7 @@ const ReportPage = () => {
     try {
       await requestCharacterImage(reportId);
       setCharacterPurchase(null);
-      setCharacterImages((prev) => ({ ...prev, locked: false }));
+      setCharacterImages((prev) => ({ ...prev, locked: false, generating: true }));
       setImagePollKey((key) => key + 1);
     } catch (e) {
       if (e.code === "CREDIT402_1") goToCharge();
