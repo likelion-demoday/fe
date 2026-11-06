@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import useAuthStore from "../../store/authStore";
 import { oauthSignUp, signUp } from "../../api/auth";
+import { getMe, updateMarketingAgreement } from "../../api/user";
 
 import BackButton from "../../components/common/BackButton";
 import Button from "../../components/common/Button";
@@ -61,6 +62,45 @@ const Consent = ({ accountMode = false }) => {
   const navigate = useNavigate();
   const [checked, setChecked] = useState(savedAgreements);
   const [activeAgreement, setActiveAgreement] = useState(null);
+  const [accountUser, setAccountUser] = useState(null);
+  const [isSaving, setIsSaving] = useState(false);
+  const [loadAttempt, setLoadAttempt] = useState(0);
+  const savePending = useRef(false);
+
+  useEffect(() => {
+    if (!accountMode) return;
+    let active = true;
+    getMe().then((user) => {
+      if (!active) return;
+      setAccountUser(user);
+      setChecked({ terms: true, privacy: true, voice: true, marketing: user.marketingAgreed });
+    }).catch((error) => {
+      if (active) setErrorMessage(error?.message || "동의 정보를 불러오지 못했어요.");
+    });
+    return () => { active = false; };
+  }, [accountMode, loadAttempt]);
+
+  const saveAccountConsent = async () => {
+    if (!accountUser || savePending.current) return;
+    if (checked.marketing === accountUser.marketingAgreed) {
+      navigate("/mypage/account");
+      return;
+    }
+    savePending.current = true;
+    setIsSaving(true);
+    setErrorMessage("");
+    try {
+      const user = await updateMarketingAgreement(Boolean(checked.marketing));
+      setAccountUser(user);
+      setChecked({ terms: true, privacy: true, voice: true, marketing: user.marketingAgreed });
+      navigate("/mypage/account");
+    } catch (error) {
+      setErrorMessage(error?.message || "동의 변경을 저장하지 못했어요. 다시 시도해주세요.");
+    } finally {
+      savePending.current = false;
+      setIsSaving(false);
+    }
+  };
 
   const allChecked = AGREEMENTS.every(({ id }) => checked[id]);
   const requiredChecked = AGREEMENTS.filter(({ required }) => required).every(
@@ -68,6 +108,7 @@ const Consent = ({ accountMode = false }) => {
   );
 
   const toggle = (id) => {
+    if (accountMode && (id !== "marketing" || !accountUser || savePending.current)) return;
     setChecked((prev) => ({ ...prev, [id]: !prev[id] }));
   };
 
@@ -143,7 +184,7 @@ const Consent = ({ accountMode = false }) => {
           </h1>}
 
           <div className="flex w-full flex-col items-start gap-[16px]">
-            <button
+            {!accountMode && <button
               type="button"
               onClick={toggleAll}
               aria-pressed={allChecked}
@@ -153,7 +194,9 @@ const Consent = ({ accountMode = false }) => {
               <span className="font-['SUITE',sans-serif] text-[18px] font-semibold tracking-[0.72px] whitespace-nowrap text-[#262626]">
                 전체 동의
               </span>
-            </button>
+            </button>}
+
+            {accountMode && !accountUser && !errorMessage && <p role="status">동의 정보를 불러오는 중...</p>}
 
             {AGREEMENTS.map(({ id, label }, index) => (
               <div key={id} className="contents">
@@ -162,10 +205,11 @@ const Consent = ({ accountMode = false }) => {
                   <button
                     type="button"
                     onClick={() => toggle(id)}
-                    aria-pressed={Boolean(checked[id])}
+                    disabled={accountMode && (id !== "marketing" || !accountUser || isSaving)}
+                    aria-pressed={Boolean(accountMode && id !== "marketing" ? true : checked[id])}
                     className="flex items-center gap-[12px]"
                   >
-                    <CheckCircle checked={Boolean(checked[id])} accountMode={accountMode} />
+                    <CheckCircle checked={Boolean(accountMode && id !== "marketing" ? true : checked[id])} accountMode={accountMode} />
                     <span className="font-['SUITE',sans-serif] text-[16px] font-semibold whitespace-nowrap text-[#262626]">
                       {label}
                     </span>
@@ -202,11 +246,15 @@ const Consent = ({ accountMode = false }) => {
           </>}
         </div>
         <div className="flex w-full max-w-[358px] flex-col items-start gap-[4px]">
-          {errorMessage && <p className="...">{errorMessage}</p>}
+          {errorMessage && <p role="alert" className="text-body text-[#595959]">{errorMessage}</p>}
+          {accountMode && !accountUser && errorMessage && <button type="button" onClick={() => {
+            setErrorMessage("");
+            setLoadAttempt((value) => value + 1);
+          }}>다시 시도</button>}
           <Button
-            text={accountMode ? "완료" : "다음"}
-            onClick={accountMode ? handleBack : handleNext}
-            disabled={!accountMode && !requiredChecked}
+            text={accountMode ? (isSaving ? "저장 중..." : "완료") : "다음"}
+            onClick={accountMode ? saveAccountConsent : handleNext}
+            disabled={accountMode ? !accountUser || isSaving : !requiredChecked}
             className={accountMode
               ? "flex w-full max-w-[358px] items-center justify-center rounded-[16px] bg-[#262626] px-[26px] py-[16px] text-[20px] font-semibold tracking-[0.8px] text-white"
               : "flex h-[49px] w-full max-w-[358px] items-center justify-center rounded-[12px] bg-[#262626] px-[26px] py-[14px] font-['Pretendard',sans-serif] text-[18px] font-semibold tracking-[-0.36px] text-white disabled:bg-[#d9d9d9]"}
