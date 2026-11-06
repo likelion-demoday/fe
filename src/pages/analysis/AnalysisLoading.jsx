@@ -94,9 +94,10 @@ const AnalysisLoading = () => {
         <AppHeader />
       </div>
  
-      <LoadingMotion className="absolute top-[330px] left-1/2 h-[75px] w-[66px] -translate-x-1/2" />
+      {/* 위치는 화면 높이 비율로 잡아서, 사파리처럼 하단바 때문에 화면이 짧아지면 같이 올라가게 함 (844px 기준 330px · 441px) */}
+      <LoadingMotion className="absolute top-[39.1%] left-1/2 h-[75px] w-[66px] -translate-x-1/2" />
 
-      <div className="absolute top-[441px] left-1/2 flex w-max -translate-x-1/2 flex-col items-center gap-[16px] text-center">
+      <div className="absolute top-[52.25%] left-1/2 flex w-max -translate-x-1/2 flex-col items-center gap-[16px] text-center">
         <h1 className="text-display w-full text-black" role="status">
           {/* "..."은 가운데 정렬 계산에서 빼서 "분석중" 글자가 로딩 모션과 같은 중심에 오게 함 */}
           <span className="relative">
