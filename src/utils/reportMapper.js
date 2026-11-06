@@ -102,12 +102,25 @@ const toCharacter = (insight, key) => ({
   description: [insight?.description ?? ""],
 });
 
+// 한국어 평균 발화 속도 대비 차이(%). 음수: 느림, 양수: 빠름. 필드가 없는 기존 보고서는 직접 계산
+const KOREAN_AVERAGE_SYLLABLES_PER_SECOND = 5.79;
+const speedDiffOf = (speaker) => {
+  if (speaker.speakingSpeedDifferencePercent != null) return speaker.speakingSpeedDifferencePercent;
+  if (!speaker.syllablesPerSecond) return 0;
+  const reference = speaker.referenceSyllablesPerSecond || KOREAN_AVERAGE_SYLLABLES_PER_SECOND;
+  return (speaker.syllablesPerSecond / reference - 1) * 100;
+};
+
+const formatSpeedDiff = (diff) => {
+  if (Math.abs(diff) <= 1) return "평균과 비슷";
+  return `평균보다 ${Math.round(Math.abs(diff))}% ${diff < 0 ? "느림" : "빠름"}`;
+};
+
 const toStyle = (role, partnerRole, partnerName, quantitative, qualitative) => {
   const mine = findByRole(quantitative.speakers, role) ?? {};
   const other = findByRole(quantitative.speakers, partnerRole) ?? {};
   const speed = quantitative.speakingSpeedComparison ?? {};
   const isFaster = speed.fasterSpeakerRole === role;
-  const speedDiff = Math.round(speed.percentDifference ?? 0);
   const insight = findByRole(qualitative.speakerInsights, role) ?? {};
   const ratio = Math.round(mine.speakingRatioPercent ?? 0);
   const talksMore = (mine.speakingRatioPercent ?? 0) >= (other.speakingRatioPercent ?? 0);
@@ -124,8 +137,9 @@ const toStyle = (role, partnerRole, partnerName, quantitative, qualitative) => {
       },
       {
         label: "평균 발화 속도",
-        value: `${isFaster ? "+" : "-"}${speedDiff}%`,
-        position: shareOf(mine.syllablesPerSecond, other.syllablesPerSecond),
+        value: formatSpeedDiff(speedDiffOf(mine)),
+        // 한국어 평균(가운데) 기준. ±50% 이상이면 끝까지
+        position: 50 + speedDiffOf(mine),
         range: ["느림", "빠름"],
       },
     ],
@@ -255,7 +269,13 @@ const evidenceQuotes = (qualitative, roles, specs) => {
 const coachingQuotes = (qualitative) => {
   const quotes = [...(qualitative.coachingSuggestions ?? [])]
     .sort((a, b) => a.order - b.order)
-    .map(({ title, suggestedPhrase }) => ({ label: title, text: suggestedPhrase, highlighted: true }));
+    .map(({ title, suggestedPhrase, evidenceQuotes: quotes }) => ({
+      label: title,
+      text: suggestedPhrase,
+      highlighted: true,
+      // 추천 문장의 근거가 된 실제 발화 (기존 보고서는 빈 배열)
+      evidences: quoteTexts(quotes),
+    }));
   return { me: quotes, partner: quotes };
 };
 
