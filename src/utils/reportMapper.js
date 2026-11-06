@@ -242,10 +242,27 @@ const toBehavior = (role, qualitative, { groups, chips }) => {
 };
 
 // 표현 강도 · 갈등 표현 탭 (표독력 화면 구성): 표독력 점수·요약 + PERCENT 지표
-const toIntensity = (role, qualitative, types) => ({
-  ...toExpression(role, qualitative),
-  axes: percentAxes(qualitative, role, types),
-});
+// 표현을 누그러뜨리는 지표: 높을수록 강도가 낮으므로 점수 계산 때 100에서 뺌
+const SOFT_INTENSITY_TYPES = ["SOFTENING_EXPRESSION", "RECOVERY_EXPRESSION", "EMOTION_CHECK"];
+
+// 위 화자 카드 점수 = 아래 항목들의 평균 (완충·회복·감정 확인은 100 - 값으로 반영). 항목이 없으면 표독력 점수
+const toIntensity = (role, qualitative, types) => {
+  const axes = percentAxes(qualitative, role, types);
+  const expression = toExpression(role, qualitative);
+  const values = types
+    .map((type) => {
+      const metric = findMetric(qualitative, role, type, "PERCENT");
+      if (!metric) return null;
+      const value = metric.value ?? 0;
+      return SOFT_INTENSITY_TYPES.includes(type) ? 100 - value : value;
+    })
+    .filter((value) => value != null);
+  const score = values.length > 0
+    ? Math.round(values.reduce((sum, value) => sum + value, 0) / values.length)
+    : expression.score;
+  // 요약 제목도 점수와 어긋나지 않게 같은 기준으로
+  return { ...expression, score, summary: { ...expression.summary, title: spicinessTitle(score) }, axes };
+};
 
 const evidenceText = ({ evidence = {} }) => evidence.displayContent || evidence.originalContent || "";
 

@@ -6,7 +6,7 @@ import { getRecordingStatus } from "../../api/recording";
 import { requestCharacterImage } from "../../api/character";
 import { getMyCredits } from "../../api/credit";
 import { getFailureMessage } from "../../constants/analysis";
-import { clearPendingAnalysis, savePendingAnalysis } from "../../utils/pendingAnalysis";
+import { removePendingAnalysis, savePendingAnalysis } from "../../utils/pendingAnalysis";
 
 import AppHeader from "../../components/common/AppHeader";
 import BottomSheet, { SheetButton } from "../../components/common/BottomSheet";
@@ -29,7 +29,7 @@ const AnalysisLoading = () => {
   useEffect(() => {
     const recordingId = state?.recordingId;
     if (!recordingId) return;
-    savePendingAnalysis(state);
+    savePendingAnalysis({ ...state, paid: true });
 
     let timer;
     let cancelled = false;
@@ -50,7 +50,7 @@ const AnalysisLoading = () => {
             .then(({ characterFreeAvailable }) => characterFreeAvailable && requestCharacterImage(recordingId))
             .catch((error) => console.error(error.message));
           if (cancelled) return;
-          clearPendingAnalysis();
+          removePendingAnalysis(recordingId);
           setIsDone(true);
           return;
         }
@@ -63,7 +63,7 @@ const AnalysisLoading = () => {
                   .catch(() => failureReason)
               : failureReason;
           if (cancelled) return;
-          clearPendingAnalysis();
+          removePendingAnalysis(recordingId);
           setFailureMessage(getFailureMessage(reason));
           return;
         }
@@ -94,9 +94,10 @@ const AnalysisLoading = () => {
         <AppHeader />
       </div>
  
-      <LoadingMotion className="absolute top-[330px] left-1/2 h-[75px] w-[66px] -translate-x-1/2" />
+      {/* 위치는 화면 높이 비율로 잡아서, 사파리처럼 하단바 때문에 화면이 짧아지면 같이 올라가게 함 (844px 기준 330px · 441px) */}
+      <LoadingMotion className="absolute top-[39.1%] left-1/2 h-[75px] w-[66px] -translate-x-1/2" />
 
-      <div className="absolute top-[441px] left-1/2 flex w-[195px] -translate-x-1/2 flex-col items-center gap-[16px] text-center">
+      <div className="absolute top-[52.25%] left-1/2 flex w-max -translate-x-1/2 flex-col items-center gap-[16px] text-center">
         <h1 className="text-display w-full text-black" role="status">
           {/* "..."은 가운데 정렬 계산에서 빼서 "분석중" 글자가 로딩 모션과 같은 중심에 오게 함 */}
           <span className="relative">
@@ -111,7 +112,7 @@ const AnalysisLoading = () => {
           </span>
         </h1>
         <div className="flex w-full flex-col items-center gap-[8px]">
-          <p className="text-title-medium w-full text-black">분석에는 최대 5분 소요돼요</p>
+          <p className="text-title-medium w-full whitespace-nowrap text-black">분석에는 최대 5분 소요돼요</p>
           <p className="text-caption w-full text-[#595959]">화면을 나가도 분석은 계속돼요</p>
         </div>
       </div>

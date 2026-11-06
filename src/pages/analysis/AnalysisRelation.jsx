@@ -10,6 +10,7 @@ import AppHeader from "../../components/common/AppHeader";
 import BottomSheet from "../../components/common/BottomSheet";
 import TextBackButton from "../../components/common/TextBackButton";
 import PurchaseSheet from "../../components/feature/analysis/PurchaseSheet";
+import UnpaidLeaveSheet from "../../components/feature/analysis/UnpaidLeaveSheet";
 import relationMainIcon from "../../assets/icons/relation-main-m.svg";
 import relationLoverIcon from "../../assets/icons/relation-lover-m.svg";
 import relationFamilyIcon from "../../assets/icons/relation-family-m.svg";
@@ -73,6 +74,8 @@ const AnalysisRelation = () => {
   const [ownedCredit, setOwnedCredit] = useState(0);
   const [price, setPrice] = useState(0);
   const [paying, setPaying] = useState(false);
+  // 결제 전 나가기 확인 시트에서 이동할 경로
+  const [leaveTo, setLeaveTo] = useState(null);
 
   useEffect(() => {
     if (!config) return;
@@ -115,7 +118,7 @@ const AnalysisRelation = () => {
       await selectRecordingType(state.recordingId, relationshipType);
       await payRecording(state.recordingId);
       // 구매완료 시트에서 바로 나가도 홈에서 이어할 수 있게 결제 직후 저장 (로딩 화면에서도 다시 저장)
-      savePendingAnalysis({ ...state, relation: selected.id });
+      savePendingAnalysis({ ...state, relation: selected.id, paid: true });
       setSheet("complete");
     } catch (e) {
       alert(e.message ?? "요청에 실패했어요. 다시 시도해 주세요.");
@@ -126,7 +129,7 @@ const AnalysisRelation = () => {
 
   return (
     <main className="relative mx-auto flex h-[min(844px,100dvh)] w-[390px] flex-col items-start gap-[30px] overflow-y-auto no-scrollbar bg-white px-[24px] py-[16px]">
-      <AppHeader title="대화 분석" />
+      <AppHeader title="대화 분석" onLeave={setLeaveTo} />
 
       <section className="flex w-full flex-col gap-[24px]">
         <h2 className="text-heading text-[#262626]">대화 상대방과 어떤 사이인가요?</h2>
@@ -160,6 +163,7 @@ const AnalysisRelation = () => {
           }}
         />
       )}
+      {leaveTo && <UnpaidLeaveSheet onStay={() => setLeaveTo(null)} onLeave={() => navigate(leaveTo)} />}
       {sheet === "complete" && <BottomSheet title="구매완료!" image={COMPLETE_IMAGE} onClose={goToLoading} />}
     </main>
   );
