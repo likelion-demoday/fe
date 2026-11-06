@@ -67,7 +67,7 @@ const scoreTextClass = (scores) => {
   return (key) => {
     if (typeof scores[key] === "number") return "font-['SUITE',sans-serif] text-[30px]";
     const words = wordCount(scores[key]);
-    const wrap = "text-right break-keep whitespace-normal";
+    const wrap = "text-left break-keep whitespace-normal";
     if (anyBody) return `${wrap} text-[16px] leading-normal tracking-[-0.32px]`;
     if (words >= 3) return `${wrap} text-[20px] leading-normal`;
     return `${wrap} font-['SUITE',sans-serif] text-[24px] leading-[32px]`;
@@ -89,7 +89,7 @@ export const SpeakerScoreSelector = ({ speakers, scores, selected, onSelect }) =
         role="tab"
         aria-selected={selected === key}
         onClick={() => onSelect(key)}
-        className={`flex min-w-0 flex-1 flex-col items-end gap-[12px] overflow-clip rounded-[20px] border border-[#eee] bg-white px-[18px] py-[20px] whitespace-nowrap transition-opacity ${CARD_SHADOW} ${
+        className={`flex min-w-0 flex-1 flex-col items-start gap-[12px] overflow-clip rounded-[20px] border border-[#eee] bg-white px-[18px] py-[20px] whitespace-nowrap transition-opacity ${CARD_SHADOW} ${
           selected === key ? "opacity-100" : "opacity-30"
         }`}
       >

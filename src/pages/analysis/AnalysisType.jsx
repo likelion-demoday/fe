@@ -1,6 +1,8 @@
-import { useLocation, useNavigate } from "react-router-dom"; 
+import { useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import AppHeader from "../../components/common/AppHeader";
+import UnpaidLeaveSheet from "../../components/feature/analysis/UnpaidLeaveSheet";
 import dailyIcon from "../../assets/icons/analysis-type-daily.svg";
 import worryIcon from "../../assets/icons/analysis-type-worry.svg";
 import relationMainIcon from "../../assets/icons/relation-main-s.svg";
@@ -45,6 +47,8 @@ const ANALYSIS_TYPES = [
 const AnalysisType = () => {
   const navigate = useNavigate();
   const { state } = useLocation();
+  // 결제 전 나가기 확인 시트에서 이동할 경로
+  const [leaveTo, setLeaveTo] = useState(null);
 
   const handleSelect = (type) => {
     navigate("/analysis/relation", { state: { ...state, type } });
@@ -52,7 +56,7 @@ const AnalysisType = () => {
 
   return (
     <main className="mx-auto flex h-[min(844px,100dvh)] w-[390px] flex-col gap-[30px] overflow-y-auto no-scrollbar bg-white px-[24px] py-[16px]">
-      <AppHeader title="대화 분석" />
+      <AppHeader title="대화 분석" onLeave={setLeaveTo} />
 
       <section className="flex w-full flex-col gap-[24px]">
         <h2 className="text-heading text-[#262626]">어떤 유형으로 분석할까요?</h2>
@@ -90,6 +94,8 @@ const AnalysisType = () => {
           ))}
         </div>
       </section>
+
+      {leaveTo && <UnpaidLeaveSheet onStay={() => setLeaveTo(null)} onLeave={() => navigate(leaveTo)} />}
     </main>
   );
 };

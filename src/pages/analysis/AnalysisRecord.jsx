@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 import { useAudioRecorder } from "../../hooks/useAudioRecorder.js";
 import { uploadRecording } from "../../api/recording.js";
+import { savePendingAnalysis } from "../../utils/pendingAnalysis";
 
 import AppHeader from "../../components/common/AppHeader";
 import Button from "../../components/common/Button";
@@ -208,11 +209,11 @@ const AnalysisRecord = () => {
 
   try {
     const { recordingId } = await uploadRecording(file);
+    const nextState = { partner: state?.partner, elapsed, recordingId };
+    // 결제 전에 나가도 홈에서 이어서 결제할 수 있게 저장 (미결제 녹음은 3일 보관)
+    savePendingAnalysis({ ...nextState, paid: false });
 
-    navigate("/analysis/type", {
-      replace: true,
-      state: { partner: state?.partner, elapsed, recordingId },
-    });
+    navigate("/analysis/type", { replace: true, state: nextState });
   } catch (e) {
     alert(e.message ?? "업로드에 실패했어요. 다시 시도해 주세요.");
   }
