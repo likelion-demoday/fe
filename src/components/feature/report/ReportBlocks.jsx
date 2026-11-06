@@ -9,10 +9,11 @@ export const DIVIDER_GRADIENT =
   "linear-gradient(90deg, rgba(238,238,238,0) 0%, #eee 5%, #eee 95%, rgba(238,238,238,0) 100%)";
 
 // wrap: 긴 문구(주제명 등)를 한 줄로 두지 않고 부모 폭 안에서 줄바꿈
-export const KeywordPill = ({ label, highlighted = false, wrap = false }) => (
+// alignLeft: 실제 발화 문장처럼 여러 줄이 될 수 있는 문구를 왼쪽 정렬
+export const KeywordPill = ({ label, highlighted = false, wrap = false, alignLeft = false }) => (
   <span
     className={`flex items-center justify-center rounded-[12px] border border-[#eee] bg-white px-[12px] py-[4px] text-[14px] leading-[22px] font-semibold tracking-[0.28px] ${CHIP_SHADOW} ${
-      wrap ? "max-w-full text-center break-keep" : "shrink-0 whitespace-nowrap"
+      wrap ? `max-w-full break-keep ${alignLeft ? "text-left" : "text-center"}` : "shrink-0 whitespace-nowrap"
     } ${highlighted ? "text-[#ff765b]" : "text-[#595959]"}`}
   >
     {label}
@@ -57,7 +58,25 @@ export const SpectrumBar = ({ position, tone }) => {
 // 화자 선택 카드: 이름 + 점수. 선택하지 않은 쪽은 흐리게
 // scores 값이 숫자면 "%"를 붙이고, 문자열이면 그대로 표시 (예: "T 87%")
 // 점수 문구가 길어 화면보다 넓어지면 가로 스크롤 (그림자가 잘리지 않게 바깥 여백까지 스크롤 영역으로 씀)
-export const SpeakerScoreSelector = ({ speakers, scores, selected, onSelect }) => (
+const wordCount = (value) => String(value).trim().split(/\s+/).length;
+
+// 문자열 점수 크기: 3어절 이상은 title(20), 5어절 이상은 body(16). 한쪽이라도 body면 둘 다 body
+const scoreTextClass = (scores) => {
+  const counts = ["me", "partner"].map((key) => (typeof scores[key] === "string" ? wordCount(scores[key]) : 0));
+  const anyBody = Math.max(...counts) >= 5;
+  return (key) => {
+    if (typeof scores[key] === "number") return "font-['SUITE',sans-serif] text-[30px]";
+    const words = wordCount(scores[key]);
+    const wrap = "text-right break-keep whitespace-normal";
+    if (anyBody) return `${wrap} text-[16px] leading-normal tracking-[-0.32px]`;
+    if (words >= 3) return `${wrap} text-[20px] leading-normal`;
+    return `${wrap} font-['SUITE',sans-serif] text-[24px] leading-[32px]`;
+  };
+};
+
+export const SpeakerScoreSelector = ({ speakers, scores, selected, onSelect }) => {
+  const scoreClass = scoreTextClass(scores);
+  return (
   <div
     className="flex items-stretch gap-[16px] self-stretch"
     role="tablist"
@@ -75,18 +94,14 @@ export const SpeakerScoreSelector = ({ speakers, scores, selected, onSelect }) =
         }`}
       >
         <span className="max-w-full truncate text-[20px] font-bold text-[#454545]">{speakers[key].nickname}</span>
-        {/* '원인 분석형' 같은 유형 텍스트는 숫자보다 길어서 작게 */}
-        <span
-          className={`font-['SUITE',sans-serif] font-bold ${
-            typeof scores[key] === "number" ? "text-[30px]" : "text-right text-[24px] leading-[32px] break-keep whitespace-normal"
-          } ${SPEAKER_TONES[key].text}`}
-        >
+        <span className={`font-bold ${scoreClass(key)} ${SPEAKER_TONES[key].text}`}>
           {typeof scores[key] === "number" ? `${scores[key]}%` : scores[key]}
         </span>
       </button>
     ))}
   </div>
-);
+  );
+};
 
 // 말풍선: 라벨 + 실제 한 말. 강조할 라벨은 화자 색, 나머지는 회색
 export const QuoteBubble = ({ label, text, highlighted, tone }) => (

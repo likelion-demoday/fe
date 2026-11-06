@@ -151,6 +151,16 @@ const AnalysisRecord = () => {
     else audio.pause();
   };
 
+  // 파형을 누른 위치부터 재생
+  const seekTo = (ratio) => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    const seconds = ratio * (audioDuration || elapsed);
+    audio.currentTime = seconds;
+    setPlayedSeconds(Math.min(elapsed, seconds));
+    audio.play().catch((e) => console.error(e.message));
+  };
+
   // 확인: 재생을 멈추고 녹음 끝내기 확인 시트로 돌아감
   const finishListening = () => {
     audioRef.current?.pause();
@@ -228,7 +238,7 @@ const AnalysisRecord = () => {
               <p className="text-heading w-full text-center text-black">
                 {formatTime(Math.floor(playedSeconds))} / {formatTime(elapsed)}
               </p>
-              <RecordingWaveform levels={levels} head={playedBars - 1} inactiveColor="#eee" />
+              <RecordingWaveform levels={levels} head={playedBars - 1} inactiveColor="#eee" onSeek={seekTo} />
             </div>
 
             <button
