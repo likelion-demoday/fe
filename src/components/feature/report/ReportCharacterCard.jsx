@@ -34,12 +34,12 @@ const ReportCharacterCard = ({ nickname, nicknameColor, character, onUnlock }) =
           <div className="absolute top-[-0.97px] left-[-0.87px] h-[107.226px] w-[165.162px]">
             <img src={cardBg} alt="" className="absolute inset-[-38.47%_-24.97%] block max-w-none" />
           </div>
-          {/* 캐릭터는 카드 바닥에 붙이고, 이름·설명은 그 위에 겹쳐 표시 */}
+          {/* 홈 캐릭터 카드(186px 폭, 이미지 160px · 왼쪽 29 · 위 65)를 이 카드 폭(160.839px) 비율로 줄인 위치 */}
           {imageUrl && (
             <img
               src={imageUrl}
               alt={character.locked ? "" : `${character.name} 캐릭터`}
-              className="pointer-events-none absolute bottom-0 left-1/2 block size-[156px] max-w-none -translate-x-1/2 object-contain"
+              className="pointer-events-none absolute top-[56.2px] left-[25.08px] block size-[138.35px] max-w-none object-contain"
             />
           )}
           <div className="relative flex w-full flex-col gap-[5.188px] px-[13.836px] pt-[12.106px]">
