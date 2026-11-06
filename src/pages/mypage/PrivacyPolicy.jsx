@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import PolicyDocument from "../../components/feature/mypage/PolicyDocument";
 
 const SECTIONS = [
@@ -16,8 +17,17 @@ const SECTIONS = [
   ["13. 변경 사항의 고지", "개인정보 처리방침 변경 시 시행일과 변경 내용을 앱 내 공지 등으로 안내합니다. 최초 시행 예정일은 2026년 10월 31일입니다."],
 ];
 
-const PrivacyPolicy = () => (
-  <PolicyDocument title="개인정보 처리방침" sections={SECTIONS} compact />
-);
+const PrivacyPolicy = () => {
+  const navigate = useNavigate();
+
+  return (
+    <PolicyDocument
+      title="개인정보 처리방침"
+      sections={SECTIONS}
+      compact
+      onBack={() => navigate(-1)}
+    />
+  );
+};
 
 export default PrivacyPolicy;
