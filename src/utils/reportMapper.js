@@ -111,9 +111,10 @@ const speedDiffOf = (speaker) => {
   return (speaker.syllablesPerSecond / reference - 1) * 100;
 };
 
+// 한국어 평균 대비 차이를 부호 있는 %로 (예: -8%, +12%)
 const formatSpeedDiff = (diff) => {
-  if (Math.abs(diff) <= 1) return "평균과 비슷";
-  return `평균보다 ${Math.round(Math.abs(diff))}% ${diff < 0 ? "느림" : "빠름"}`;
+  const rounded = Math.round(diff);
+  return `${rounded > 0 ? "+" : ""}${rounded}%`;
 };
 
 const toStyle = (role, partnerRole, partnerName, quantitative, qualitative) => {
