@@ -267,17 +267,20 @@ const evidenceQuotes = (qualitative, roles, specs) => {
 };
 
 // 개선 제안은 모델이 만든 추천 문장 (실제 발화 아님)
-const coachingQuotes = (qualitative) => {
-  const quotes = [...(qualitative.coachingSuggestions ?? [])]
-    .sort((a, b) => a.order - b.order)
-    .map(({ title, suggestedPhrase, evidenceQuotes: quotes }) => ({
-      label: title,
-      text: suggestedPhrase,
-      highlighted: true,
-      // 추천 문장의 근거가 된 실제 발화 (기존 보고서는 빈 배열)
-      evidences: quoteTexts(quotes),
-    }));
-  return { me: quotes, partner: quotes };
+// 화자별 개선 제안. speakerRole이 없는 기존 보고서는 양쪽에 같은 제안을 보여줌
+const coachingQuotes = (qualitative, roles) => {
+  const suggestions = [...(qualitative.coachingSuggestions ?? [])].sort((a, b) => a.order - b.order);
+  const build = (role) =>
+    suggestions
+      .filter((item) => !item.speakerRole || item.speakerRole === role)
+      .map(({ title, suggestedPhrase, evidenceQuotes: quotes }) => ({
+        label: title,
+        text: suggestedPhrase,
+        highlighted: true,
+        // 추천 문장의 근거가 된 실제 발화 (기존 보고서는 빈 배열)
+        evidences: quoteTexts(quotes),
+      }));
+  return { me: build(roles.me), partner: build(roles.partner) };
 };
 
 const hasQuotes = ({ quotes }) => quotes.me.length > 0 || quotes.partner.length > 0;
@@ -399,11 +402,14 @@ export const toReportView = (report) => {
   const bySpeaker = (build) => ({ me: build(meRole), partner: build(partnerRole) });
   const nameOf = (role) => (role === meRole ? me?.speakerName ?? "나" : partnerName);
   const tendencyLabels = bySpeaker((role) => findByRole(qualitative.speakerTendencies, role)?.label ?? "");
-  const coachingSection = (title) => ({
-    title,
-    scores: { me: "3단계", partner: "3단계" },
-    quotes: coachingQuotes(qualitative),
-  });
+  const coachingSection = (title) => {
+    const quotes = coachingQuotes(qualitative, roles);
+    return {
+      title,
+      scores: { me: `${quotes.me.length}단계`, partner: `${quotes.partner.length}단계` },
+      quotes,
+    };
+  };
 
   const conflict = scenario === "COUPLE_CONFLICT" && {
     overviewScores: [
