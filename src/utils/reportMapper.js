@@ -242,10 +242,16 @@ const toBehavior = (role, qualitative, { groups, chips }) => {
 };
 
 // 표현 강도 · 갈등 표현 탭 (표독력 화면 구성): 표독력 점수·요약 + PERCENT 지표
-const toIntensity = (role, qualitative, types) => ({
-  ...toExpression(role, qualitative),
-  axes: percentAxes(qualitative, role, types),
-});
+// 위 화자 카드 점수는 아래 항목(PERCENT 지표)들의 평균. 항목이 없으면 표독력 점수
+const toIntensity = (role, qualitative, types) => {
+  const axes = percentAxes(qualitative, role, types);
+  const expression = toExpression(role, qualitative);
+  const average = axes.length > 0
+    ? Math.round(axes.reduce((sum, { value = 0 }) => sum + value, 0) / axes.length)
+    : expression.score;
+  // 요약 제목도 점수와 어긋나지 않게 평균 기준으로
+  return { ...expression, score: average, summary: { ...expression.summary, title: spicinessTitle(average) }, axes };
+};
 
 const evidenceText = ({ evidence = {} }) => evidence.displayContent || evidence.originalContent || "";
 
