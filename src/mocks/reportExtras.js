@@ -139,7 +139,13 @@ const MOCK_EXTRAS = {
       { speakerRole: "PARTNER", label: "조언 중심", description: "걱정되는 마음에 질문보다 조언을 먼저 건넸어요." },
     ],
     coachingSuggestions: [
-      { order: 1, title: "감정 먼저 묻기", description: "", suggestedPhrase: "그때 어떤 점이 답답했니?" },
+      {
+        order: 1,
+        title: "감정 먼저 묻기",
+        description: "",
+        suggestedPhrase: "그때 어떤 점이 답답했니?",
+        evidenceQuotes: [evidence("CHILD_POSITION", "SELF", "그냥 내 얘기 좀 들어줬으면 좋겠어.").evidence],
+      },
       { order: 2, title: "조언은 허락받고", description: "", suggestedPhrase: "내 생각을 말해봐도 괜찮을까?" },
       { order: 3, title: "함께 선택하기", description: "", suggestedPhrase: "어떤 도움을 받으면 좋겠어?" },
     ],

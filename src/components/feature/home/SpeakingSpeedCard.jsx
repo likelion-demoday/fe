@@ -45,7 +45,7 @@ const SpeakingSpeedCard = ({ count, diffPercent = 0, active = true }) => {
         </p>
         <div className="absolute top-[76px] left-1/2 flex w-[106px] -translate-x-1/2 flex-col items-center text-center text-[#262626]">
           <p className="text-heading w-full">{formatPercent(diffPercent * progress)}</p>
-          <p className="text-body w-full">전체 사용자 평균</p>
+          <p className="text-body w-full">한국인 평균</p>
         </div>
       </div>
     </section>
