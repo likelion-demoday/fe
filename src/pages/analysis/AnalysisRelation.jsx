@@ -4,6 +4,7 @@ import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import { payRecording, selectRecordingType } from "../../api/recording";
 import { getCreditPrices, getMyCredits } from "../../api/credit";
 import { saveChargeReturn } from "../../utils/chargeReturn";
+import { savePendingAnalysis } from "../../utils/pendingAnalysis";
 
 import AppHeader from "../../components/common/AppHeader";
 import BottomSheet from "../../components/common/BottomSheet";
@@ -113,6 +114,8 @@ const AnalysisRelation = () => {
     try {
       await selectRecordingType(state.recordingId, relationshipType);
       await payRecording(state.recordingId);
+      // 구매완료 시트에서 바로 나가도 홈에서 이어할 수 있게 결제 직후 저장 (로딩 화면에서도 다시 저장)
+      savePendingAnalysis({ ...state, relation: selected.id });
       setSheet("complete");
     } catch (e) {
       alert(e.message ?? "요청에 실패했어요. 다시 시도해 주세요.");

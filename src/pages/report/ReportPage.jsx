@@ -74,11 +74,11 @@ const SECTIONS = [
   { key: "affection", label: "애정 표현" },
   { key: "conflictReaction", label: "갈등 반응" },
   { key: "intensity", label: "표현 강도" },
-  { key: "missedWords", label: "놓친 말" },
+  { key: "missedWords", label: "추가 분석" },
   { key: "coaching", label: "대화 개선" },
   { key: "questionAdvice", label: "질문·조언" },
   { key: "conflictExpression", label: "갈등 표현" },
-  { key: "retry", label: "다시 대화" },
+  { key: "retry", label: "추가 분석" },
   { key: "extra", label: "추가 분석" },
 ];
 

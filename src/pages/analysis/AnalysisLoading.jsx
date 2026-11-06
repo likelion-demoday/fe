@@ -111,7 +111,7 @@ const AnalysisLoading = () => {
           </span>
         </h1>
         <div className="flex w-full flex-col items-center gap-[8px]">
-          <p className="text-title-medium w-full text-black">5분정도 시간이 소요돼요</p>
+          <p className="text-title-medium w-full text-black">분석에는 최대 5분 소요돼요</p>
           <p className="text-caption w-full text-[#595959]">화면을 나가도 분석은 계속돼요</p>
         </div>
       </div>
