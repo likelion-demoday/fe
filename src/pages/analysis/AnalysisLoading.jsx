@@ -6,7 +6,7 @@ import { getRecordingStatus } from "../../api/recording";
 import { requestCharacterImage } from "../../api/character";
 import { getMyCredits } from "../../api/credit";
 import { getFailureMessage } from "../../constants/analysis";
-import { clearPendingAnalysis, savePendingAnalysis } from "../../utils/pendingAnalysis";
+import { removePendingAnalysis, savePendingAnalysis } from "../../utils/pendingAnalysis";
 
 import AppHeader from "../../components/common/AppHeader";
 import BottomSheet, { SheetButton } from "../../components/common/BottomSheet";
@@ -29,7 +29,7 @@ const AnalysisLoading = () => {
   useEffect(() => {
     const recordingId = state?.recordingId;
     if (!recordingId) return;
-    savePendingAnalysis(state);
+    savePendingAnalysis({ ...state, paid: true });
 
     let timer;
     let cancelled = false;
@@ -50,7 +50,7 @@ const AnalysisLoading = () => {
             .then(({ characterFreeAvailable }) => characterFreeAvailable && requestCharacterImage(recordingId))
             .catch((error) => console.error(error.message));
           if (cancelled) return;
-          clearPendingAnalysis();
+          removePendingAnalysis(recordingId);
           setIsDone(true);
           return;
         }
@@ -63,7 +63,7 @@ const AnalysisLoading = () => {
                   .catch(() => failureReason)
               : failureReason;
           if (cancelled) return;
-          clearPendingAnalysis();
+          removePendingAnalysis(recordingId);
           setFailureMessage(getFailureMessage(reason));
           return;
         }

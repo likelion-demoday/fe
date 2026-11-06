@@ -2,7 +2,8 @@ import { useNavigate } from "react-router-dom";
 import profileIcon from "../../assets/icons/profile.svg";
 import TextBackButton from "./TextBackButton";
 
-const AppHeader = ({ title, onBack, onLogoClick, titleClassName = "text-display" }) => {
+// onLeave(path): 마이페이지 이동 전에 확인이 필요할 때 (예: 결제 전 분석 화면)
+const AppHeader = ({ title, onBack, onLogoClick, onLeave, titleClassName = "text-display" }) => {
   const navigate = useNavigate();
   const Logo = onLogoClick ? "button" : "p";
 
@@ -16,7 +17,7 @@ const AppHeader = ({ title, onBack, onLogoClick, titleClassName = "text-display"
         </Logo>
         <button
           type="button"
-          onClick={() => navigate("/mypage")}
+          onClick={() => (onLeave ? onLeave("/mypage") : navigate("/mypage"))}
           aria-label="마이페이지"
           className="relative size-[40px] shrink-0"
         >

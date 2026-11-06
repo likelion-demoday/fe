@@ -112,7 +112,13 @@ const CharacterCarousel = () => {
 
     const fetchCharacters = async () => {
       try {
-        const { items = [] } = await getAnalyses({ size: 3 });
+        // 캐릭터가 있는 분석을 모두 보여주기 위해 목록을 끝까지 가져옴
+        const items = [];
+        for (let page = 0; ; page += 1) {
+          const result = await getAnalyses({ page, size: 20 });
+          items.push(...(result.items ?? []));
+          if (!result.hasNext || !active) break;
+        }
         const list = await Promise.all(
           items
             .filter((item) => item.analysisStatus === "COMPLETED")
