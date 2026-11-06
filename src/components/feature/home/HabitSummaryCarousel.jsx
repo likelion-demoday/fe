@@ -58,7 +58,7 @@ const SLIDES = [
 ];
 
 const EmptySummaryCard = () => (
-  <section className="flex w-full flex-col items-center gap-[20px] rounded-[16px] border border-[#eee] bg-white px-[24px] pt-[16px] pb-[20px] drop-shadow-[0px_4px_5.85px_rgba(0,0,0,0.05)] drop-shadow-[0px_0px_24.55px_rgba(0,0,0,0.1)]">
+  <section className="flex w-full flex-col items-center gap-[20px] rounded-[16px] border border-[#eee] bg-white px-[24px] pt-[16px] pb-[20px] shadow-[0px_4px_11.7px_0px_rgba(0,0,0,0.05),0px_0px_49.1px_0px_rgba(0,0,0,0.1)]">
     <div className="flex w-full flex-col gap-[4px]">
       <p className="text-caption invisible text-[#bfbfbf]">최근 n회 분석 기준</p>
       <div className="flex w-full items-center justify-between">

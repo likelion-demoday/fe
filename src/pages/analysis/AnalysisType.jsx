@@ -79,7 +79,7 @@ const AnalysisType = () => {
                 {relations.map(({ label, icon: relationIcon }) => (
                   <li
                     key={label}
-                    className="flex items-center justify-center gap-[2px] rounded-[12px] bg-white p-[8px] drop-shadow-[0px_2px_3px_rgba(0,0,0,0.05)] drop-shadow-[0px_0px_5.7px_rgba(0,0,0,0.05)]"
+                    className="flex items-center justify-center gap-[2px] rounded-[12px] bg-white p-[8px] shadow-[0px_2px_6px_0px_rgba(0,0,0,0.05),0px_0px_11.4px_0px_rgba(0,0,0,0.05)]"
                   >
                     {RELATION_ICONS[relationIcon]}
                     <span className="text-caption whitespace-nowrap text-black">{label}</span>

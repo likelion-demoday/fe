@@ -393,7 +393,7 @@ export const toReportView = (report) => {
     intensity: bySpeaker((role) => toIntensity(role, qualitative, COUPLE_CONFLICT_INTENSITY)),
     missed: [
       {
-        title: "놓친 말",
+        title: "대화 다시보기",
         scores: bySpeaker((role) => `질문 ${countOf(qualitative, role, "QUESTION")}회`),
         quotes: evidenceQuotes(qualitative, roles, [
           { type: "EMOTION_EXPRESSION", label: "감정 표현" },
@@ -440,7 +440,7 @@ export const toReportView = (report) => {
     conflictExpression: bySpeaker((role) => toIntensity(role, qualitative, PARENT_CHILD_INTENSITY)),
     retry: [
       {
-        title: "놓친 말",
+        title: "대화 다시보기",
         // 부모·자녀 역할이 SELF로 올 수 있어 화자별로 있는 지표로 판단
         scores: bySpeaker((role) =>
           findMetric(qualitative, role, "CHILD_EXPRESSION", "COUNT")
