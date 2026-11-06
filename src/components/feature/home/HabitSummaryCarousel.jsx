@@ -109,9 +109,10 @@ const HabitSummaryCarousel = () => {
 
   return (
     <div className="relative w-full">
+      {/* 가로 스크롤 영역이 카드 그림자(blur 49px)를 자르지 않도록 위아래 여백을 그림자 크기만큼 확보 */}
       <div
         onScroll={handleScroll}
-        className="no-scrollbar -mx-[24px] -my-[24px] flex snap-x snap-mandatory scroll-px-[24px] overflow-x-auto px-[24px] py-[24px]"
+        className="no-scrollbar -mx-[24px] -my-[56px] flex snap-x snap-mandatory scroll-px-[24px] overflow-x-auto px-[24px] py-[56px]"
         style={{ gap: SLIDE_GAP }}
       >
         {SLIDES.map(({ id, render }, index) => (
