@@ -96,7 +96,7 @@ const AnalysisLoading = () => {
  
       <LoadingMotion className="absolute top-[330px] left-1/2 h-[75px] w-[66px] -translate-x-1/2" />
 
-      <div className="absolute top-[441px] left-1/2 flex w-[195px] -translate-x-1/2 flex-col items-center gap-[16px] text-center">
+      <div className="absolute top-[441px] left-1/2 flex w-max -translate-x-1/2 flex-col items-center gap-[16px] text-center">
         <h1 className="text-display w-full text-black" role="status">
           {/* "..."은 가운데 정렬 계산에서 빼서 "분석중" 글자가 로딩 모션과 같은 중심에 오게 함 */}
           <span className="relative">
@@ -111,7 +111,7 @@ const AnalysisLoading = () => {
           </span>
         </h1>
         <div className="flex w-full flex-col items-center gap-[8px]">
-          <p className="text-title-medium w-full text-black">분석에는 최대 5분 소요돼요</p>
+          <p className="text-title-medium w-full whitespace-nowrap text-black">분석에는 최대 5분 소요돼요</p>
           <p className="text-caption w-full text-[#595959]">화면을 나가도 분석은 계속돼요</p>
         </div>
       </div>
