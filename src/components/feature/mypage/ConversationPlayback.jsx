@@ -38,6 +38,16 @@ const ConversationPlayback = ({ conversation, onClose, loading = false, loadErro
     }
   };
 
+  // 파형을 누른 위치부터 재생
+  const seekTo = (ratio) => {
+    const audio = audioRef.current;
+    if (!audio || !duration) return;
+    audio.currentTime = ratio * duration;
+    setElapsed(audio.currentTime);
+    setError("");
+    audio.play().catch(() => setError("녹음을 재생하지 못했어요. 다시 시도해주세요."));
+  };
+
   return (
     <main className="mx-auto flex h-[844px] w-[390px] flex-col justify-between bg-white">
       <div className="flex min-h-0 flex-1 flex-col items-center justify-between pb-[50px]">
@@ -54,7 +64,7 @@ const ConversationPlayback = ({ conversation, onClose, loading = false, loadErro
         <div className="flex w-[343.5px] flex-col items-center gap-[30px]">
           <p className="text-heading text-center">{formatTime(elapsed)} / {formatTime(duration)}</p>
           <div className="mt-[15px] w-full">
-            <RecordingWaveform levels={LEVELS} head={elapsed > 0 && duration > 0 ? Math.floor(elapsed / duration * LEVELS.length) : -1} inactiveColor="#eee" />
+            <RecordingWaveform levels={LEVELS} head={elapsed > 0 && duration > 0 ? Math.floor(elapsed / duration * LEVELS.length) : -1} inactiveColor="#eee" onSeek={audioUrl && !loading && !loadError ? seekTo : undefined} />
           </div>
           <RecordingControl variant="listen" active={playing} onClick={togglePlayback} disabled={loading || !!loadError || !audioUrl} label={playing ? "녹음 일시정지" : "녹음 재생"} iconIncludesShadow>
             <img src={playIcon} alt="" className="pointer-events-none absolute left-[-54.56%] top-[-54.56%] w-[209.12%] max-w-none" />

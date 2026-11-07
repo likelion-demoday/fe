@@ -8,6 +8,7 @@ import { getCreditPrices, getMyCredits } from "../../api/credit";
 import AppHeader from "../../components/common/AppHeader";
 import { SheetButton } from "../../components/common/BottomSheet";
 import PurchaseSheet from "../../components/feature/analysis/PurchaseSheet";
+import CharacterShareSheet from "../../components/feature/character/CharacterShareSheet";
 import ReportSectionTabs from "../../components/feature/report/ReportSectionTabs";
 import OverviewSection from "../../components/feature/report/OverviewSection";
 import ConversationInformation from "./ConversationInformation";
@@ -186,6 +187,7 @@ const ReportPage = () => {
   // 캐릭터 결제 시트: { ownedCredit, price, isFree }
   const [characterPurchase, setCharacterPurchase] = useState(null);
   const [paying, setPaying] = useState(false);
+  const [shareCharacter, setShareCharacter] = useState(null);
   const isCurrent = loaded.id === reportId;
   const isImagesCurrent = characterImages.id === reportId;
   const images = isImagesCurrent ? characterImages.images : {};
@@ -350,7 +352,7 @@ const ReportPage = () => {
             </div>
           )}
 
-          <SectionContent report={report} onUnlockCharacter={openCharacterPurchase} />
+          <SectionContent report={report} onUnlockCharacter={openCharacterPurchase} onShareCharacter={setShareCharacter} />
         </div>
 
         {/* 화면 하단 고정이 아니라 보고서 맨 끝에 붙는 버튼 */}
@@ -359,6 +361,8 @@ const ReportPage = () => {
           <SheetButton text="완료" onClick={() => navigate("/home")} />
         </div>
       </div>
+
+      {shareCharacter && <CharacterShareSheet character={shareCharacter} onClose={() => setShareCharacter(null)} />}
 
       {characterPurchase && (
         <PurchaseSheet

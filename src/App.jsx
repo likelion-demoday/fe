@@ -36,7 +36,6 @@ import SignUp from "./pages/auth/SignUp";
 //onboarding
 import Nickname from "./pages/onboarding/Nickname";
 import Consent from "./pages/onboarding/Consent";
-import VoiceRegister from "./pages/onboarding/VoiceRegister";
 import NotificationEmail from "./pages/onboarding/NotificationEmail";
 import KakaoCallbackPage from "./pages/auth/KakaoCallbackPage";
 import GoogleCallbackPage from "./pages/auth/GoogleCallbackPage";
@@ -139,7 +138,6 @@ function App() {
 
       <Route path="/onboarding/nickname" element={<Nickname />} />
       <Route path="/onboarding/consent" element={<Consent />} />
-      <Route path="/onboarding/voice" element={<VoiceRegister />} />
     </Routes>
   );
 }
