@@ -19,6 +19,7 @@ const WHITE_FADE = "linear-gradient(154.64deg, #fff 43.136%, rgba(255,255,255,0)
 const toCardStyle = ({ characterNameTextColor, cardBackgroundGradientColors: colors }) => ({
   ...(characterNameTextColor && { titleColor: characterNameTextColor }),
   ...(colors?.length >= 2 && {
+    gradientColors: colors.slice(0, 2),
     background: `${WHITE_FADE}, linear-gradient(154.64deg, ${colors[0]} 43.136%, ${colors[1]} 87.54%)`,
   }),
 });
