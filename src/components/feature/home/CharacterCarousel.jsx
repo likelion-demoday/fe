@@ -2,16 +2,17 @@ import { useEffect, useRef, useState } from "react";
 
 import cardBg from "../../../assets/icons/character-card-bg-large.svg";
 import { getAnalyses, getAnalysisReport } from "../../../api/analysis";
-import { getCharacterImages } from "../../../api/character";
+import { getCharacterImageStatus, getCharacterImages } from "../../../api/character";
 import { CHARACTER_STYLES } from "../../../constants/report";
 import { resolveRoles } from "../../../utils/reportMapper";
 import CharacterShareSheet from "../character/CharacterShareSheet";
 
 // 배경(서버 색상 그라데이션 + 위쪽 흰 물결)은 프론트에서 그리고, 배경 투명 캐릭터 이미지를 아래쪽에 올림
+// 보고서와 이미지 상태는 같이 요청하고, 이미지 파일은 '나'의 것만 내려받음 (상대 이미지는 홈에서 안 씀)
 const loadCharacter = async ({ recordingId }) => {
-  const [analysis, images] = await Promise.all([
+  const [analysis, status] = await Promise.all([
     getAnalysisReport(recordingId),
-    getCharacterImages(recordingId),
+    getCharacterImageStatus(recordingId),
   ]);
   // 부모·자녀 분석은 SELF 대신 CHILD/PARENT로 와서 보고서와 같은 기준으로 '나'를 정함
   const myRole =
@@ -20,7 +21,9 @@ const loadCharacter = async ({ recordingId }) => {
   const insight = analysis.report?.qualitativeAnalysis?.characterInsights?.find(
     (item) => item.speakerRole === myRole,
   );
-  if (!insight || !images[myRole]) return null;
+  if (!insight) return null;
+  const images = await getCharacterImages(recordingId, { roles: [myRole], status });
+  if (!images[myRole]) return null;
 
   return {
     ...CHARACTER_STYLES.me,
@@ -121,21 +124,42 @@ const CharacterCarousel = () => {
   useEffect(() => {
     let active = true;
 
+    // 목록 순서(최신순)대로 앞에서부터 준비된 카드까지만 보여줌
+    // (뒤 카드가 먼저 준비돼도 순서가 바뀌지 않게, 앞 카드가 끝나야 이어서 표시)
+    const results = [];
+    let total = 0;
+    const publish = () => {
+      if (!active) return;
+      const ready = [];
+      for (let index = 0; index < total && index in results; index += 1) {
+        if (results[index]) ready.push(results[index]);
+      }
+      setCharacters(ready);
+    };
+
     const fetchCharacters = async () => {
+      const pending = [];
       try {
-        // 캐릭터가 있는 분석을 모두 보여주기 위해 목록을 끝까지 가져옴
-        const items = [];
+        // 캐릭터가 있는 분석을 모두 보여주기 위해 목록을 끝까지 가져오되, 페이지를 받는 즉시 카드 준비를 시작
         for (let page = 0; ; page += 1) {
           const result = await getAnalyses({ page, size: 20 });
-          items.push(...(result.items ?? []));
+          (result.items ?? [])
+            .filter((item) => item.analysisStatus === "COMPLETED")
+            .forEach((item) => {
+              const index = total;
+              total += 1;
+              pending.push(
+                loadCharacter(item)
+                  .catch(() => null)
+                  .then((character) => {
+                    results[index] = character;
+                    publish();
+                  }),
+              );
+            });
           if (!result.hasNext || !active) break;
         }
-        const list = await Promise.all(
-          items
-            .filter((item) => item.analysisStatus === "COMPLETED")
-            .map((item) => loadCharacter(item).catch(() => null)),
-        );
-        if (active) setCharacters(list.filter(Boolean));
+        await Promise.all(pending);
       } catch (error) {
         console.error(error.message);
       } finally {
@@ -183,7 +207,7 @@ const CharacterCarousel = () => {
     setDragX(0);
   };
 
-  if (!loaded) return <div className="h-[263px] w-[338px]" />;
+  if (!loaded && characters.length === 0) return <div className="h-[263px] w-[338px]" />;
   if (characters.length === 0) {
     return (
       <div className="flex h-[263px] w-[338px] justify-center">

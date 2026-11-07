@@ -25,11 +25,13 @@ const toCardStyle = ({ characterNameTextColor, cardBackgroundGradientColors: col
 });
 
 // 생성 완료된 캐릭터를 { [speakerRole]: { imageUrl, titleColor, background } } 형태로 반환
-export const getCharacterImages = async (recordingId) => {
-  const { images = [] } = await getCharacterImageStatus(recordingId);
+// roles: 이 역할의 이미지만 내려받음 / status: 이미 받아둔 상태 조회 결과 (다시 요청하지 않음)
+export const getCharacterImages = async (recordingId, { roles, status } = {}) => {
+  const { images = [] } = status ?? (await getCharacterImageStatus(recordingId));
   const entries = await Promise.all(
     images
       .filter((image) => image.status === "COMPLETED" && image.contentUrl)
+      .filter((image) => !roles || roles.includes(image.speakerRole))
       .map(async (image) => {
         const blob = await getCharacterImageBlob(image.contentUrl);
         return [image.speakerRole, { imageUrl: URL.createObjectURL(blob), ...toCardStyle(image) }];
