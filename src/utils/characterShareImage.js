@@ -3,7 +3,7 @@ import storyWave from "../assets/images/share-story-wave.svg";
 import storyShadow from "../assets/images/share-story-shadow.svg";
 
 // 캐릭터 공유·저장 이미지 (피그마 461 x 820 기준으로 그리고 1080 x 1920으로 저장)
-// download: "다운로드용" (위에 로고) / story: "인스타 공유용"에서 로고만 뺀 것 (인스타 상단 UI에 로고가 가려져서)
+// download: "다운로드용" (로고가 맨 위) / story: "인스타 공유용"에서 링크 알약만 뺀 것 (로고를 내려서 인스타 상단 UI에 안 가려짐)
 const WIDTH = 461;
 const HEIGHT = 820;
 const OUTPUT_WIDTH = 1080;
@@ -11,7 +11,8 @@ const OUTPUT_HEIGHT = 1920;
 const SCALE = OUTPUT_WIDTH / WIDTH;
 
 const CARD_SIZE = { x: 25, width: 413.128, height: 508.637, radius: 35.538 };
-const CARD_TOP = { download: 155, story: 135 };
+const CARD_TOP = { download: 155, story: 175 };
+const LOGO_MIDDLE = { download: 45.8, story: 135.8 };
 const DEFAULT_COLORS = ["#ffffff", "#c3c5d9"];
 
 const loadImage = (src) =>
@@ -129,19 +130,17 @@ export const createCharacterStoryImage = async (
   ctx.fillRect(0, 0, WIDTH, HEIGHT);
   ctx.drawImage(bg, -136.63, 80.25, 734.266, 794.259);
 
-  // 로고 RE:SAY (다운로드용만)
+  // 로고 RE:SAY
   let logoX = 25;
-  if (variant === "download") {
-    [
-      ["RE", "#000", -1.4159],
-      [":S", "#ff765b", -0.8],
-      ["AY", "#000", -1.28],
-    ].forEach(([text, color, spacing]) => {
-      setText(ctx, "800 35.396px SUIT", color, spacing);
-      ctx.fillText(text, logoX, 45.8);
-      logoX += ctx.measureText(text).width;
-    });
-  }
+  [
+    ["RE", "#000", -1.4159],
+    [":S", "#ff765b", -0.8],
+    ["AY", "#000", -1.28],
+  ].forEach(([text, color, spacing]) => {
+    setText(ctx, "800 35.396px SUIT", color, spacing);
+    ctx.fillText(text, logoX, LOGO_MIDDLE[variant]);
+    logoX += ctx.measureText(text).width;
+  });
 
   // 카드 그림자 + 배경
   const { x, y, width, height, radius } = CARD;
