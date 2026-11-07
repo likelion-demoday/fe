@@ -21,11 +21,11 @@ const CharacterShareSheet = ({ character, onClose }) => {
   useEffect(() => {
     let active = true;
     let previewUrl = null;
-    createCharacterStoryImage(character)
-      .then((file) => {
+    Promise.all([createCharacterStoryImage(character, "download"), createCharacterStoryImage(character, "story")])
+      .then(([download, story]) => {
         if (!active) return;
-        previewUrl = URL.createObjectURL(file);
-        setImage({ file, previewUrl });
+        previewUrl = URL.createObjectURL(download);
+        setImage({ download, story, previewUrl });
       })
       .catch(() => active && setError("공유 이미지를 만들지 못했어요."));
     return () => {
@@ -37,13 +37,13 @@ const CharacterShareSheet = ({ character, onClose }) => {
   // 인스타 스토리: 휴대폰 공유 창에 이미지를 넘김
   const shareToStory = async () => {
     if (!image) return;
-    if (!navigator.canShare?.({ files: [image.file] })) {
-      downloadFile(image.file);
+    if (!navigator.canShare?.({ files: [image.story] })) {
+      downloadFile(image.download);
       alert("이 기기에서는 바로 공유할 수 없어서 이미지를 저장했어요.");
       return;
     }
     try {
-      await navigator.share({ files: [image.file] });
+      await navigator.share({ files: [image.story] });
     } catch {
       // 사용자가 공유를 취소한 경우
     }
@@ -56,7 +56,7 @@ const CharacterShareSheet = ({ character, onClose }) => {
       showCharacter={false}
       footer={
         <>
-          <SheetButton text="이미지 저장" onClick={() => image && downloadFile(image.file)} disabled={!image} />
+          <SheetButton text="이미지 저장" onClick={() => image && downloadFile(image.download)} disabled={!image} />
           <SheetButton text="인스타 스토리" onClick={shareToStory} disabled={!image} />
         </>
       }
