@@ -54,6 +54,7 @@ const CharacterShareSheet = ({ character, onClose }) => {
       title="캐릭터 공유하기"
       onClose={onClose}
       showCharacter={false}
+      contentGap="gap-[20px]"
       footer={
         <>
           <SheetButton text="이미지 저장" onClick={() => image && downloadFile(image.download)} disabled={!image} />
