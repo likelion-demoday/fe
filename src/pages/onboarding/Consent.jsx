@@ -241,7 +241,6 @@ const Consent = ({ accountMode = false }) => {
           {!accountMode && <>
             <span className="size-[8px] rounded-[99px] bg-[#454545]" />
             <span className="size-[8px] rounded-[99px] bg-[#454545]" />
-            <span className="size-[8px] rounded-[99px] bg-[#454545]" />
             <span className="size-[8px] rounded-[99px] bg-[#d9d9d9]" />
           </>}
         </div>

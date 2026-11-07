@@ -18,8 +18,10 @@ const LockIcon = () => (
 // 닉네임 + 캐릭터 카드 (디자인 기준 카드 160.839 x 198.022)
 // 배경(그라데이션 + 위쪽 흰 물결)은 프론트에서 그리고, imageUrl(배경 투명 캐릭터)을 아래쪽에 올림
 // locked(생성 전) · generating(생성중): 캐릭터 없이 회색 카드를 흐림 막으로 덮고 자물쇠 / "생성중..." 표시
-const ReportCharacterCard = ({ nickname, nicknameColor, character, onUnlock }) => {
+// onShare: 캐릭터가 열린 카드를 누르면 공유 시트를 엶
+const ReportCharacterCard = ({ nickname, nicknameColor, character, onUnlock, onShare }) => {
   const isPlaceholder = character.locked || character.generating;
+  const shareable = !isPlaceholder && character.imageUrl && onShare;
 
   return (
     <div className={`flex shrink-0 flex-col items-start gap-[6px] rounded-[16px] border-[0.865px] border-[#eee] bg-white pt-[8px] ${CARD_SHADOW}`}>
@@ -30,7 +32,12 @@ const ReportCharacterCard = ({ nickname, nicknameColor, character, onUnlock }) =
         {nickname}
       </p>
       <div
-        className="relative h-[198.022px] w-[160.839px] overflow-clip rounded-[13.836px] shadow-[0px_-1.729px_9.04px_0px_rgba(0,0,0,0.05),0px_0px_36.854px_0px_rgba(0,0,0,0.05)]"
+        onClick={shareable ? onShare : undefined}
+        role={shareable ? "button" : undefined}
+        tabIndex={shareable ? 0 : undefined}
+        aria-label={shareable ? `${character.name} 캐릭터 공유하기` : undefined}
+        onKeyDown={shareable ? (e) => (e.key === "Enter" || e.key === " ") && onShare() : undefined}
+        className={`relative ${shareable ? "cursor-pointer" : ""} h-[198.022px] w-[160.839px] overflow-clip rounded-[13.836px] shadow-[0px_-1.729px_9.04px_0px_rgba(0,0,0,0.05),0px_0px_36.854px_0px_rgba(0,0,0,0.05)]`}
         style={{ backgroundImage: isPlaceholder ? PLACEHOLDER_BACKGROUND : character.background }}
       >
         <div className="absolute top-[-0.97px] left-[-0.87px] h-[107.226px] w-[165.162px]">
