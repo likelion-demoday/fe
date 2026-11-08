@@ -1,6 +1,7 @@
 import { useState } from "react";
 
 import {
+  CARD_SHADOW,
   CHIP_SHADOW,
   DETAIL_CARD_SHADOW,
   KeywordPill,
@@ -9,7 +10,8 @@ import {
   SummaryCard,
 } from "../../components/feature/report/ReportBlocks";
 
-const DETAIL_CARD = `flex w-full flex-col items-start rounded-[20px] border border-[#eee] bg-white p-[20px] ${DETAIL_CARD_SHADOW}`;
+const DETAIL_CARD = "flex w-full flex-col items-start rounded-[20px] border border-[#eee] bg-white p-[20px]";
+const CARD_SHADOW_SCENARIOS = ["FRIEND_DAILY", "COUPLE_CONFLICT", "PARENT_CHILD_CONFLICT"];
 
 const InterestItem = ({ title, count, description, examples }) => (
   <div className="flex w-full flex-col items-start gap-[8px]">
@@ -42,10 +44,12 @@ const InterestGroup = ({ title, summary, children }) => (
 
 
 // 관심도 화면. 같은 구성의 갈등 반응 탭도 data/제목만 바꿔 재사용
-const InterestLevel = ({ report, data = report.interest, title = "관심을 보인 방식" }) => {
+const InterestLevel = ({ report, data = report.interest, title = "관심을 보인 방식", largeScore = false }) => {
   const [speaker, setSpeaker] = useState("me");
   const scores = { me: data.me.score, partner: data.partner.score };
   const { summary, groups, chips } = data[speaker];
+  // 친구 일상·연인 갈등·부모자녀 갈등은 그림자 2번, 연인 일상은 기존 그림자 유지
+  const detailCardClass = `${DETAIL_CARD} ${CARD_SHADOW_SCENARIOS.includes(report.scenario) ? CARD_SHADOW : DETAIL_CARD_SHADOW}`;
 
   return (
     <div className="flex w-full flex-col items-start gap-[30px] font-['SUIT',sans-serif]">
@@ -55,6 +59,7 @@ const InterestLevel = ({ report, data = report.interest, title = "관심을 보�
           scores={scores}
           selected={speaker}
           onSelect={setSpeaker}
+          largeScore={largeScore}
         />
         <SummaryCard {...summary} />
       </div>
@@ -63,7 +68,7 @@ const InterestLevel = ({ report, data = report.interest, title = "관심을 보�
         <div className="flex w-full flex-col items-start gap-[30px]">
           {groups.map(({ title, items, summary: groupSummary }) => (
             <InterestGroup key={title} title={title} summary={groupSummary}>
-              <div className={`${DETAIL_CARD} gap-[30px]`}>
+              <div className={`${detailCardClass} gap-[30px]`}>
                 {items.map((item) => (
                   <InterestItem key={item.title} {...item} />
                 ))}
@@ -74,7 +79,7 @@ const InterestLevel = ({ report, data = report.interest, title = "관심을 보�
           {(chips.summary || chips.items.length > 0) && (
             <InterestGroup title={chips.title} summary={chips.summary}>
               {chips.items.length > 0 && (
-                <div className={`${DETAIL_CARD} gap-[12px]`}>
+                <div className={`${detailCardClass} gap-[12px]`}>
                   <p className="text-[12px] leading-[18px] font-medium tracking-[0.24px] text-[#6b6b6b]">
                     {chips.caption}
                   </p>

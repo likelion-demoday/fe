@@ -3,7 +3,7 @@ import storyWave from "../assets/images/share-story-wave.svg";
 import storyShadow from "../assets/images/share-story-shadow.svg";
 
 // 캐릭터 공유·저장 이미지 (피그마 461 x 820 기준으로 그리고 1080 x 1920으로 저장)
-// download: "다운로드용" (로고가 맨 위) / story: "인스타 공유용"에서 링크 알약만 뺀 것 (로고를 내려서 인스타 상단 UI에 안 가려짐)
+// download: "다운로드용" (로고가 맨 위) / story: "인스타 공유용" (사이트 주소 알약 포함, 전체를 40px 내려서 인스타 상단 UI를 피함)
 const WIDTH = 461;
 const HEIGHT = 820;
 const OUTPUT_WIDTH = 1080;
@@ -13,6 +13,8 @@ const SCALE = OUTPUT_WIDTH / WIDTH;
 const CARD_SIZE = { x: 25, width: 413.128, height: 508.637, radius: 35.538 };
 const CARD_TOP = { download: 155, story: 175 };
 const LOGO_MIDDLE = { download: 45.8, story: 135.8 };
+const SITE_PILL_TOP = 707;
+const SITE_HOST = "resay.site";
 const DEFAULT_COLORS = ["#ffffff", "#c3c5d9"];
 
 const loadImage = (src) =>
@@ -103,6 +105,44 @@ const FONTS = [
   "500 29px SUITE",
   "500 20px SUITE",
 ];
+
+// "내 캐릭터는? → resay.site" 알약 (주소 표시용, 누르는 링크는 아님)
+const drawSitePill = (ctx) => {
+  const top = SITE_PILL_TOP;
+  [
+    { y: 4, blur: 5.85, color: "rgba(0,0,0,0.05)" },
+    { blur: 24.55, color: "rgba(0,0,0,0.1)" },
+  ].forEach((shadowStyle) =>
+    withShadow(ctx, shadowStyle, () => {
+      roundRectPath(ctx, 171, top, 267, 43, 21.5);
+      ctx.fillStyle = "#fff";
+      ctx.fill();
+    }),
+  );
+
+  // SUITE의 → 글자는 꺾쇠(>)처럼 보여서 화살표만 기본 글꼴로 그림 (피그마도 화살표만 다른 글꼴)
+  setText(ctx, "500 20px SUITE", "#262626");
+  const label = "내 캐릭터는? ";
+  ctx.fillText(label, 187, top + 21.5);
+  const arrowX = 187 + ctx.measureText(label).width;
+  setText(ctx, "500 20px Pretendard, -apple-system, sans-serif", "#262626");
+  ctx.fillText("→", arrowX, top + 21.5);
+
+  [
+    { y: 4, blur: 11.7, color: "rgba(0,0,0,0.05)" },
+    { blur: 14.3, color: "rgba(0,0,0,0.05)" },
+  ].forEach((shadowStyle) =>
+    withShadow(ctx, shadowStyle, () => {
+      roundRectPath(ctx, 320, top, 118, 43, 21.5);
+      ctx.fillStyle = "#fff";
+      ctx.fill();
+    }),
+  );
+  setText(ctx, "500 20px SUIT", "#ff765b");
+  ctx.textAlign = "center";
+  ctx.fillText(SITE_HOST, 379, top + 18.5);
+  ctx.textAlign = "start";
+};
 
 export const createCharacterStoryImage = async (
   character,
@@ -198,6 +238,8 @@ export const createCharacterStoryImage = async (
   ctx.strokeStyle = "#eee";
   ctx.lineWidth = 1.985;
   ctx.stroke();
+
+  if (variant === "story") drawSitePill(ctx);
 
   const blob = await new Promise((resolve) =>
     canvas.toBlob(resolve, "image/png"),

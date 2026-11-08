@@ -54,7 +54,13 @@ const SLIDES = [
   },
   {
     id: "speaking-length",
-    render: (active, summary) => <SpeakingLengthCard active={active} count={summary.analysisCount} />,
+    render: (active, summary) => (
+      <SpeakingLengthCard
+        active={active}
+        count={summary.analysisCount}
+        durationMs={summary.averageUtteranceDurationMs}
+      />
+    ),
   },
 ];
 
