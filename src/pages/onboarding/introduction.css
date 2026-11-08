@@ -1,5 +1,10 @@
-.intro-screen { position: relative; display: flex; flex-direction: column; width: 100%; max-width: 390px; height: min(844px, 100dvh); margin: 0 auto; background: white; overflow: hidden; }
-.intro-scroll { flex: 1; min-height: 0; overflow-y: auto; overflow-x: hidden; }
+.intro-screen { position: relative; display: flex; flex-direction: column; width: 100%; height: 100dvh; margin: 0 auto; background: white; overflow: hidden; overscroll-behavior-y: none; touch-action: pan-x pinch-zoom; }
+
+/* 모바일에서는 화면을 채우고, 태블릿 이상에서만 디자인 폭을 제한합니다. */
+@media (min-width: 768px) {
+  .intro-screen { max-width: 390px; height: min(844px, 100dvh); }
+}
+.intro-scroll { position: relative; flex: 1; min-height: 0; overflow: clip; }
 .intro-stage { position: relative; min-height: 715px; width: 100%; overflow: hidden; }
 .intro-header { position: relative; z-index: 1; padding: 59px 24px 0; }
 .intro-copy { position: relative; z-index: 1; margin: 30px 24px 0; }
@@ -24,14 +29,10 @@
 .intro-glow-right { position: absolute; left: 126px; top: 355px; width: 410.795px; height: 410.795px; transform: rotate(-15deg); }
 .intro-glow-right img { position: absolute; left: -16.02%; top: -16.02%; }
 .intro-characters { position: absolute; left: calc(50% - 157px); top: 274px; width: 313px; height: 418px; object-fit: cover; }
-.intro-footer { position: relative; z-index: 2; display: flex; flex-shrink: 0; flex-direction: column; gap: 24px; padding: 10px 16px max(30px, env(safe-area-inset-bottom)); background: white; }
+.intro-footer { position: absolute; inset: auto 0 0; z-index: 2; display: flex; flex-direction: column; gap: 24px; padding: 10px 16px max(30px, env(safe-area-inset-bottom)); }
 
-/* 첫 소개의 배경은 스크롤 영역에 잘리지 않고 하단 버튼 뒤까지 이어집니다. */
-.intro-screen-welcome .intro-scroll { position: relative; }
-.intro-screen-welcome .intro-footer { background: transparent; }
-.intro-screen-preview .intro-scroll { position: relative; }
-.intro-screen-preview .intro-footer { background: transparent; }
-.intro-screen-preview .intro-footer::before {
+/* 모든 소개 화면의 내용이 버튼 뒤로 이어지며 서서히 흐려집니다. */
+.intro-footer::before {
   content: "";
   position: absolute;
   inset: -28px 0 0;
@@ -42,7 +43,7 @@
   -webkit-mask-image: linear-gradient(to bottom, transparent, #000 40%);
   mask-image: linear-gradient(to bottom, transparent, #000 40%);
 }
-.intro-screen-preview .intro-footer > * { position: relative; }
+.intro-footer > * { position: relative; }
 .intro-screen-preview .intro-header { height: 120px; }
 .intro-screen-preview .intro-header p,
 .intro-screen-preview .intro-header .text-body,
@@ -72,9 +73,6 @@
     animation: none;
   }
 }
-
-.intro-screen-start .intro-scroll { position: relative; }
-.intro-screen-start .intro-footer { background: transparent; }
 
 .sample-report-scroll { padding-bottom: calc(110px + max(30px, env(safe-area-inset-bottom))); }
 .sample-report-footer::before {
