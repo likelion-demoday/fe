@@ -1,3 +1,4 @@
+import { consumeLoginReturn } from "../../utils/loginReturn";
 import { useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { googleLogin } from "../../api/auth";
@@ -54,7 +55,7 @@ function GoogleCallbackPage() {
         localStorage.setItem("accessToken", data.accessToken);
         localStorage.setItem("refreshToken", data.refreshToken);
         localStorage.setItem("isLogin", "true");
-        navigate("/home", { replace: true });
+        navigate(consumeLoginReturn(), { replace: true });
       } catch (error) {
         setErrorMessage(error.message || "구글 로그인에 실패했습니다. 다시 시도해주세요.");
       }

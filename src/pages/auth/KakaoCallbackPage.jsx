@@ -1,3 +1,4 @@
+import { consumeLoginReturn } from "../../utils/loginReturn";
 import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { kakaoLogin } from "../../api/auth";
@@ -36,7 +37,7 @@ function KakaoCallbackPage() {
         localStorage.setItem("accessToken", data.accessToken);
         localStorage.setItem("refreshToken", data.refreshToken);
         localStorage.setItem("isLogin", "true");
-        navigate("/home", { replace: true });
+        navigate(consumeLoginReturn(), { replace: true });
       } catch (error) {
         setErrorMessage(error.message || "카카오 로그인에 실패했습니다. 다시 시도해주세요.");
       }

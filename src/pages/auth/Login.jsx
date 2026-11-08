@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import { login } from "../../api/auth";
 
@@ -8,7 +8,13 @@ import PasswordInput from "../../components/feature/auth/PasswordInput";
 import SocialLoginButtons from "../../components/feature/auth/SocialLoginButtons";
 import Button from "../../components/common/Button";
 
+import { consumeLoginReturn, rememberLoginReturn } from "../../utils/loginReturn";
+
 const Login = () => {
+  const { search } = useLocation();
+  useEffect(() => {
+    rememberLoginReturn(new URLSearchParams(search).get("redirect"));
+  }, [search]);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
@@ -23,7 +29,7 @@ const Login = () => {
       localStorage.setItem("isLogin", true);
 
       // 로그인 화면을 기록에서 지워서 홈에서 뒤로가기로 돌아오지 않게 함
-      navigate("/home", { replace: true });
+      navigate(consumeLoginReturn(), { replace: true });
     } catch (error) {
       if (error.code === "AUTH401_1") {
         setErrorMessage("이메일 또는 비밀번호가 일치하지 않아요.");
