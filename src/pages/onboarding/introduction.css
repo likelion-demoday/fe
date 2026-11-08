@@ -1,0 +1,91 @@
+.intro-screen { position: relative; display: flex; flex-direction: column; width: 100%; max-width: 390px; height: min(844px, 100dvh); margin: 0 auto; background: white; overflow: hidden; }
+.intro-scroll { flex: 1; min-height: 0; overflow-y: auto; overflow-x: hidden; }
+.intro-stage { position: relative; min-height: 715px; width: 100%; overflow: hidden; }
+.intro-header { position: relative; z-index: 1; padding: 59px 24px 0; }
+.intro-copy { position: relative; z-index: 1; margin: 30px 24px 0; }
+.intro-art { position: absolute; inset: 0; pointer-events: none; }
+.intro-art img { max-width: none; }
+.intro-coins { position: absolute; left: -69px; top: 287px; width: 202px; height: 202px; opacity: .3; filter: blur(5.45px); overflow: hidden; }
+.intro-coins img { position: absolute; width: 122.52%; height: 122.73%; left: -12.61%; top: -11.9%; }
+.intro-back-symbol { position: absolute; left: -223px; top: 391px; width: 542.729px; height: 542.729px; transform: rotate(-33.26deg); opacity: .3; filter: blur(7.95px); }
+.intro-main-symbol { position: absolute; top: 333px; left: calc(50% - 139px); width: 278px; height: 278px; overflow: hidden; }
+.intro-main-symbol img { position: absolute; left: -4.41%; top: -4.41%; width: 108.82%; height: 108.82%; }
+.intro-blur-symbol { position: absolute; left: calc(50% + 11px); top: 526px; width: 227px; height: 227px; transform: rotate(-11.15deg); opacity: .2; filter: blur(7.069px); }
+.intro-envelope { position: absolute; left: 228px; top: 198px; width: 237px; height: 237px; opacity: .1; filter: blur(3.4px); }
+.intro-side-symbol { position: absolute; left: 318px; top: 425px; width: 114px; height: 114px; transform: rotate(-21.77deg); opacity: .4; filter: blur(7px); }
+.intro-top-symbol { position: absolute; left: 120px; top: 307px; width: 122.926px; height: 122.926px; transform: rotate(25.22deg); opacity: .1; filter: blur(7.95px); }
+.intro-metrics { position: relative; width: calc(100% - 56px); margin: 60px 24px 0; display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 13px 12px; }
+.intro-metric { padding: 14px 16px; border: 1px solid #eee; border-radius: 18px; background: white; box-shadow: 0 4px 11.7px #0000000d, 0 0 49.1px #0000001a; }
+.intro-interest { grid-column: span 2; height: 144.5px; border-radius: 22px; }
+.intro-metric strong { font-size: 30px; font-weight: 700; color: #ff765b; line-height: normal; }
+.intro-chip { padding: 4px 12px; border: .5px solid #f5f5f5; border-radius: 12px; font-family: SUIT, sans-serif; font-size: 14px; line-height: 22px; color: #454545; box-shadow: 0 2px 6px #0000000d, 0 0 11.4px #0000000d; }
+.intro-glow-left { position: absolute; left: -50px; top: 335px; width: 232.71px; height: 232.71px; transform: rotate(-15deg); }
+.intro-glow-left img { position: absolute; left: -28.28%; top: -28.28%; }
+.intro-glow-right { position: absolute; left: 126px; top: 355px; width: 410.795px; height: 410.795px; transform: rotate(-15deg); }
+.intro-glow-right img { position: absolute; left: -16.02%; top: -16.02%; }
+.intro-characters { position: absolute; left: calc(50% - 157px); top: 274px; width: 313px; height: 418px; object-fit: cover; }
+.intro-footer { position: relative; z-index: 2; display: flex; flex-shrink: 0; flex-direction: column; gap: 24px; padding: 10px 16px max(30px, env(safe-area-inset-bottom)); background: white; }
+
+/* 첫 소개의 배경은 스크롤 영역에 잘리지 않고 하단 버튼 뒤까지 이어집니다. */
+.intro-screen-welcome .intro-scroll { position: relative; }
+.intro-screen-welcome .intro-footer { background: transparent; }
+.intro-screen-preview .intro-scroll { position: relative; }
+.intro-screen-preview .intro-footer { background: transparent; }
+.intro-screen-preview .intro-footer::before {
+  content: "";
+  position: absolute;
+  inset: -28px 0 0;
+  pointer-events: none;
+  background: linear-gradient(to bottom, transparent, rgb(255 255 255 / 60%) 55%, rgb(255 255 255 / 85%));
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 40%);
+  mask-image: linear-gradient(to bottom, transparent, #000 40%);
+}
+.intro-screen-preview .intro-footer > * { position: relative; }
+.intro-screen-preview .intro-header { height: 120px; }
+.intro-screen-preview .intro-header p,
+.intro-screen-preview .intro-header .text-body,
+.intro-screen-preview .intro-copy h1,
+.intro-screen-preview .intro-copy p { line-height: normal; }
+
+/* 개별 translate를 사용해 원래 이미지의 회전 각도를 유지합니다. */
+@keyframes intro-background-float {
+  0%, 100% { translate: 0 0; }
+  35% { translate: var(--float-x, 10px) var(--float-y, -18px); }
+  70% { translate: calc(var(--float-x, 10px) * -.6) calc(var(--float-y, -18px) * .4); }
+}
+
+.intro-screen-welcome :is(.intro-coins, .intro-back-symbol, .intro-blur-symbol, .intro-envelope, .intro-side-symbol, .intro-top-symbol) {
+  animation: intro-background-float var(--float-duration, 9s) ease-in-out infinite;
+  animation-delay: var(--float-delay, 0s);
+}
+.intro-coins { --float-x: 28px; --float-y: -44px; --float-duration: 6s; --float-delay: -2s; }
+.intro-back-symbol { --float-x: -24px; --float-y: -36px; --float-duration: 8s; --float-delay: -5s; }
+.intro-blur-symbol { --float-x: 32px; --float-y: -48px; --float-duration: 7s; --float-delay: -4s; }
+.intro-envelope { --float-x: -28px; --float-y: 40px; --float-duration: 7.5s; --float-delay: -7s; }
+.intro-side-symbol { --float-x: -32px; --float-y: -52px; --float-duration: 5.5s; --float-delay: -3s; }
+.intro-top-symbol { --float-x: 24px; --float-y: -32px; --float-duration: 6.5s; --float-delay: -6s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .intro-screen-welcome :is(.intro-coins, .intro-back-symbol, .intro-blur-symbol, .intro-envelope, .intro-side-symbol, .intro-top-symbol) {
+    animation: none;
+  }
+}
+
+.intro-screen-start .intro-scroll { position: relative; }
+.intro-screen-start .intro-footer { background: transparent; }
+
+.sample-report-scroll { padding-bottom: calc(110px + max(30px, env(safe-area-inset-bottom))); }
+.sample-report-footer::before {
+  content: "";
+  position: absolute;
+  inset: -40px 0 0;
+  pointer-events: none;
+  background: linear-gradient(to bottom, transparent, rgb(255 255 255 / 65%) 55%, white);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 55%);
+  mask-image: linear-gradient(to bottom, transparent, #000 55%);
+}
+.sample-report-footer > button { position: relative; }

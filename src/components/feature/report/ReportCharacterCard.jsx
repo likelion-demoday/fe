@@ -72,6 +72,10 @@ const ReportCharacterCard = ({ nickname, nicknameColor, character, onUnlock, onS
           </p>
         </div>
 
+        {!isPlaceholder && character.decorationUrl && (
+          <img src={character.decorationUrl} alt="" aria-hidden="true" className="pointer-events-none absolute top-[48.7px] left-[67.7px] block max-w-none" style={{ width: 48.8, height: 21.8 }} />
+        )}
+
         {isPlaceholder && (
           <>
             {/* 피그마: 흰색 30% + 배경 흐림(17.9) 막 */}

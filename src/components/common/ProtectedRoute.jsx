@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
-import { Navigate, Outlet } from "react-router-dom";
+import { Navigate, Outlet, useLocation } from "react-router-dom";
 
 import { getMe } from "../../api/user";
 import { hasStoredLogin } from "../../utils/auth";
 
+import { loginPathFor } from "../../utils/loginReturn";
+
 function ProtectedRoute() {
+  const location = useLocation();
   const [isLoggedIn] = useState(hasStoredLogin);
   // localStorage 값만으로는 만료 여부를 알 수 없어서 첫 진입 시 서버에 한 번 확인
   // 만료면 axios 인터셉터가 재발급을 시도하고, 실패하면 저장값을 지우고 로그인 화면으로 보냄
@@ -24,7 +27,7 @@ function ProtectedRoute() {
     };
   }, [isLoggedIn]);
 
-  if (!isLoggedIn || status === "expired") return <Navigate to="/auth/login" replace />;
+  if (!isLoggedIn || status === "expired") return <Navigate to={loginPathFor(location.pathname + location.search + location.hash)} replace />;
   if (status === "checking") return null;
   return <Outlet />;
 }
