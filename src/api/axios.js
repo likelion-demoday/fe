@@ -1,3 +1,4 @@
+import { loginPathFor } from "../utils/loginReturn";
 import axios from "axios";
 
 // 개발 서버에서는 같은 주소로 요청하고 vite.config.js의 프록시가 API 서버로 전달 (CORS 우회)
@@ -47,7 +48,7 @@ const handleSessionExpired = () => {
   localStorage.removeItem("isLogin");
 
   alert("로그인이 만료되었습니다. 다시 로그인해주세요.");
-  window.location.href = "/auth/login";
+  window.location.href = loginPathFor(window.location.pathname + window.location.search + window.location.hash);
 };
 
 api.interceptors.response.use(

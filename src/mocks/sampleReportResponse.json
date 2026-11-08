@@ -1,0 +1,1047 @@
+{
+  "recordingInfo": {
+    "recordingId": 23,
+    "scenario": "COUPLE_CONFLICT",
+    "durationMs": 361000,
+    "durationSeconds": 361,
+    "recordedAt": "2026-11-05T00:02:24.738206",
+    "speakers": [
+      {
+        "speakerRole": "SELF",
+        "speakerName": "현지"
+      },
+      {
+        "speakerRole": "PARTNER",
+        "speakerName": "백현"
+      }
+    ]
+  },
+  "quantitativeAnalysis": {
+    "speakers": [
+      {
+        "speakerRole": "PARTNER",
+        "speakingDurationMs": 137489,
+        "utteranceCount": 28,
+        "transcribedCharacterCount": 691,
+        "transcribedSyllableCount": 690,
+        "transcribedWordCount": 277,
+        "speakingRatioPercent": 40.54,
+        "averageUtteranceDurationMs": 4910.32,
+        "charactersPerMinute": 301.55,
+        "syllablesPerSecond": 5.02,
+        "referenceSyllablesPerSecond": 5.79,
+        "speakingSpeedDifferencePercent": -13.3,
+        "speakingSpeedDirection": "SLOWER"
+      },
+      {
+        "speakerRole": "SELF",
+        "speakingDurationMs": 201641,
+        "utteranceCount": 36,
+        "transcribedCharacterCount": 1003,
+        "transcribedSyllableCount": 998,
+        "transcribedWordCount": 382,
+        "speakingRatioPercent": 59.46,
+        "averageUtteranceDurationMs": 5601.14,
+        "charactersPerMinute": 298.45,
+        "syllablesPerSecond": 4.95,
+        "referenceSyllablesPerSecond": 5.79,
+        "speakingSpeedDifferencePercent": -14.51,
+        "speakingSpeedDirection": "SLOWER"
+      }
+    ],
+    "speakingSpeedComparison": {
+      "fasterSpeakerRole": "PARTNER",
+      "slowerSpeakerRole": "SELF",
+      "percentDifference": 1.41
+    },
+    "totalTurnCount": 47
+  },
+  "qualitativeAnalysis": {
+    "overview": {
+      "title": "재회 의사와 엇갈린 신호",
+      "description": "재회 가능성과 서로의 마음을 확인하는 과정에서, 문자와 행동이 엇갈려 보였던 이유를 두고 대화해요. SELF가 마음을 정리한 과정을 설명한 뒤 PARTNER도 그 설명과 자신의 혼란을 함께 말해요."
+    },
+    "timeline": [
+      {
+        "title": "마음 확인",
+        "description": "PARTNER가 SELF의 마음을 묻고, 두 사람은 질문의 이유와 서로의 마음을 확인해요.",
+        "startMs": 1710,
+        "endMs": 47226
+      },
+      {
+        "title": "재회 의사와 응원",
+        "description": "응원과 재회 가능성, 재회를 원하는 마음이 있는지를 두고 서로 다른 해석을 말해요.",
+        "startMs": 47226,
+        "endMs": 150520
+      },
+      {
+        "title": "엇갈린 행동의 이유",
+        "description": "SELF는 자신이 마음을 닫게 된 이유를 설명하고, PARTNER는 표현과 행동이 엇갈려 보인 점을 묻고 있어요.",
+        "startMs": 154060,
+        "endMs": 250136
+      },
+      {
+        "title": "문자를 보내지 않은 이유",
+        "description": "SELF가 문자를 보내지 않은 이유와 마음의 모호함을 설명하고, PARTNER도 그 행동이 혼란스러웠다고 덧붙여요.",
+        "startMs": 250136,
+        "endMs": 361090
+      }
+    ],
+    "topics": [
+      {
+        "title": "서로의 마음 확인",
+        "description": "시간이 얼마 남지 않은 상황에서 서로의 마음이 어떤지, 왜 궁금한지를 묻고 답해요.",
+        "timeRanges": [
+          {
+            "startMs": 1710,
+            "endMs": 47226
+          }
+        ],
+        "turnCount": 11,
+        "speakingDurationMs": 44776,
+        "longest": false
+      },
+      {
+        "title": "재회와 응원의 의미",
+        "description": "상대에 대한 호감과 응원, 재회 가능성을 열어둔 것의 의미를 두고 입장이 달라요.",
+        "timeRanges": [
+          {
+            "startMs": 47226,
+            "endMs": 150520
+          }
+        ],
+        "turnCount": 18,
+        "speakingDurationMs": 95963,
+        "longest": false
+      },
+      {
+        "title": "마음이 닫힌 이유",
+        "description": "SELF는 자신이 마음을 닫게 된 이유를 말하고, PARTNER는 표현과 행동이 모순돼 보였다고 질문해요.",
+        "timeRanges": [
+          {
+            "startMs": 154060,
+            "endMs": 250136
+          }
+        ],
+        "turnCount": 10,
+        "speakingDurationMs": 88537,
+        "longest": false
+      },
+      {
+        "title": "문자를 보내지 않은 이유",
+        "description": "SELF는 마음이 불분명해 문자를 보내지 않았다고 설명하고, PARTNER는 당시에는 혼란스러웠다고 말해요.",
+        "timeRanges": [
+          {
+            "startMs": 250136,
+            "endMs": 361090
+          }
+        ],
+        "turnCount": 8,
+        "speakingDurationMs": 109854,
+        "longest": true
+      }
+    ],
+    "characterInsights": [
+      {
+        "speakerRole": "PARTNER",
+        "name": "꼬리질문 탐정",
+        "description": "엇갈린 말과 행동을 짚으며 궁금한 점을 물어요."
+      },
+      {
+        "speakerRole": "SELF",
+        "name": "차근차근 해설가",
+        "description": "선택한 이유와 생각의 흐름을 차분히 설명해요."
+      }
+    ],
+    "speakerInsights": [
+      {
+        "speakerRole": "SELF",
+        "patterns": [
+          {
+            "category": "SHORT_RESPONSE",
+            "title": "짧게 되묻고 확인해요",
+            "description": "상대의 질문이나 주장에 짧게 되묻거나 반응하며 대화를 이어가요.",
+            "count": 4,
+            "evidenceQuotes": [
+              {
+                "segmentId": 1378,
+                "speakerRole": "SELF",
+                "originalContent": "그게 왜 궁금해? 너가",
+                "displayContent": "그게 왜 궁금해? 너가",
+                "correctionApplied": false,
+                "startMs": 12717,
+                "endMs": 14420
+              },
+              {
+                "segmentId": 1386,
+                "speakerRole": "SELF",
+                "originalContent": "너 마음이 뭔데",
+                "displayContent": "너 마음이 뭔데",
+                "correctionApplied": false,
+                "startMs": 38515,
+                "endMs": 40320
+              }
+            ]
+          },
+          {
+            "category": "DEFENSE",
+            "title": "다른 해석을 바로잡아요",
+            "description": "상대의 해석과 다른 자신의 입장을 여러 차례 바로잡고, 이유를 덧붙여 설명해요.",
+            "count": 12,
+            "evidenceQuotes": [
+              {
+                "segmentId": 1382,
+                "speakerRole": "SELF",
+                "originalContent": "그러면 너 마음에 따라서 내 마음이 안 왔다 갔다 할 것 같아. 여기 있는 모든 사람이 지금 다 그래",
+                "displayContent": "그러면 너 마음에 따라서 내 마음이 안 왔다 갔다 할 것 같아. 여기 있는 모든 사람이 지금 다 그래",
+                "correctionApplied": false,
+                "startMs": 24689,
+                "endMs": 30825
+              },
+              {
+                "segmentId": 1407,
+                "speakerRole": "SELF",
+                "originalContent": "너랑 무조건적으로 다시 만나려고 나온 게 아니지.",
+                "displayContent": "너랑 무조건적으로 다시 만나려고 나온 게 아니지.",
+                "correctionApplied": false,
+                "startMs": 131025,
+                "endMs": 134390
+              },
+              {
+                "segmentId": 1420,
+                "speakerRole": "SELF",
+                "originalContent": "제어할 마음이 없을뿐더러 나를 별로 존중하지 않는 태도로 나는 느껴졌으니까 그게 오해였지만 알고 보니까",
+                "displayContent": "제어할 마음이 없을뿐더러 나를 별로 존중하지 않는 태도로 나는 느껴졌으니까 그게 오해였지만 알고 보니까",
+                "correctionApplied": false,
+                "startMs": 220292,
+                "endMs": 229065
+              }
+            ]
+          },
+          {
+            "category": "EXPRESSION_PATTERN",
+            "title": "행동의 이유를 풀어 말해요",
+            "description": "자신의 마음과 행동을 설명하며 재회 가능성이나 문자에 관한 입장을 구체적으로 풀어요.",
+            "count": 9,
+            "evidenceQuotes": [
+              {
+                "segmentId": 1405,
+                "speakerRole": "SELF",
+                "originalContent": "가능성을 열어두고 나왔다고",
+                "displayContent": "가능성을 열어두고 나왔다고",
+                "correctionApplied": false,
+                "startMs": 119981,
+                "endMs": 122755
+              },
+              {
+                "segmentId": 1430,
+                "speakerRole": "SELF",
+                "originalContent": "그냥 내 마음에 조금 솔직하게 표현을 해야겠다는 생각이 들었어. 그냥 자존심을 내려놓고 그래서 얘기한 거야.",
+                "displayContent": "그냥 내 마음에 조금 솔직하게 표현을 해야겠다는 생각이 들었어. 그냥 자존심을 내려놓고 그래서 얘기한 거야.",
+                "correctionApplied": false,
+                "startMs": 291205,
+                "endMs": 301480
+              }
+            ]
+          },
+          {
+            "category": "SITUATION_ACKNOWLEDGEMENT",
+            "title": "상대의 관점도 짚어봐요",
+            "description": "상대가 자신의 행동을 애매하게 받아들였을 가능성을 인정하고, 배려하려 했던 뜻을 덧붙여요.",
+            "count": 2,
+            "evidenceQuotes": [
+              {
+                "segmentId": 1432,
+                "speakerRole": "SELF",
+                "originalContent": "근데 네가 애매하게 느낀 게 나도 내가 무슨 마음인지 몰라서 애매하게 느꼈을 수도 있어. 근데 나는 오해가 너무 사실 난 진짜 배려하고 있다고 생각했어. 너를",
+                "displayContent": "근데 네가 애매하게 느낀 게 나도 내가 무슨 마음인지 몰라서 애매하게 느꼈을 수도 있어. 근데 나는 오해가 너무 사실 난 진짜 배려하고 있다고 생각했어. 너를",
+                "correctionApplied": false,
+                "startMs": 309800,
+                "endMs": 321630
+              },
+              {
+                "segmentId": 1435,
+                "speakerRole": "SELF",
+                "originalContent": "나도 100% 확신이 생겼을 때 너한테 보내는 게 그게 예의라고 생각해서 안 보냈던 건데.",
+                "displayContent": "나도 100% 확신이 생겼을 때 너한테 보내는 게 그게 예의라고 생각해서 안 보냈던 건데.",
+                "correctionApplied": false,
+                "startMs": 327151,
+                "endMs": 333652
+              }
+            ]
+          }
+        ],
+        "frequentExpressionSummary": {
+          "title": "마음과 생각을 중심으로 설명해요",
+          "description": "마음과 생각을 설명하는 표현이 반복되고, 자신의 판단이나 상대의 입장을 풀어 말해요."
+        },
+        "frequentExpressions": [
+          {
+            "category": "WORD",
+            "expression": "마음",
+            "count": 8
+          },
+          {
+            "category": "SPEECH_HABIT",
+            "expression": "그냥",
+            "count": 9
+          },
+          {
+            "category": "WORD",
+            "expression": "생각",
+            "count": 9
+          }
+        ]
+      },
+      {
+        "speakerRole": "PARTNER",
+        "patterns": [
+          {
+            "category": "EMOTION_QUESTION",
+            "title": "상대의 마음을 직접 물어요",
+            "description": "SELF의 마음이나 재회 의사를 직접 확인하는 질문을 이어가요.",
+            "count": 5,
+            "evidenceQuotes": [
+              {
+                "segmentId": 1377,
+                "speakerRole": "PARTNER",
+                "originalContent": "너의 마음을 정했냐 난 이게 궁금했고",
+                "displayContent": "너의 마음을 정했냐 난 이게 궁금했고",
+                "correctionApplied": false,
+                "startMs": 9285,
+                "endMs": 12717
+              },
+              {
+                "segmentId": 1385,
+                "speakerRole": "PARTNER",
+                "originalContent": "지금 너의 마음이 어떠냐고 묻는 거야. 그럼 내 마음 알잖아. 어쨌든",
+                "displayContent": "지금 너의 마음이 어떠냐고 묻는 거야. 그럼 내 마음 알잖아. 어쨌든",
+                "correctionApplied": false,
+                "startMs": 34004,
+                "endMs": 38515
+              },
+              {
+                "segmentId": 1404,
+                "speakerRole": "PARTNER",
+                "originalContent": "재회를 혼자 하냐? 근데 넌 재회하고 싶다 재회하고 싶은 마음이 있고 그",
+                "displayContent": "재회를 혼자 하냐? 근데 넌 재회하고 싶다 재회하고 싶은 마음이 있고 그",
+                "correctionApplied": false,
+                "startMs": 114695,
+                "endMs": 119981
+              }
+            ]
+          },
+          {
+            "category": "DEFENSE",
+            "title": "상대의 말에 이유를 따져요",
+            "description": "SELF의 행동이나 설명에 왜 그런지 되묻고, 자신의 해석을 덧붙여 반박해요.",
+            "count": 8,
+            "evidenceQuotes": [
+              {
+                "segmentId": 1392,
+                "speakerRole": "PARTNER",
+                "originalContent": "대화하자고 그러면서 나 너 좋다 막 이렇게 말하고 왜 그렇게 흔들어?",
+                "displayContent": "대화하자고 그러면서 나 너 좋다 막 이렇게 말하고 왜 그렇게 흔들어?",
+                "correctionApplied": false,
+                "startMs": 63796,
+                "endMs": 67574
+              },
+              {
+                "segmentId": 1408,
+                "speakerRole": "PARTNER",
+                "originalContent": "그러니까 그게 재회를 원해서 나온 게 아니잖아. 재회를 원하는 마음이 있는 게 아니잖아.",
+                "displayContent": "그러니까 그게 재회를 원해서 나온 게 아니잖아. 재회를 원하는 마음이 있는 게 아니잖아.",
+                "correctionApplied": false,
+                "startMs": 134390,
+                "endMs": 140190
+              },
+              {
+                "segmentId": 1423,
+                "speakerRole": "PARTNER",
+                "originalContent": "근데 왜 갑자기 나한테 갑자기 좋다고 그러고 왜 그런 거야? 갑자기 마음을 표현을 하기도 했잖아. 그 외에는 우리가 풀려서",
+                "displayContent": "근데 왜 갑자기 나한테 갑자기 좋다고 그러고 왜 그런 거야? 갑자기 마음을 표현을 하기도 했잖아. 그 외에는 우리가 풀려서",
+                "correctionApplied": false,
+                "startMs": 242920,
+                "endMs": 250136
+              }
+            ]
+          },
+          {
+            "category": "FOLLOW_UP_QUESTION",
+            "title": "앞선 말을 이어서 물어요",
+            "description": "앞선 발화의 행동이나 표현을 이어서 짚으며, 설명을 더 요구하는 질문을 해요.",
+            "count": 5,
+            "evidenceQuotes": [
+              {
+                "segmentId": 1392,
+                "speakerRole": "PARTNER",
+                "originalContent": "대화하자고 그러면서 나 너 좋다 막 이렇게 말하고 왜 그렇게 흔들어?",
+                "displayContent": "대화하자고 그러면서 나 너 좋다 막 이렇게 말하고 왜 그렇게 흔들어?",
+                "correctionApplied": false,
+                "startMs": 63796,
+                "endMs": 67574
+              },
+              {
+                "segmentId": 1423,
+                "speakerRole": "PARTNER",
+                "originalContent": "근데 왜 갑자기 나한테 갑자기 좋다고 그러고 왜 그런 거야? 갑자기 마음을 표현을 하기도 했잖아. 그 외에는 우리가 풀려서",
+                "displayContent": "근데 왜 갑자기 나한테 갑자기 좋다고 그러고 왜 그런 거야? 갑자기 마음을 표현을 하기도 했잖아. 그 외에는 우리가 풀려서",
+                "correctionApplied": false,
+                "startMs": 242920,
+                "endMs": 250136
+              }
+            ]
+          },
+          {
+            "category": "SITUATION_ACKNOWLEDGEMENT",
+            "title": "상대의 설명을 일부 받아줘요",
+            "description": "SELF의 설명을 들은 뒤 자신의 입장에서는 이해하기 어려웠다고 덧붙여, 서로 다른 관점을 함께 말해요.",
+            "count": 2,
+            "evidenceQuotes": [
+              {
+                "segmentId": 1436,
+                "speakerRole": "PARTNER",
+                "originalContent": "근데 이렇게 말을 들으면 사실 이해가 되는데 그것만 단면적으로 놓고 보면은 사실은 내 입장에서는 이해가 안 되잖아.",
+                "displayContent": "근데 이렇게 말을 들으면 사실 이해가 되는데 그것만 단면적으로 놓고 보면은 사실은 내 입장에서는 이해가 안 되잖아.",
+                "correctionApplied": false,
+                "startMs": 333652,
+                "endMs": 341515
+              },
+              {
+                "segmentId": 1438,
+                "speakerRole": "PARTNER",
+                "originalContent": "있다고 하니까. 그럼 나는 당연히 혼란스럽잖아. 그리고",
+                "displayContent": "있다고 하니까. 그럼 나는 당연히 혼란스럽잖아. 그리고",
+                "correctionApplied": false,
+                "startMs": 345243,
+                "endMs": 353355
+              }
+            ]
+          }
+        ],
+        "frequentExpressionSummary": {
+          "title": "마음과 의사를 확인해요",
+          "description": "상대의 마음을 묻고 확인하는 표현이 반복되며, 재회 의사와 행동의 의미를 질문해요."
+        },
+        "frequentExpressions": [
+          {
+            "category": "WORD",
+            "expression": "마음",
+            "count": 14
+          },
+          {
+            "category": "SPEECH_HABIT",
+            "expression": "왜",
+            "count": 8
+          }
+        ]
+      }
+    ],
+    "interestInsights": [
+      {
+        "speakerRole": "PARTNER",
+        "score": 48,
+        "description": "상대의 마음과 재회 의사를 확인하는 질문이 이어지고, 마지막에는 자신의 혼란도 설명해요.",
+        "observations": [
+          {
+            "category": "QUESTION",
+            "title": "상대의 마음을 여러 번 확인해요",
+            "description": "SELF의 마음과 재회 의사를 직접 묻는 질문을 이어가요.",
+            "count": 4
+          },
+          {
+            "category": "EMPATHY",
+            "title": "상대가 혼란스러웠던 이유를 설명해요",
+            "description": "SELF의 설명을 들으면 이해된다고 말하면서도, 앞선 상황에서는 혼란스러웠다고 덧붙여요.",
+            "count": 2
+          }
+        ]
+      },
+      {
+        "speakerRole": "SELF",
+        "score": 39,
+        "description": "상대의 마음을 확인하고, 자신의 행동이 배려에서 나온 것이었다고 설명해요.",
+        "observations": [
+          {
+            "category": "QUESTION",
+            "title": "상대의 마음을 되물어요",
+            "description": "상대가 왜 궁금한지, 상대의 마음은 어떤지 되물어요.",
+            "count": 2
+          },
+          {
+            "category": "EMPATHY",
+            "title": "상대를 배려하려 한 이유를 설명해요",
+            "description": "문자를 보내지 않은 것이 상대의 방향을 방해하지 않으려는 배려였다고 설명해요.",
+            "count": 4
+          }
+        ]
+      }
+    ],
+    "spicinessInsights": [
+      {
+        "speakerRole": "PARTNER",
+        "score": 32,
+        "swearWordCount": 0,
+        "swearWords": [],
+        "description": "상대의 마음을 반복해서 확인하고 행동의 이유를 직접 따지는 표현이 있어요. 비속어는 없고, 후반에는 설명을 들으며 이해되는 부분도 말해요.",
+        "observations": [
+          {
+            "category": "DIRECTNESS",
+            "title": "행동의 이유를 직접 따져요",
+            "description": "상대가 왜 그렇게 말하거나 행동했는지 직접 묻는 표현이 반복돼요.",
+            "count": 4
+          },
+          {
+            "category": "EXPRESSION_INTENSITY",
+            "title": "강한 표현을 사용해 의문을 제기해요",
+            "description": "상대가 자신을 흔든다는 식으로 표현하고, 응원 방식에 대한 요구를 말해요.",
+            "count": 2
+          },
+          {
+            "category": "RECOVERY_EXPRESSION",
+            "title": "설명을 들은 뒤 이해되는 부분을 인정해요",
+            "description": "대화 후반에는 설명을 들으면 이해되는 부분이 있다고 말해요.",
+            "count": 1
+          }
+        ]
+      },
+      {
+        "speakerRole": "SELF",
+        "score": 22,
+        "swearWordCount": 0,
+        "swearWords": [],
+        "description": "상대의 해석을 바로잡고 자신의 입장을 분명히 말하지만, 비하나 비속어는 확인되지 않아요.",
+        "observations": [
+          {
+            "category": "DIRECTNESS",
+            "title": "자신의 입장을 뚜렷하게 말해요",
+            "description": "재회 의사와 상대의 행동을 어떻게 받아들였는지 직접 설명해요.",
+            "count": 3
+          },
+          {
+            "category": "SOFTENING_EXPRESSION",
+            "title": "상대가 느낀 모호함을 인정해요",
+            "description": "자신의 마음이 불분명해 상대가 애매하게 느꼈을 수 있다고 말해요.",
+            "count": 2
+          },
+          {
+            "category": "RECOVERY_EXPRESSION",
+            "title": "마음을 정리한 과정을 설명해요",
+            "description": "문자를 보내지 않은 이유와 이후 솔직하게 표현하기로 한 과정을 설명해요.",
+            "count": 3
+          }
+        ]
+      }
+    ],
+    "reactionStyleInsights": [
+      {
+        "speakerRole": "PARTNER",
+        "thinkingPercent": 65,
+        "feelingPercent": 35,
+        "description": "상대의 마음을 묻는 한편, 행동이 왜 혼란스럽게 보였는지 이유를 들어 설명해요.",
+        "examples": [
+          {
+            "category": "THINKING",
+            "title": "이유를 확인하고 자신의 관점을 덧붙여요",
+            "description": "상대의 표현에 이유를 묻고, 자신의 입장에서 이해가 어려웠던 점을 설명해요."
+          }
+        ]
+      },
+      {
+        "speakerRole": "SELF",
+        "thinkingPercent": 70,
+        "feelingPercent": 30,
+        "description": "마음이 정해지지 않았던 과정과 문자를 보내지 않은 이유를 차례로 설명해요.",
+        "examples": [
+          {
+            "category": "THINKING",
+            "title": "마음의 변화 과정을 풀어 설명해요",
+            "description": "미련인지 질투인지 알기 어려웠던 점과 이후 솔직히 표현하기로 한 이유를 말해요."
+          }
+        ]
+      }
+    ],
+    "scenarioInsights": [
+      {
+        "category": "CONFLICT_TOPIC",
+        "speakerRoles": [
+          "SELF",
+          "PARTNER"
+        ],
+        "title": "재회 의사와 마음의 확인",
+        "description": "한쪽은 상대의 마음과 재회 의사를 확인하고 싶어 하고, 다른 쪽은 재회 가능성은 열어뒀지만 확정한 건 아니라고 설명해요."
+      },
+      {
+        "category": "CONFLICT_POSITION",
+        "speakerRoles": [
+          "PARTNER"
+        ],
+        "title": "확실한 답을 원하는 입장",
+        "description": "PARTNER는 시간이 얼마 남지 않은 상황에서 SELF의 마음과 재회 의사를 분명히 알고 싶다고 말해요."
+      },
+      {
+        "category": "CONFLICT_POSITION",
+        "speakerRoles": [
+          "SELF"
+        ],
+        "title": "가능성을 열어두고 신중히 표현한 입장",
+        "description": "SELF는 재회를 확정한 건 아니며, 마음이 정해지지 않아 문자를 보내지 않았고 생각을 정리한 뒤 솔직히 표현했다고 설명해요."
+      },
+      {
+        "category": "TURNING_POINT",
+        "speakerRoles": [
+          "SELF",
+          "PARTNER"
+        ],
+        "title": "이유를 설명하며 생긴 전환",
+        "description": "SELF가 문자를 보내지 않은 이유와 마음이 모호했던 과정을 설명하자, PARTNER는 그 설명을 들으면 이해가 된다고 반응해요."
+      },
+      {
+        "category": "MISSED_SIGNAL",
+        "speakerRoles": [
+          "SELF",
+          "PARTNER"
+        ],
+        "title": "질문에 바로 닿지 못한 순간",
+        "description": "서로 상대의 마음을 묻거나 확인하는 질문이 이어지지만, 질문에 바로 답하기보다 상대의 말이나 의도를 따져 대화가 엇갈리는 순간이 있어요."
+      },
+      {
+        "category": "SOLUTION",
+        "speakerRoles": [
+          "SELF",
+          "PARTNER"
+        ],
+        "title": "이유를 풀어 설명하기",
+        "description": "SELF가 마음을 정리하고 문자를 보내지 않은 이유를 차례로 설명하고, PARTNER도 한쪽 면만 보면 이해하기 어려웠다고 말해요. 마지막에는 서로의 관점을 더 구체적으로 확인해 볼 수 있어요."
+      }
+    ],
+    "representativeEvidences": [
+      {
+        "type": "EMOTION_EXPRESSION",
+        "speakerRole": "SELF",
+        "reactionCategory": null,
+        "evidence": {
+          "segmentId": 1426,
+          "speakerRole": "SELF",
+          "originalContent": "뭔가 내 마음이 정해지지도 않은 상태에서 이게 미련인 건지 아니면 그냥 단순히 질투가 나서 기분이 나쁜 건지 그게 정해지지 않은 상황에서 너한테 문자를 보내면은",
+          "displayContent": "뭔가 내 마음이 정해지지도 않은 상태에서 이게 미련인 건지 아니면 그냥 단순히 질투가 나서 기분이 나쁜 건지 그게 정해지지 않은 상황에서 너한테 문자를 보내면은",
+          "correctionApplied": false,
+          "startMs": 261220,
+          "endMs": 271959
+        }
+      },
+      {
+        "type": "MISSED_QUESTION",
+        "speakerRole": "SELF",
+        "reactionCategory": null,
+        "evidence": {
+          "segmentId": 1378,
+          "speakerRole": "SELF",
+          "originalContent": "그게 왜 궁금해? 너가",
+          "displayContent": "그게 왜 궁금해? 너가",
+          "correctionApplied": false,
+          "startMs": 12717,
+          "endMs": 14420
+        }
+      },
+      {
+        "type": "FOLLOWING_RESPONSE",
+        "speakerRole": "PARTNER",
+        "reactionCategory": null,
+        "evidence": {
+          "segmentId": 1436,
+          "speakerRole": "PARTNER",
+          "originalContent": "근데 이렇게 말을 들으면 사실 이해가 되는데 그것만 단면적으로 놓고 보면은 사실은 내 입장에서는 이해가 안 되잖아.",
+          "displayContent": "근데 이렇게 말을 들으면 사실 이해가 되는데 그것만 단면적으로 놓고 보면은 사실은 내 입장에서는 이해가 안 되잖아.",
+          "correctionApplied": false,
+          "startMs": 333652,
+          "endMs": 341515
+        }
+      },
+      {
+        "type": "RECOVERY_START",
+        "speakerRole": "SELF",
+        "reactionCategory": null,
+        "evidence": {
+          "segmentId": 1430,
+          "speakerRole": "SELF",
+          "originalContent": "그냥 내 마음에 조금 솔직하게 표현을 해야겠다는 생각이 들었어. 그냥 자존심을 내려놓고 그래서 얘기한 거야.",
+          "displayContent": "그냥 내 마음에 조금 솔직하게 표현을 해야겠다는 생각이 들었어. 그냥 자존심을 내려놓고 그래서 얘기한 거야.",
+          "correctionApplied": false,
+          "startMs": 291205,
+          "endMs": 301480
+        }
+      },
+      {
+        "type": "SPEAKER_REACTION",
+        "speakerRole": "SELF",
+        "reactionCategory": null,
+        "evidence": {
+          "segmentId": 1432,
+          "speakerRole": "SELF",
+          "originalContent": "근데 네가 애매하게 느낀 게 나도 내가 무슨 마음인지 몰라서 애매하게 느꼈을 수도 있어. 근데 나는 오해가 너무 사실 난 진짜 배려하고 있다고 생각했어. 너를",
+          "displayContent": "근데 네가 애매하게 느낀 게 나도 내가 무슨 마음인지 몰라서 애매하게 느꼈을 수도 있어. 근데 나는 오해가 너무 사실 난 진짜 배려하고 있다고 생각했어. 너를",
+          "correctionApplied": false,
+          "startMs": 309800,
+          "endMs": 321630
+        }
+      },
+      {
+        "type": "SPEAKER_REACTION",
+        "speakerRole": "PARTNER",
+        "reactionCategory": null,
+        "evidence": {
+          "segmentId": 1436,
+          "speakerRole": "PARTNER",
+          "originalContent": "근데 이렇게 말을 들으면 사실 이해가 되는데 그것만 단면적으로 놓고 보면은 사실은 내 입장에서는 이해가 안 되잖아.",
+          "displayContent": "근데 이렇게 말을 들으면 사실 이해가 되는데 그것만 단면적으로 놓고 보면은 사실은 내 입장에서는 이해가 안 되잖아.",
+          "correctionApplied": false,
+          "startMs": 333652,
+          "endMs": 341515
+        }
+      }
+    ],
+    "relationshipSummary": {
+      "title": "확답을 찾는 쪽과 이유를 푸는 쪽",
+      "description": "한쪽은 분명한 재회 의사를 확인하려 하고, 다른 쪽은 마음이 정해지기까지의 과정을 설명해요. 서로의 의도를 더 구체적으로 확인하는 대화가 이어져요."
+    },
+    "reportMetrics": [
+      {
+        "type": "POSITION_EXPLANATION",
+        "speakerRole": "PARTNER",
+        "value": 7,
+        "unit": "COUNT",
+        "title": "입장 설명",
+        "description": "자신이 궁금한 점과 상대의 행동을 바라보는 이유를 말해요.",
+        "evidenceQuotes": [
+          {
+            "segmentId": 1376,
+            "speakerRole": "PARTNER",
+            "originalContent": "그래서 얘가 여기에 온 이유는 그냥 너한테 정확히 물어보고 싶은 거야. 왜냐하면 시간이 얼마 안 남았기 때문에",
+            "displayContent": "그래서 얘가 여기에 온 이유는 그냥 너한테 정확히 물어보고 싶은 거야. 왜냐하면 시간이 얼마 안 남았기 때문에",
+            "correctionApplied": false,
+            "startMs": 1710,
+            "endMs": 9285
+          }
+        ]
+      },
+      {
+        "type": "POSITION_EXPLANATION",
+        "speakerRole": "SELF",
+        "value": 23,
+        "unit": "COUNT",
+        "title": "입장 설명",
+        "description": "재회 가능성과 문자, 마음의 변화에 관한 자신의 이유를 설명해요.",
+        "evidenceQuotes": [
+          {
+            "segmentId": 1405,
+            "speakerRole": "SELF",
+            "originalContent": "가능성을 열어두고 나왔다고",
+            "displayContent": "가능성을 열어두고 나왔다고",
+            "correctionApplied": false,
+            "startMs": 119981,
+            "endMs": 122755
+          },
+          {
+            "segmentId": 1430,
+            "speakerRole": "SELF",
+            "originalContent": "그냥 내 마음에 조금 솔직하게 표현을 해야겠다는 생각이 들었어. 그냥 자존심을 내려놓고 그래서 얘기한 거야.",
+            "displayContent": "그냥 내 마음에 조금 솔직하게 표현을 해야겠다는 생각이 들었어. 그냥 자존심을 내려놓고 그래서 얘기한 거야.",
+            "correctionApplied": false,
+            "startMs": 291205,
+            "endMs": 301480
+          }
+        ]
+      },
+      {
+        "type": "REBUTTAL",
+        "speakerRole": "PARTNER",
+        "value": 7,
+        "unit": "COUNT",
+        "title": "반박",
+        "description": "SELF의 행동과 설명에 의문을 제기하거나 다른 해석을 내놓아요.",
+        "evidenceQuotes": [
+          {
+            "segmentId": 1392,
+            "speakerRole": "PARTNER",
+            "originalContent": "대화하자고 그러면서 나 너 좋다 막 이렇게 말하고 왜 그렇게 흔들어?",
+            "displayContent": "대화하자고 그러면서 나 너 좋다 막 이렇게 말하고 왜 그렇게 흔들어?",
+            "correctionApplied": false,
+            "startMs": 63796,
+            "endMs": 67574
+          },
+          {
+            "segmentId": 1408,
+            "speakerRole": "PARTNER",
+            "originalContent": "그러니까 그게 재회를 원해서 나온 게 아니잖아. 재회를 원하는 마음이 있는 게 아니잖아.",
+            "displayContent": "그러니까 그게 재회를 원해서 나온 게 아니잖아. 재회를 원하는 마음이 있는 게 아니잖아.",
+            "correctionApplied": false,
+            "startMs": 134390,
+            "endMs": 140190
+          }
+        ]
+      },
+      {
+        "type": "REBUTTAL",
+        "speakerRole": "SELF",
+        "value": 15,
+        "unit": "COUNT",
+        "title": "반박",
+        "description": "PARTNER의 해석에 다른 입장을 밝히거나 자신이 본 상황을 바로잡아요.",
+        "evidenceQuotes": [
+          {
+            "segmentId": 1407,
+            "speakerRole": "SELF",
+            "originalContent": "너랑 무조건적으로 다시 만나려고 나온 게 아니지.",
+            "displayContent": "너랑 무조건적으로 다시 만나려고 나온 게 아니지.",
+            "correctionApplied": false,
+            "startMs": 131025,
+            "endMs": 134390
+          }
+        ]
+      },
+      {
+        "type": "AVOIDANCE",
+        "speakerRole": "PARTNER",
+        "value": 0,
+        "unit": "COUNT",
+        "title": "회피",
+        "description": "상대의 질문이나 주제를 피하는 발화는 뚜렷하게 확인되지 않아요.",
+        "evidenceQuotes": []
+      },
+      {
+        "type": "AVOIDANCE",
+        "speakerRole": "SELF",
+        "value": 0,
+        "unit": "COUNT",
+        "title": "회피",
+        "description": "상대의 질문이나 주제를 피하는 발화는 뚜렷하게 확인되지 않아요.",
+        "evidenceQuotes": []
+      },
+      {
+        "type": "APOLOGY",
+        "speakerRole": "PARTNER",
+        "value": 0,
+        "unit": "COUNT",
+        "title": "사과",
+        "description": "명시적인 사과 표현은 확인되지 않아요.",
+        "evidenceQuotes": []
+      },
+      {
+        "type": "APOLOGY",
+        "speakerRole": "SELF",
+        "value": 0,
+        "unit": "COUNT",
+        "title": "사과",
+        "description": "명시적인 사과 표현은 확인되지 않아요.",
+        "evidenceQuotes": []
+      },
+      {
+        "type": "YIELDING",
+        "speakerRole": "PARTNER",
+        "value": 0,
+        "unit": "COUNT",
+        "title": "양보",
+        "description": "상대의 입장을 받아들이거나 물러서는 명시적 표현은 확인되지 않아요.",
+        "evidenceQuotes": []
+      },
+      {
+        "type": "YIELDING",
+        "speakerRole": "SELF",
+        "value": 0,
+        "unit": "COUNT",
+        "title": "양보",
+        "description": "상대의 입장을 받아들이거나 물러서는 명시적 표현은 확인되지 않아요.",
+        "evidenceQuotes": []
+      },
+      {
+        "type": "EMOTION_CHECK",
+        "speakerRole": "PARTNER",
+        "value": 5,
+        "unit": "COUNT",
+        "title": "감정 확인 질문",
+        "description": "상대의 현재 마음이나 재회 의사를 직접 묻는 발화예요.",
+        "evidenceQuotes": []
+      },
+      {
+        "type": "EMOTION_CHECK",
+        "speakerRole": "SELF",
+        "value": 1,
+        "unit": "COUNT",
+        "title": "감정 확인 질문",
+        "description": "상대의 마음이 무엇인지 직접 확인해요.",
+        "evidenceQuotes": []
+      },
+      {
+        "type": "QUESTION",
+        "speakerRole": "PARTNER",
+        "value": 18,
+        "unit": "COUNT",
+        "title": "질문",
+        "description": "상대에게 이유나 입장을 묻는 질문이 여러 차례 나와요.",
+        "evidenceQuotes": []
+      },
+      {
+        "type": "QUESTION",
+        "speakerRole": "SELF",
+        "value": 5,
+        "unit": "COUNT",
+        "title": "질문",
+        "description": "상대에게 궁금한 점을 묻거나 자신의 말에 대한 반응을 확인해요.",
+        "evidenceQuotes": []
+      },
+      {
+        "type": "MISSED_RESPONSE",
+        "speakerRole": "PARTNER",
+        "value": 1,
+        "unit": "COUNT",
+        "title": "바로 이어지지 않은 응답",
+        "description": "상대가 마음을 정했는지 묻지만, 바로 답을 듣지 못하고 질문의 이유를 두고 대화가 이어져요.",
+        "evidenceQuotes": []
+      },
+      {
+        "type": "MISSED_RESPONSE",
+        "speakerRole": "SELF",
+        "value": 1,
+        "unit": "COUNT",
+        "title": "바로 이어지지 않은 응답",
+        "description": "왜 궁금한지 묻는 질문에 직접 답하기보다, 상대가 왜 자신의 마음을 말하느냐고 되물어요.",
+        "evidenceQuotes": []
+      },
+      {
+        "type": "DIRECT_EXPRESSION",
+        "speakerRole": "PARTNER",
+        "value": 74,
+        "unit": "PERCENT",
+        "title": "직접 표현",
+        "description": "원하는 답과 불편한 지점을 직접 묻고 설명하는 표현이 비교적 자주 보여요.",
+        "evidenceQuotes": []
+      },
+      {
+        "type": "DIRECT_EXPRESSION",
+        "speakerRole": "SELF",
+        "value": 78,
+        "unit": "PERCENT",
+        "title": "직접 표현",
+        "description": "마음과 행동의 이유를 분명히 설명하는 표현이 자주 보여요.",
+        "evidenceQuotes": []
+      },
+      {
+        "type": "ASSERTIVE_EXPRESSION",
+        "speakerRole": "PARTNER",
+        "value": 65,
+        "unit": "PERCENT",
+        "title": "주장 표현",
+        "description": "자신이 원하는 확인과 해석을 뚜렷하게 말하는 표현이 이어져요.",
+        "evidenceQuotes": []
+      },
+      {
+        "type": "ASSERTIVE_EXPRESSION",
+        "speakerRole": "SELF",
+        "value": 71,
+        "unit": "PERCENT",
+        "title": "주장 표현",
+        "description": "자신의 선택과 마음의 이유를 명확히 밝히는 표현이 보여요.",
+        "evidenceQuotes": []
+      },
+      {
+        "type": "SOFTENING_EXPRESSION",
+        "speakerRole": "PARTNER",
+        "value": 14,
+        "unit": "PERCENT",
+        "title": "완충 표현",
+        "description": "상대의 설명을 들은 뒤 이해되는 부분을 먼저 인정하는 표현이 조금 보여요.",
+        "evidenceQuotes": []
+      },
+      {
+        "type": "SOFTENING_EXPRESSION",
+        "speakerRole": "SELF",
+        "value": 35,
+        "unit": "PERCENT",
+        "title": "완충 표현",
+        "description": "상대가 애매하게 느꼈을 가능성을 인정하고 자신의 의도를 설명해요.",
+        "evidenceQuotes": []
+      },
+      {
+        "type": "RECOVERY_EXPRESSION",
+        "speakerRole": "PARTNER",
+        "value": 18,
+        "unit": "PERCENT",
+        "title": "회복 표현",
+        "description": "대화 후반에 상대의 설명을 이해할 수 있다고 말하며 입장을 덧붙여요.",
+        "evidenceQuotes": []
+      },
+      {
+        "type": "RECOVERY_EXPRESSION",
+        "speakerRole": "SELF",
+        "value": 42,
+        "unit": "PERCENT",
+        "title": "회복 표현",
+        "description": "마음이 모호했던 과정과 행동의 이유를 풀어 말하며 오해를 좁히려 해요.",
+        "evidenceQuotes": []
+      }
+    ],
+    "speakerTendencies": [
+      {
+        "speakerRole": "PARTNER",
+        "label": "질문으로 확인해요",
+        "description": "상대의 마음을 질문으로 확인하고, 행동이 이해되지 않는 지점을 구체적으로 따져요."
+      },
+      {
+        "speakerRole": "SELF",
+        "label": "이유를 풀어 설명해요",
+        "description": "마음이 바뀐 과정과 행동의 이유를 설명하고, 상대가 다르게 받아들였을 가능성도 짚어요."
+      }
+    ],
+    "coachingSuggestions": [
+      {
+        "speakerRole": "SELF",
+        "order": 1,
+        "title": "설명 전에 질문에 먼저 답해요",
+        "description": "재회 의사를 묻는 질문에 이유를 길게 설명하기 전에, 현재의 입장을 짧게 밝혀 상대가 답을 찾기 쉽게 해보세요.",
+        "suggestedPhrase": "다시 만날 가능성은 열어두고 있지만, 지금 재회를 결정한 건 아니야. 왜 그렇게 생각하는지도 차근히 설명할게.",
+        "evidenceQuotes": []
+      },
+      {
+        "speakerRole": "SELF",
+        "order": 2,
+        "title": "의도와 별개로 상대의 혼란을 인정해요",
+        "description": "문자를 보내지 않은 이유를 설명할 때, 배려하려던 의도와 상대가 실제로 느낀 혼란을 나눠 짚어보세요.",
+        "suggestedPhrase": "나는 확신 없이 문자를 보내면 더 혼란스러울까 봐 망설였어. 그런데 연락이 없어서 너는 오히려 헷갈렸을 수 있겠네.",
+        "evidenceQuotes": []
+      },
+      {
+        "speakerRole": "SELF",
+        "order": 3,
+        "title": "지금의 입장과 다음 행동을 함께 말해요",
+        "description": "과거에 판단한 이유를 풀어낸 뒤, 현재 확실한 것과 아직 정하지 못한 것을 구분하고 다음 대화의 방향을 제안해보세요.",
+        "suggestedPhrase": "지금은 바로 다시 만나겠다고 약속하기 어려워. 그래도 오해는 풀고 싶어. 오늘은 서로 다르게 받아들였던 부분부터 얘기해보면 좋겠어.",
+        "evidenceQuotes": []
+      },
+      {
+        "speakerRole": "PARTNER",
+        "order": 1,
+        "title": "한 번에 한 가지를 물어요",
+        "description": "재회 의사와 문자에 담긴 의미를 함께 확인하기보다, 가장 궁금한 질문 하나를 먼저 건네고 답을 기다려보세요.",
+        "suggestedPhrase": "내가 먼저 확인하고 싶은 건 지금 다시 만날 생각이 있는지야. 아직 정하지 못했다면 그렇게 말해줘도 괜찮아.",
+        "evidenceQuotes": []
+      },
+      {
+        "speakerRole": "PARTNER",
+        "order": 2,
+        "title": "추측 대신 내가 느낀 점을 말해요",
+        "description": "상대가 일부러 흔들었다고 단정하기보다, 어떤 말과 행동 때문에 어떻게 느꼈는지를 구체적으로 전해보세요.",
+        "suggestedPhrase": "나를 좋다고 말한 뒤 문자는 오지 않아서, 나는 어떻게 받아들여야 할지 혼란스러웠어. 그때 어떤 생각이었는지 듣고 싶어.",
+        "evidenceQuotes": []
+      },
+      {
+        "speakerRole": "PARTNER",
+        "order": 3,
+        "title": "들은 내용을 확인한 뒤 내 바람을 전해요",
+        "description": "상대의 설명을 다시 반박하기 전에 이해한 내용을 짧게 확인하고, 자신이 바라는 관계의 방향을 덧붙여보세요.",
+        "suggestedPhrase": "가능성은 열어뒀지만 확신이 없어서 연락하지 않았다는 뜻으로 이해했어. 맞아? 나는 다시 만날 수 있을지 얘기하고 싶지만, 지금 답하기 어렵다면 그 점도 알고 싶어.",
+        "evidenceQuotes": []
+      }
+    ]
+  }
+}
