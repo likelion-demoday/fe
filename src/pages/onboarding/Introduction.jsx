@@ -63,6 +63,8 @@ export default function Introduction() {
 
   return (
     <main className={`intro-screen${step === 0 ? " intro-screen-welcome" : step === 2 ? " intro-screen-preview" : step === 3 ? " intro-screen-start" : ""}`}>
+      <div key={step} className="intro-scroll no-scrollbar">
+        <div className="intro-stage">
       {step === 2 && <IntroductionPreview />}
           {step === 0 && <div aria-hidden="true" className="intro-art">
             <div className="intro-coins"><img src={coins} alt="" /></div>
@@ -78,8 +80,6 @@ export default function Introduction() {
             <div className="intro-glow-right"><img src={glowRight} alt="" /></div>
             <img className="intro-characters" src={characters} alt="" />
           </div>}
-      <div className="intro-scroll no-scrollbar">
-        <div className="intro-stage">
           <header className="intro-header">
             <p className="font-['SUIT',sans-serif] text-[20px] font-extrabold tracking-[-0.8px] text-black">RE<span className="text-[#ff765b]">:S</span><span className="tracking-[-1.28px]">AY</span></p>
             <div className="mt-[16px] flex items-center justify-between">

@@ -1,11 +1,11 @@
-.intro-screen { position: relative; display: flex; flex-direction: column; width: 100%; height: 100dvh; margin: 0 auto; background: white; overflow: hidden; overscroll-behavior-y: none; touch-action: pan-x pinch-zoom; }
+.intro-screen { position: relative; display: flex; flex-direction: column; width: 100%; height: 100dvh; margin: 0 auto; background: white; overflow: hidden; overscroll-behavior-y: none; }
 
 /* 모바일에서는 화면을 채우고, 태블릿 이상에서만 디자인 폭을 제한합니다. */
 @media (min-width: 768px) {
   .intro-screen { max-width: 390px; height: min(844px, 100dvh); }
 }
-.intro-scroll { position: relative; flex: 1; min-height: 0; overflow: clip; }
-.intro-stage { position: relative; min-height: 715px; width: 100%; overflow: hidden; }
+.intro-scroll { position: relative; flex: 1; min-height: 0; overflow-y: auto; overflow-x: hidden; overscroll-behavior-y: none; }
+.intro-stage { position: relative; min-height: max(844px, 100%); width: 100%; padding-bottom: calc(102px + max(30px, env(safe-area-inset-bottom))); overflow: hidden; }
 .intro-header { position: relative; z-index: 1; padding: 59px 24px 0; }
 .intro-copy { position: relative; z-index: 1; margin: 30px 24px 0; }
 .intro-art { position: absolute; inset: 0; pointer-events: none; }
