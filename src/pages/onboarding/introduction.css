@@ -29,3 +29,27 @@
 /* 첫 소개의 배경은 스크롤 영역에 잘리지 않고 하단 버튼 뒤까지 이어집니다. */
 .intro-screen-welcome .intro-scroll { position: relative; }
 .intro-screen-welcome .intro-footer { background: transparent; }
+
+/* 개별 translate를 사용해 원래 이미지의 회전 각도를 유지합니다. */
+@keyframes intro-background-float {
+  0%, 100% { translate: 0 0; }
+  35% { translate: var(--float-x, 10px) var(--float-y, -18px); }
+  70% { translate: calc(var(--float-x, 10px) * -.6) calc(var(--float-y, -18px) * .4); }
+}
+
+.intro-screen-welcome :is(.intro-coins, .intro-back-symbol, .intro-blur-symbol, .intro-envelope, .intro-side-symbol, .intro-top-symbol) {
+  animation: intro-background-float var(--float-duration, 9s) ease-in-out infinite;
+  animation-delay: var(--float-delay, 0s);
+}
+.intro-coins { --float-x: 28px; --float-y: -44px; --float-duration: 6s; --float-delay: -2s; }
+.intro-back-symbol { --float-x: -24px; --float-y: -36px; --float-duration: 8s; --float-delay: -5s; }
+.intro-blur-symbol { --float-x: 32px; --float-y: -48px; --float-duration: 7s; --float-delay: -4s; }
+.intro-envelope { --float-x: -28px; --float-y: 40px; --float-duration: 7.5s; --float-delay: -7s; }
+.intro-side-symbol { --float-x: -32px; --float-y: -52px; --float-duration: 5.5s; --float-delay: -3s; }
+.intro-top-symbol { --float-x: 24px; --float-y: -32px; --float-duration: 6.5s; --float-delay: -6s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .intro-screen-welcome :is(.intro-coins, .intro-back-symbol, .intro-blur-symbol, .intro-envelope, .intro-side-symbol, .intro-top-symbol) {
+    animation: none;
+  }
+}
