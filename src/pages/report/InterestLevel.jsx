@@ -1,6 +1,7 @@
 import { useState } from "react";
 
 import {
+  CARD_SHADOW,
   CHIP_SHADOW,
   DETAIL_CARD_SHADOW,
   KeywordPill,
@@ -9,7 +10,7 @@ import {
   SummaryCard,
 } from "../../components/feature/report/ReportBlocks";
 
-const DETAIL_CARD = `flex w-full flex-col items-start rounded-[20px] border border-[#eee] bg-white p-[20px] ${DETAIL_CARD_SHADOW}`;
+const DETAIL_CARD = "flex w-full flex-col items-start rounded-[20px] border border-[#eee] bg-white p-[20px]";
 
 const InterestItem = ({ title, count, description, examples }) => (
   <div className="flex w-full flex-col items-start gap-[8px]">
@@ -46,6 +47,8 @@ const InterestLevel = ({ report, data = report.interest, title = "관심을 보�
   const [speaker, setSpeaker] = useState("me");
   const scores = { me: data.me.score, partner: data.partner.score };
   const { summary, groups, chips } = data[speaker];
+  // 친구 일상만 그림자 2번, 나머지 대화 유형은 기존 그림자 유지
+  const detailCardClass = `${DETAIL_CARD} ${report.scenario === "FRIEND_DAILY" ? CARD_SHADOW : DETAIL_CARD_SHADOW}`;
 
   return (
     <div className="flex w-full flex-col items-start gap-[30px] font-['SUIT',sans-serif]">
@@ -63,7 +66,7 @@ const InterestLevel = ({ report, data = report.interest, title = "관심을 보�
         <div className="flex w-full flex-col items-start gap-[30px]">
           {groups.map(({ title, items, summary: groupSummary }) => (
             <InterestGroup key={title} title={title} summary={groupSummary}>
-              <div className={`${DETAIL_CARD} gap-[30px]`}>
+              <div className={`${detailCardClass} gap-[30px]`}>
                 {items.map((item) => (
                   <InterestItem key={item.title} {...item} />
                 ))}
@@ -74,7 +77,7 @@ const InterestLevel = ({ report, data = report.interest, title = "관심을 보�
           {(chips.summary || chips.items.length > 0) && (
             <InterestGroup title={chips.title} summary={chips.summary}>
               {chips.items.length > 0 && (
-                <div className={`${DETAIL_CARD} gap-[12px]`}>
+                <div className={`${detailCardClass} gap-[12px]`}>
                   <p className="text-[12px] leading-[18px] font-medium tracking-[0.24px] text-[#6b6b6b]">
                     {chips.caption}
                   </p>
