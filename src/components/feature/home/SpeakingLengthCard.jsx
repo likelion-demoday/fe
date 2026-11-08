@@ -11,15 +11,46 @@ const FILL_SEGMENTS = [
   { d: "M230.5 24H14", x1: 230.5, y1: 0, x2: 14, y2: 0, from: "#FFC2B2", to: "#FFAA96" },
   { d: "M14 24C8.47715 24 4 28.4772 4 34C4 39.5228 8.47715 44 14 44", x1: 0, y1: 24, x2: 0, y2: 44, from: "#FFAA96", to: "#FF9177" },
   { d: "M14 44H70.5", cap: "round", x1: 14, y1: 0, x2: 70.5, y2: 0, from: "#FF9177", to: "#FF765B" },
+  // 피그마 샘플(+12%)보다 길면 같은 색으로 트랙 끝까지 이어짐
+  {
+    d: "M70.5 44H230.5C236.023 44 240.5 48.4772 240.5 54C240.5 59.5228 236.023 64 230.5 64H14C8.47715 64 4 68.4771 4 74C4 79.5229 8.47715 84 14 84H240.5",
+    cap: "round",
+    x1: 70.5,
+    y1: 0,
+    x2: 240.5,
+    y2: 0,
+    from: "#FF765B",
+    to: "#FF765B",
+  },
 ];
 const FILL_PATH =
-  "M4 4H230.5C236.023 4 240.5 8.47715 240.5 14C240.5 19.5228 236.023 24 230.5 24H14C8.47715 24 4 28.4772 4 34C4 39.5228 8.47715 44 14 44H70.5";
-const DIFF_PERCENT = 12;
+  "M4 4H230.5C236.023 4 240.5 8.47715 240.5 14C240.5 19.5228 236.023 24 230.5 24H14C8.47715 24 4 28.4772 4 34C4 39.5228 8.47715 44 14 44H230.5C236.023 44 240.5 48.4772 240.5 54C240.5 59.5228 236.023 64 230.5 64H14C8.47715 64 4 68.4771 4 74C4 79.5229 8.47715 84 14 84H240.5";
+// 비교 기준이 되는 사람들의 평균 발화 길이
+const REFERENCE_DURATION_MS = 2070;
+// 서버 값이 없을 때 보여주는 목데이터 (피그마 샘플)
+const MOCK_DIFF_PERCENT = 12;
 const ANIMATION_DURATION_MS = 1200;
+// 피그마에서 +12%일 때 막대가 트랙 전체에서 차지하는 비율 (562.3 / 1228.2)
+const SAMPLE_FILL_RATIO = 0.4578;
 
-const SpeakingLengthCard = ({ count, active = true }) => {
+const toDiffPercent = (durationMs) =>
+  ((Number(durationMs) - REFERENCE_DURATION_MS) / REFERENCE_DURATION_MS) * 100;
+
+// 막대는 말하는 길이에 비례하고, 피그마 샘플(+12%)과 같은 지점을 기준으로 삼음
+const toFillRatio = (diffPercent) =>
+  Math.min(1, Math.max(0, (SAMPLE_FILL_RATIO * (100 + diffPercent)) / (100 + MOCK_DIFF_PERCENT)));
+
+const formatPercent = (value) => {
+  const rounded = Math.round(value);
+  return `${rounded > 0 ? "+" : ""}${rounded}%`;
+};
+
+// durationMs: 평균 발화 길이(ms). 서버가 아직 안 주거나 null이면 목데이터 표시
+const SpeakingLengthCard = ({ count, durationMs, active = true }) => {
   const progress = useRevealProgress(active, ANIMATION_DURATION_MS);
   const maskId = useId();
+  const diffPercent = durationMs != null ? toDiffPercent(durationMs) : MOCK_DIFF_PERCENT;
+  const fillRatio = toFillRatio(diffPercent);
 
   return (
     <section className="flex w-full flex-col items-center h-full gap-[16px] rounded-[16px] border border-[#eee] bg-white px-[24px] pt-[16px] pb-[44px] shadow-[0px_4px_11.7px_0px_rgba(0,0,0,0.05),0px_0px_49.1px_0px_rgba(0,0,0,0.1)]">
@@ -31,9 +62,9 @@ const SpeakingLengthCard = ({ count, active = true }) => {
       </div>
 
       <div className="relative h-[154px] w-[290px] shrink-0">
-        <div className="absolute top-[5px] left-1/2 flex w-[106px] -translate-x-1/2 flex-col items-center text-center text-[#262626]">
-          <p className="text-heading w-full">+{Math.round(DIFF_PERCENT * progress)}%</p>
-          <p className="text-body w-full">전체 사용자 평균</p>
+        <div className="absolute top-[5px] left-1/2 flex w-max -translate-x-1/2 flex-col items-center text-center text-[#262626]">
+          <p className="text-heading w-full">{formatPercent(diffPercent * progress)}</p>
+          <p className="text-body w-full">한국어 일상 대화 평균</p>
         </div>
         <img
           src={trackImage}
@@ -41,12 +72,12 @@ const SpeakingLengthCard = ({ count, active = true }) => {
           className="absolute top-[61px] left-[23px] block h-[88px] w-[244.5px] max-w-none"
         />
         <svg
-          className="absolute top-[61px] left-[23px] block h-[48px] w-[244.5px]"
-          viewBox="0 0 244.5 48"
+          className="absolute top-[61px] left-[23px] block h-[88px] w-[244.5px]"
+          viewBox="0 0 244.5 88"
           aria-hidden="true"
           style={{ opacity: progress > 0 ? 1 : 0 }}
         >
-          <mask id={maskId} maskUnits="userSpaceOnUse" x="0" y="0" width="244.5" height="48">
+          <mask id={maskId} maskUnits="userSpaceOnUse" x="0" y="0" width="244.5" height="88">
             <path
               d={FILL_PATH}
               pathLength="1"
@@ -54,7 +85,7 @@ const SpeakingLengthCard = ({ count, active = true }) => {
               stroke="white"
               strokeWidth="8"
               strokeLinecap="round"
-              strokeDasharray={`${progress} 1`}
+              strokeDasharray={`${progress * fillRatio} 1`}
             />
           </mask>
           <defs>

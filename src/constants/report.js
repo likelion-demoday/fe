@@ -73,6 +73,10 @@ export const METRIC_LABELS = {
   DIRECT_EXPRESSION: "직설 표현",
   ASSERTIVE_EXPRESSION: "단정 표현",
   SOFTENING_EXPRESSION: "완충 표현",
+  // 표독력 항목 (PERCENT 지표로 오면 막대 이름)
+  SWEAR_WORD: "비속어",
+  DIRECTNESS: "직설력",
+  EXPRESSION_INTENSITY: "표현 강도",
   RECOVERY_EXPRESSION: "회복 표현",
   SITUATION_QUESTION: "상황 확인 질문",
   CONCRETE_ADVICE: "구체적인 조언",

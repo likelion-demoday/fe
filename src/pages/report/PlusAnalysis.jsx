@@ -23,6 +23,7 @@ const PlusAnalysis = ({ report }) => {
         scores={scores}
         selected={speaker}
         onSelect={setSpeaker}
+        largeScore
       />
       {quotes.map((quote, index) => (
         <QuoteBubble

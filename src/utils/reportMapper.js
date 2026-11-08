@@ -190,18 +190,35 @@ const toInterest = (role, partnerRole, qualitative, chipsSpec) => {
   };
 };
 
+// 표현을 누그러뜨리는 지표: 높을수록 강도가 낮으므로 점수 평균 때 100에서 뺌
+const SOFT_INTENSITY_TYPES = ["SOFTENING_EXPRESSION", "RECOVERY_EXPRESSION", "EMOTION_CHECK"];
+
+// 화자 카드 점수용: types의 PERCENT 지표 평균 (누그러뜨리는 지표는 100 - 값). 지표가 하나도 없으면 null
+const averagePercent = (qualitative, role, types) => {
+  const values = types
+    .map((type) => findMetric(qualitative, role, type, "PERCENT"))
+    .filter(Boolean)
+    .map(({ type, value = 0 }) => (SOFT_INTENSITY_TYPES.includes(type) ? 100 - value : value));
+  if (values.length === 0) return null;
+  return Math.round(values.reduce((sum, value) => sum + value, 0) / values.length);
+};
+
+// 표독력: 항목별 PERCENT 지표가 오면 막대 + 평균 점수, 아직 없으면 설명만 + 서버 표독력 점수
 const toExpression = (role, qualitative) => {
   const insight = findByRole(qualitative.spicinessInsights, role) ?? {};
   const toCard = ({ title, description }) => ({ title, description });
+  const percentItems = percentAxes(qualitative, role, SPICINESS_AXIS_CATEGORIES);
+  const score = averagePercent(qualitative, role, SPICINESS_AXIS_CATEGORIES) ?? insight.score ?? 0;
 
   return {
-    score: insight.score ?? 0,
-    summary: { title: spicinessTitle(insight.score), description: insight.description ?? "" },
-    // 지표별 수치는 API에 없어서 막대 없이 설명만 표시
-    axes: pickByCategory(insight.observations, SPICINESS_AXIS_CATEGORIES).map(({ title, description }) => ({
-      label: title,
-      description,
-    })),
+    score,
+    summary: { title: spicinessTitle(score), description: insight.description ?? "" },
+    axes: percentItems.length > 0
+      ? percentItems
+      : pickByCategory(insight.observations, SPICINESS_AXIS_CATEGORIES).map(({ title, description }) => ({
+          label: title,
+          description,
+        })),
     contexts: pickByCategory(insight.observations, SPICINESS_CONTEXT_CATEGORIES).map(toCard),
   };
 };
@@ -242,26 +259,17 @@ const toBehavior = (role, qualitative, { groups, chips }) => {
 };
 
 // 표현 강도 · 갈등 표현 탭 (표독력 화면 구성): 표독력 점수·요약 + PERCENT 지표
-// 표현을 누그러뜨리는 지표: 높을수록 강도가 낮으므로 점수 계산 때 100에서 뺌
-const SOFT_INTENSITY_TYPES = ["SOFTENING_EXPRESSION", "RECOVERY_EXPRESSION", "EMOTION_CHECK"];
-
-// 위 화자 카드 점수 = 아래 항목들의 평균 (완충·회복·감정 확인은 100 - 값으로 반영). 항목이 없으면 표독력 점수
+// 위 화자 카드 점수 = 아래 항목들의 평균. 항목이 없으면 표독력 점수
 const toIntensity = (role, qualitative, types) => {
-  const axes = percentAxes(qualitative, role, types);
   const expression = toExpression(role, qualitative);
-  const values = types
-    .map((type) => {
-      const metric = findMetric(qualitative, role, type, "PERCENT");
-      if (!metric) return null;
-      const value = metric.value ?? 0;
-      return SOFT_INTENSITY_TYPES.includes(type) ? 100 - value : value;
-    })
-    .filter((value) => value != null);
-  const score = values.length > 0
-    ? Math.round(values.reduce((sum, value) => sum + value, 0) / values.length)
-    : expression.score;
+  const score = averagePercent(qualitative, role, types) ?? expression.score;
   // 요약 제목도 점수와 어긋나지 않게 같은 기준으로
-  return { ...expression, score, summary: { ...expression.summary, title: spicinessTitle(score) }, axes };
+  return {
+    ...expression,
+    score,
+    summary: { ...expression.summary, title: spicinessTitle(score) },
+    axes: percentAxes(qualitative, role, types),
+  };
 };
 
 const evidenceText = ({ evidence = {} }) => evidence.displayContent || evidence.originalContent || "";
@@ -459,7 +467,8 @@ export const toReportView = (report) => {
 
   const affection = scenario === "COUPLE_DAILY" &&
     bySpeaker((role) => ({
-      score: percentOf(qualitative, role, "DIRECT_AFFECTION"),
+      // 아래 애정 표현 항목들의 평균
+      score: averagePercent(qualitative, role, COUPLE_DAILY_AFFECTION) ?? 0,
       summary: scenarioSummary(qualitative, role, ["AFFECTION_EXPRESSION"]) ??
         pickByCategory(findByRole(qualitative.interestInsights, role)?.observations, ["AFFECTION_EXPRESSION"])[0] ?? {
           title: "",
@@ -506,8 +515,8 @@ export const toReportView = (report) => {
           { type: "CLOSING_RESPONSE", label: "닫히는 대답" },
         ]),
       },
-      coachingSection("다시 대화하기"),
     ].filter(hasQuotes),
+    coaching: [coachingSection("대화 개선 힌트")].filter(hasQuotes),
   };
 
   const interestScore = {
@@ -519,8 +528,8 @@ export const toReportView = (report) => {
     ? { label: "애정지수", me: affection.me.score, partner: affection.partner.score }
     : {
         label: "표독력",
-        me: findByRole(qualitative.spicinessInsights, meRole)?.score ?? 0,
-        partner: findByRole(qualitative.spicinessInsights, partnerRole)?.score ?? 0,
+        me: toExpression(meRole, qualitative).score,
+        partner: toExpression(partnerRole, qualitative).score,
       };
   const interestChips = scenario === "COUPLE_DAILY" ? COUPLE_DAILY_CHIPS : FRIEND_DAILY_CHIPS;
 
