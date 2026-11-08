@@ -119,7 +119,7 @@ const SECTION_CONTENT = {
   },
   conflictReaction: {
     Component: ({ report }) => (
-      <InterestLevel report={report} data={report.conflict.reaction} title="서로의 갈등 반응" />
+      <InterestLevel report={report} data={report.conflict.reaction} title="서로의 갈등 반응" largeScore />
     ),
     gap: "gap-[20px]",
   },
