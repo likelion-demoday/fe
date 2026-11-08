@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import Button from "../../components/common/Button";
 import TextBackButton from "../../components/common/TextBackButton";
@@ -14,7 +14,7 @@ import blurSymbol from "../../assets/images/introduction/blur-symbol.png";
 import envelope from "../../assets/images/introduction/envelope.png";
 import sideSymbol from "../../assets/images/introduction/side-symbol.png";
 import topSymbol from "../../assets/images/introduction/top-symbol.png";
-import characters from "../../assets/images/introduction/characters.png";
+import characters from "../../assets/images/introduction/characters.webp";
 import glowLeft from "../../assets/images/introduction/glow-left.svg";
 import glowRight from "../../assets/images/introduction/glow-right.svg";
 import "./introduction.css";
@@ -46,6 +46,12 @@ export default function Introduction() {
   const navigate = useNavigate();
   const [step, setStep] = useState(0);
   const [showSample, setShowSample] = useState(false);
+  useEffect(() => {
+    const image = new Image();
+    image.src = characters;
+    // 마지막 페이지에 도달하기 전에 다운로드와 디코딩을 시작합니다.
+    image.decode().catch(() => {});
+  }, []);
   const isLoggedIn = hasStoredLogin();
   if (!needsIntroduction()) return <Navigate to={isLoggedIn ? "/home" : "/auth/login"} replace />;
 
