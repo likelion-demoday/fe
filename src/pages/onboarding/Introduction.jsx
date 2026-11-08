@@ -25,7 +25,7 @@ const SLIDES = [
   ["궁금하다면\n먼저 살짝 둘러볼까요?", "실제 보고서에 어떤 내용이 담기는지\n예시를 통해 직접 확인해보세요"],
   ["이제 진짜 내 대화를\n둘러볼 차례!", "사소한 말 한마디에서 시작되는\n우리 사이의 새로운 발견 :S"],
 ];
-const buttonClass = "flex w-full cursor-pointer items-center justify-center rounded-[16px] bg-[#262626] px-[26px] py-[16px] text-[20px] font-semibold tracking-[0.8px] text-white";
+const buttonClass = "flex w-full cursor-pointer items-center justify-center rounded-[16px] bg-[#262626] active:bg-[#595959] px-[26px] py-[16px] text-[20px] font-semibold tracking-[0.8px] text-white";
 
 function MetricCards() {
   const progress = useRevealProgress(true, 900);
@@ -97,13 +97,13 @@ export default function Introduction() {
         <div className="flex justify-center gap-[12px]" aria-label={`서비스 소개 4단계 중 ${step + 1}단계`}>
           {SLIDES.map((_, index) => <span key={index} className={`size-[8px] rounded-full ${index <= step ? "bg-[#454545]" : "bg-[#d9d9d9]"}`} />)}
         </div>
-        <div className={step === 0 ? "mx-auto flex w-full max-w-[342px] gap-[12px]" : "w-full"}>
-        {step === 0 && <Button text="건너뛰기" className={`${buttonClass} min-w-0 flex-1 whitespace-nowrap`} onClick={() => finish("/home")} />}
-        <Button text={step === 2 ? "보고서 둘러보기" : step === 3 ? "내 대화 분석 시작하기!" : "다음"} className={`${buttonClass}${step === 0 ? " min-w-0 flex-1 whitespace-nowrap" : ""}`} onClick={() => {
-          if (step === 2) setShowSample(true);
-          else if (step === 3) finish("/analysis");
-          else setStep(step + 1);
-        }} />
+        <div className={step === 0 || step === 2 ? "mx-auto flex w-full max-w-[342px] gap-[12px]" : "w-full"}>
+          {step === 0 && <Button text="건너뛰기" className={`${buttonClass} min-w-0 flex-1 whitespace-nowrap`} onClick={() => finish("/home")} />}
+          {step === 2 && <Button text="보고서 둘러보기" className={`${buttonClass} min-w-0 flex-1 whitespace-nowrap px-[12px]`} onClick={() => setShowSample(true)} />}
+          <Button text={step === 3 ? "내 대화 분석 시작하기!" : "다음"} className={`${buttonClass}${step === 0 || step === 2 ? " min-w-0 flex-1 whitespace-nowrap" : ""}`} onClick={() => {
+            if (step === 3) finish("/analysis");
+            else setStep(step + 1);
+          }} />
         </div>
       </footer>
     </main>

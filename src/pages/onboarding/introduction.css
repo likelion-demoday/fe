@@ -31,6 +31,18 @@
 .intro-screen-welcome .intro-footer { background: transparent; }
 .intro-screen-preview .intro-scroll { position: relative; }
 .intro-screen-preview .intro-footer { background: transparent; }
+.intro-screen-preview .intro-footer::before {
+  content: "";
+  position: absolute;
+  inset: -28px 0 0;
+  pointer-events: none;
+  background: linear-gradient(to bottom, transparent, rgb(255 255 255 / 60%) 55%, rgb(255 255 255 / 85%));
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 40%);
+  mask-image: linear-gradient(to bottom, transparent, #000 40%);
+}
+.intro-screen-preview .intro-footer > * { position: relative; }
 .intro-screen-preview .intro-header { height: 120px; }
 .intro-screen-preview .intro-header p,
 .intro-screen-preview .intro-header .text-body,
@@ -63,3 +75,17 @@
 
 .intro-screen-start .intro-scroll { position: relative; }
 .intro-screen-start .intro-footer { background: transparent; }
+
+.sample-report-scroll { padding-bottom: calc(110px + max(30px, env(safe-area-inset-bottom))); }
+.sample-report-footer::before {
+  content: "";
+  position: absolute;
+  inset: -40px 0 0;
+  pointer-events: none;
+  background: linear-gradient(to bottom, transparent, rgb(255 255 255 / 65%) 55%, white);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 55%);
+  mask-image: linear-gradient(to bottom, transparent, #000 55%);
+}
+.sample-report-footer > button { position: relative; }
