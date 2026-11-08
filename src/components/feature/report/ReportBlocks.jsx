@@ -61,7 +61,8 @@ export const SpectrumBar = ({ position, tone }) => {
 const wordCount = (value) => String(value).trim().split(/\s+/).length;
 
 // 문자열 점수 크기: 3어절 이상은 title(20), 5어절 이상은 body(16). 한쪽이라도 body면 둘 다 body
-const scoreTextClass = (scores) => {
+// largeScore: 짧은 문자열 점수(예: "T 87%")를 숫자 점수와 같은 30px로 표시
+const scoreTextClass = (scores, largeScore) => {
   const counts = ["me", "partner"].map((key) => (typeof scores[key] === "string" ? wordCount(scores[key]) : 0));
   const anyBody = Math.max(...counts) >= 5;
   return (key) => {
@@ -70,12 +71,13 @@ const scoreTextClass = (scores) => {
     const wrap = "text-left break-keep whitespace-normal";
     if (anyBody) return `${wrap} text-[16px] leading-normal tracking-[-0.32px]`;
     if (words >= 3) return `${wrap} text-[20px] leading-normal`;
+    if (largeScore) return `${wrap} font-['SUITE',sans-serif] text-[30px]`;
     return `${wrap} font-['SUITE',sans-serif] text-[24px] leading-[32px]`;
   };
 };
 
-export const SpeakerScoreSelector = ({ speakers, scores, selected, onSelect }) => {
-  const scoreClass = scoreTextClass(scores);
+export const SpeakerScoreSelector = ({ speakers, scores, selected, onSelect, largeScore = false }) => {
+  const scoreClass = scoreTextClass(scores, largeScore);
   return (
   <div
     className="flex items-stretch gap-[16px] self-stretch"
@@ -107,7 +109,7 @@ export const SpeakerScoreSelector = ({ speakers, scores, selected, onSelect }) =
 // evidences: 추천 문장(다시 대화하기)의 근거가 된 실제 발화
 export const QuoteBubble = ({ label, text, highlighted, tone, evidences = [] }) => (
   <div
-    className={`flex w-[310px] flex-col items-start gap-[8px] overflow-clip rounded-[16px] rounded-tl-none bg-white px-[20px] py-[12px] ${CARD_SHADOW}`}
+    className={`flex w-full flex-col items-start gap-[8px] overflow-clip rounded-[16px] rounded-tl-none bg-white px-[20px] py-[12px] ${CARD_SHADOW}`}
   >
     <p
       className={`text-[14px] leading-[20px] font-medium tracking-[-0.14px] ${
