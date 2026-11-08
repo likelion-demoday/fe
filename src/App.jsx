@@ -37,6 +37,7 @@ import SignUp from "./pages/auth/SignUp";
 import Nickname from "./pages/onboarding/Nickname";
 import Consent from "./pages/onboarding/Consent";
 import NotificationEmail from "./pages/onboarding/NotificationEmail";
+import Introduction from "./pages/onboarding/Introduction";
 import KakaoCallbackPage from "./pages/auth/KakaoCallbackPage";
 import GoogleCallbackPage from "./pages/auth/GoogleCallbackPage";
 //analysis
@@ -53,6 +54,7 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<Splash />} />
+      <Route path="/onboarding/introduction" element={<Introduction />} />
 
       <Route element={<ProtectedRoute />}>
         <Route path="/onboarding/email" element={<NotificationEmail />} />

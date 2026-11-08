@@ -1,6 +1,8 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import splashLogoSymbol from "../assets/icons/splash-logo-symbol.svg";
+import { hasStoredLogin } from "../utils/auth";
+import { needsIntroduction } from "../utils/introduction";
 
 const SPLASH_DURATION = 500;
 
@@ -9,7 +11,9 @@ const Splash = () => {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      navigate("/auth/login",{ replace: true });
+      const destination = needsIntroduction() ? "/onboarding/introduction"
+        : hasStoredLogin() ? "/home" : "/auth/login";
+      navigate(destination, { replace: true });
     }, SPLASH_DURATION);
 
     return () => clearTimeout(timer);
