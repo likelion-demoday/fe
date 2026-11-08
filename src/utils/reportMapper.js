@@ -515,8 +515,8 @@ export const toReportView = (report) => {
           { type: "CLOSING_RESPONSE", label: "닫히는 대답" },
         ]),
       },
-      coachingSection("다시 대화하기"),
     ].filter(hasQuotes),
+    coaching: [coachingSection("대화 개선 힌트")].filter(hasQuotes),
   };
 
   const interestScore = {
