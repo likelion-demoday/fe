@@ -14,12 +14,15 @@ const FILL_SEGMENTS = [
 ];
 const FILL_PATH =
   "M4 4H230.5C236.023 4 240.5 8.47715 240.5 14C240.5 19.5228 236.023 24 230.5 24H14C8.47715 24 4 28.4772 4 34C4 39.5228 8.47715 44 14 44H70.5";
-const DIFF_PERCENT = 12;
+// 서버 값이 없을 때 보여주는 목데이터 (피그마 샘플)
+const MOCK_DIFF_PERCENT = 12;
 const ANIMATION_DURATION_MS = 1200;
 
-const SpeakingLengthCard = ({ count, active = true }) => {
+// durationMs: 평균 발화 길이(ms). 서버가 아직 안 주거나 null이면 목데이터 표시
+const SpeakingLengthCard = ({ count, durationMs, active = true }) => {
   const progress = useRevealProgress(active, ANIMATION_DURATION_MS);
   const maskId = useId();
+  const hasDuration = durationMs != null;
 
   return (
     <section className="flex w-full flex-col items-center h-full gap-[16px] rounded-[16px] border border-[#eee] bg-white px-[24px] pt-[16px] pb-[44px] shadow-[0px_4px_11.7px_0px_rgba(0,0,0,0.05),0px_0px_49.1px_0px_rgba(0,0,0,0.1)]">
@@ -32,8 +35,12 @@ const SpeakingLengthCard = ({ count, active = true }) => {
 
       <div className="relative h-[154px] w-[290px] shrink-0">
         <div className="absolute top-[5px] left-1/2 flex w-[106px] -translate-x-1/2 flex-col items-center text-center text-[#262626]">
-          <p className="text-heading w-full">+{Math.round(DIFF_PERCENT * progress)}%</p>
-          <p className="text-body w-full">전체 사용자 평균</p>
+          <p className="text-heading w-full">
+            {hasDuration
+              ? `${((Number(durationMs) / 1000) * progress).toFixed(1)}초`
+              : `+${Math.round(MOCK_DIFF_PERCENT * progress)}%`}
+          </p>
+          <p className="text-body w-full">{hasDuration ? "평균 발화 길이" : "전체 사용자 평균"}</p>
         </div>
         <img
           src={trackImage}
