@@ -11,6 +11,7 @@ import {
 } from "../../components/feature/report/ReportBlocks";
 
 const DETAIL_CARD = "flex w-full flex-col items-start rounded-[20px] border border-[#eee] bg-white p-[20px]";
+const CARD_SHADOW_SCENARIOS = ["FRIEND_DAILY", "COUPLE_CONFLICT", "PARENT_CHILD_CONFLICT"];
 
 const InterestItem = ({ title, count, description, examples }) => (
   <div className="flex w-full flex-col items-start gap-[8px]">
@@ -47,8 +48,8 @@ const InterestLevel = ({ report, data = report.interest, title = "관심을 보�
   const [speaker, setSpeaker] = useState("me");
   const scores = { me: data.me.score, partner: data.partner.score };
   const { summary, groups, chips } = data[speaker];
-  // 친구 일상만 그림자 2번, 나머지 대화 유형은 기존 그림자 유지
-  const detailCardClass = `${DETAIL_CARD} ${report.scenario === "FRIEND_DAILY" ? CARD_SHADOW : DETAIL_CARD_SHADOW}`;
+  // 친구 일상·연인 갈등·부모자녀 갈등은 그림자 2번, 연인 일상은 기존 그림자 유지
+  const detailCardClass = `${DETAIL_CARD} ${CARD_SHADOW_SCENARIOS.includes(report.scenario) ? CARD_SHADOW : DETAIL_CARD_SHADOW}`;
 
   return (
     <div className="flex w-full flex-col items-start gap-[30px] font-['SUIT',sans-serif]">
