@@ -236,9 +236,12 @@ const AnalysisRecord = () => {
 
           <div className="flex w-[343.5px] flex-col items-center gap-[72px] [@media(max-height:843px)]:gap-[24px]">
             <div className="flex w-full flex-col items-center gap-[80px] [@media(max-height:843px)]:gap-[24px]">
-              <p className="text-heading w-full text-center text-black">
-                {formatTime(Math.floor(playedSeconds))} / {formatTime(elapsed)}
-              </p>
+              <div className="flex w-full flex-col items-center gap-[8px] text-center">
+                <p className="text-body text-[#6b6b6b]">파형을 누르면 원하는 부분부터 들을 수 있어요</p>
+                <p className="text-heading w-full text-black">
+                  {formatTime(Math.floor(playedSeconds))} / {formatTime(elapsed)}
+                </p>
+              </div>
               <RecordingWaveform levels={levels} head={playedBars - 1} inactiveColor="#eee" onSeek={seekTo} />
             </div>
 

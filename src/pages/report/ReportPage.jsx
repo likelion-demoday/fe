@@ -80,6 +80,7 @@ const SECTIONS = [
   { key: "questionAdvice", label: "질문·조언" },
   { key: "conflictExpression", label: "갈등 표현" },
   { key: "retry", label: "추가 분석" },
+  { key: "parentCoaching", label: "대화 개선" },
   { key: "extra", label: "추가 분석" },
 ];
 
@@ -88,7 +89,7 @@ const SCENARIO_SECTIONS = {
   FRIEND_DAILY: ["overview", "info", "style", "interest", "expression", "extra"],
   COUPLE_DAILY: ["overview", "info", "style", "interest", "affection", "extra"],
   COUPLE_CONFLICT: ["overview", "conflictInfo", "style", "conflictReaction", "intensity", "missedWords", "coaching"],
-  PARENT_CHILD_CONFLICT: ["overview", "conflictFlow", "parentStyle", "questionAdvice", "conflictExpression", "retry"],
+  PARENT_CHILD_CONFLICT: ["overview", "conflictFlow", "parentStyle", "questionAdvice", "conflictExpression", "retry", "parentCoaching"],
 };
 
 const SECTION_CONTENT = {
@@ -118,7 +119,7 @@ const SECTION_CONTENT = {
   },
   conflictReaction: {
     Component: ({ report }) => (
-      <InterestLevel report={report} data={report.conflict.reaction} title="서로의 갈등 반응" />
+      <InterestLevel report={report} data={report.conflict.reaction} title="서로의 갈등 반응" largeScore />
     ),
     gap: "gap-[20px]",
   },
@@ -149,7 +150,7 @@ const SECTION_CONTENT = {
   },
   questionAdvice: {
     Component: ({ report }) => (
-      <InterestLevel report={report} data={report.parentConflict.questionAdvice} title="질문과 조언" />
+      <InterestLevel report={report} data={report.parentConflict.questionAdvice} title="질문과 조언" largeScore />
     ),
     gap: "gap-[20px]",
   },
@@ -166,6 +167,10 @@ const SECTION_CONTENT = {
   },
   retry: {
     Component: ({ report }) => <MissedWords report={report} sections={report.parentConflict.retry} />,
+    gap: "gap-[20px]",
+  },
+  parentCoaching: {
+    Component: ({ report }) => <MissedWords report={report} sections={report.parentConflict.coaching} />,
     gap: "gap-[20px]",
   },
 };
