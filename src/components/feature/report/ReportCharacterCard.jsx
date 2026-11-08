@@ -1,3 +1,4 @@
+import CharacterImage from "../character/CharacterImage";
 import cardBg from "../../../assets/icons/character-card-bg-medium.svg";
 import { CARD_SHADOW } from "./ReportBlocks";
 
@@ -45,7 +46,7 @@ const ReportCharacterCard = ({ nickname, nicknameColor, character, onUnlock, onS
         </div>
         {/* 홈 캐릭터 카드(186px 폭, 이미지 160px · 왼쪽 29 · 위 65)를 이 카드 폭(160.839px) 비율로 줄인 위치 */}
         {!isPlaceholder && character.imageUrl && (
-          <img
+          <CharacterImage
             src={character.imageUrl}
             alt={`${character.name} 캐릭터`}
             className="pointer-events-none absolute top-[56.2px] left-[25.08px] block size-[138.35px] max-w-none object-contain"

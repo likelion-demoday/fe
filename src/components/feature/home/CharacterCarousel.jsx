@@ -1,3 +1,4 @@
+import CharacterImage from "../character/CharacterImage";
 import { useEffect, useRef, useState } from "react";
 
 import cardBg from "../../../assets/icons/character-card-bg-large.svg";
@@ -84,7 +85,7 @@ const CharacterCard = ({
           />
         </div>
         {/* 캐릭터는 카드 바닥에 붙이고, 이름·설명은 그 위에 겹쳐 표시 */}
-        <img
+        <CharacterImage
           src={character.imageUrl}
           alt={isActive ? `${character.name} 캐릭터` : ""}
           draggable={false}
