@@ -52,6 +52,12 @@ const fetchReport = (reportId) => {
   });
 };
 
+// 화자 이름이 없으면 reportMapper가 "나"로 채우므로 공유 문구에서는 "상대방"으로 표시
+const buildShareMessage = (nickname) => {
+  const sharer = nickname && nickname !== "나" ? `${nickname}님이` : "상대방이";
+  return `RE:SAY에서 ${sharer} 보고서를 공유하고 싶어해요. 링크에서 확인해보세요!`;
+};
+
 const IMAGE_POLLING_MS = 3000;
 const IMAGE_POLLING_LIMIT = 60; // 최대 3분
 
@@ -362,7 +368,7 @@ const ReportPage = () => {
 
         {/* 화면 하단 고정이 아니라 보고서 맨 끝에 붙는 버튼 */}
         <div className="-mx-[4px] mt-auto flex shrink-0 gap-[12px] py-[14px]">
-          <SheetButton text="공유하기" onClick={() => shareCurrentPage("RE:SAY 대화 분석 보고서")} />
+          <SheetButton text="공유하기" onClick={() => shareCurrentPage(buildShareMessage(report.speakers.me.nickname))} />
           <SheetButton text="완료" onClick={() => navigate("/home")} />
         </div>
       </div>
