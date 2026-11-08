@@ -29,6 +29,13 @@
 /* 첫 소개의 배경은 스크롤 영역에 잘리지 않고 하단 버튼 뒤까지 이어집니다. */
 .intro-screen-welcome .intro-scroll { position: relative; }
 .intro-screen-welcome .intro-footer { background: transparent; }
+.intro-screen-preview .intro-scroll { position: relative; }
+.intro-screen-preview .intro-footer { background: transparent; }
+.intro-screen-preview .intro-header { height: 120px; }
+.intro-screen-preview .intro-header p,
+.intro-screen-preview .intro-header .text-body,
+.intro-screen-preview .intro-copy h1,
+.intro-screen-preview .intro-copy p { line-height: normal; }
 
 /* 개별 translate를 사용해 원래 이미지의 회전 각도를 유지합니다. */
 @keyframes intro-background-float {
@@ -53,3 +60,6 @@
     animation: none;
   }
 }
+
+.intro-screen-start .intro-scroll { position: relative; }
+.intro-screen-start .intro-footer { background: transparent; }
