@@ -43,7 +43,7 @@ const InterestGroup = ({ title, summary, children }) => (
 
 
 // 관심도 화면. 같은 구성의 갈등 반응 탭도 data/제목만 바꿔 재사용
-const InterestLevel = ({ report, data = report.interest, title = "관심을 보인 방식" }) => {
+const InterestLevel = ({ report, data = report.interest, title = "관심을 보인 방식", largeScore = false }) => {
   const [speaker, setSpeaker] = useState("me");
   const scores = { me: data.me.score, partner: data.partner.score };
   const { summary, groups, chips } = data[speaker];
@@ -58,6 +58,7 @@ const InterestLevel = ({ report, data = report.interest, title = "관심을 보�
           scores={scores}
           selected={speaker}
           onSelect={setSpeaker}
+          largeScore={largeScore}
         />
         <SummaryCard {...summary} />
       </div>

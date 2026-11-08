@@ -150,7 +150,7 @@ const SECTION_CONTENT = {
   },
   questionAdvice: {
     Component: ({ report }) => (
-      <InterestLevel report={report} data={report.parentConflict.questionAdvice} title="질문과 조언" />
+      <InterestLevel report={report} data={report.parentConflict.questionAdvice} title="질문과 조언" largeScore />
     ),
     gap: "gap-[20px]",
   },
