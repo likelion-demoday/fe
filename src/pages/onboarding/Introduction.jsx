@@ -71,7 +71,6 @@ export default function Introduction() {
     <main className={`intro-screen${step === 0 ? " intro-screen-welcome" : step === 2 ? " intro-screen-preview" : step === 3 ? " intro-screen-start" : ""}`}>
       <div key={step} className="intro-scroll no-scrollbar">
         <div className="intro-stage">
-      {step === 2 && <IntroductionPreview />}
           {step === 0 && <div aria-hidden="true" className="intro-art">
             <div className="intro-coins"><img src={coins} alt="" /></div>
             <img className="intro-back-symbol" src={backSymbol} alt="" />
@@ -96,6 +95,7 @@ export default function Introduction() {
             <h1 className="text-display whitespace-pre-line text-[#29272c]">{SLIDES[step][0]}</h1>
             <p className="text-caption mt-[8px] whitespace-pre-line text-[#817c83]">{SLIDES[step][1]}</p>
           </section>
+          {step === 2 && <IntroductionPreview />}
           {step === 1 && <MetricCards />}
         </div>
       </div>
