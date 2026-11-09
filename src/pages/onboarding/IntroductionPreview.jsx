@@ -16,7 +16,7 @@ import imgComponent25 from "../../assets/images/introduction/imgComponent25.svg"
 import imgComponent26 from "../../assets/images/introduction/imgComponent26.svg";
 
 export default function IntroductionPreview() {
-  return <div aria-hidden="true" className="pointer-events-none absolute inset-0">      <div className="absolute border border-[#eee] border-solid h-[802.4px] left-[39px] overflow-clip rounded-[16px] shadow-[0px_4px_11.7px_0px_rgba(0,0,0,0.05),0px_0px_49.1px_0px_rgba(0,0,0,0.1)] top-[365px] w-[312px]" data-node-id="1893:7718">
+  return <div aria-hidden="true" className="intro-preview-art">      <div className="absolute border border-[#eee] border-solid h-[802.4px] left-[39px] overflow-clip rounded-[16px] shadow-[0px_4px_11.7px_0px_rgba(0,0,0,0.05),0px_0px_49.1px_0px_rgba(0,0,0,0.1)] top-[91px] w-[312px]" data-node-id="1893:7718">
         <div className="-translate-x-1/2 absolute bg-white blur-[3px] border border-[#eee] border-solid h-[802.4px] left-1/2 overflow-clip rounded-[16px] top-[-1px] w-[312px]" data-node-id="1893:7584" data-name="대화분석_보고서_친구일상">
           <div className="absolute content-stretch flex items-center justify-between left-[-1px] pl-[28px] pr-[16px] py-[12.8px] top-[-1px] w-[312px]" data-node-id="1893:7585" data-name="Status Bar/iOS">
             <div className="content-stretch flex gap-[3.2px] items-center justify-center relative shrink-0" data-node-id="I1893:7585;59:961" data-name="Time">
@@ -301,7 +301,7 @@ export default function IntroductionPreview() {
           </div>
         </div>
       </div>
-      <div className="absolute content-stretch flex items-center justify-between left-[24px] top-[274px] w-[343px]" data-node-id="1908:7919">
+      <div className="absolute content-stretch flex items-center justify-between left-[24px] top-0 w-[343px]" data-node-id="1908:7919">
         <div className="content-stretch flex flex-col gap-[6px] items-start relative shrink-0 w-[149.8px]" data-node-id="1908:7918">
           <div className="bg-white content-stretch drop-shadow-[0px_0px_4.56px_rgba(0,0,0,0.05)] flex gap-[1.6px] items-center justify-center p-[6.4px] relative rounded-[9.6px] shrink-0" data-node-id="1908:7885" data-name="키워드">
             <div className="relative shrink-0 size-[16px]" data-node-id="I1908:7885;768:5582" data-name="Component 22">
