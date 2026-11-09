@@ -3,7 +3,8 @@ import profileIcon from "../../assets/icons/profile.svg";
 import TextBackButton from "./TextBackButton";
 
 // onLeave(path): 마이페이지 이동 전에 확인이 필요할 때 (예: 결제 전 분석 화면)
-const AppHeader = ({ title, onBack, onLogoClick, onLeave, titleClassName = "text-display" }) => {
+// showProfile: 비로그인으로 보는 화면(공유 보고서)에서는 마이페이지 버튼을 숨김
+const AppHeader = ({ title, onBack, onLogoClick, onLeave, titleClassName = "text-display", showProfile = true }) => {
   const navigate = useNavigate();
   const Logo = onLogoClick ? "button" : "p";
 
@@ -15,14 +16,16 @@ const AppHeader = ({ title, onBack, onLogoClick, onLeave, titleClassName = "text
           <span className="text-[#ff765b]">:S</span>
           <span className="tracking-[-1.28px]">AY</span>
         </Logo>
-        <button
-          type="button"
-          onClick={() => (onLeave ? onLeave("/mypage") : navigate("/mypage"))}
-          aria-label="마이페이지"
-          className="relative size-[40px] shrink-0"
-        >
-          <img src={profileIcon} alt="" className="absolute -top-[10px] -left-[10px] max-w-none" />
-        </button>
+        {showProfile && (
+          <button
+            type="button"
+            onClick={() => (onLeave ? onLeave("/mypage") : navigate("/mypage"))}
+            aria-label="마이페이지"
+            className="relative size-[40px] shrink-0"
+          >
+            <img src={profileIcon} alt="" className="absolute -top-[10px] -left-[10px] max-w-none" />
+          </button>
+        )}
       </div>
       {title && <h1 className={`${titleClassName} text-black`}>{title}</h1>}
       {onBack && <TextBackButton onClick={onBack} />}
