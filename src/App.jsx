@@ -49,6 +49,7 @@ import AnalysisLoading from "./pages/analysis/AnalysisLoading";
 import AnalysisSpeaker from "./pages/analysis/AnalysisSpeaker";
 //report
 import ReportPage from "./pages/report/ReportPage";
+import SharePage from "./pages/report/SharePage";
 
 function App() {
   return (
@@ -131,6 +132,7 @@ function App() {
         <Route path="/payments/fail" element={<CreditChargeFailure />} />
       </Route>
 
+      <Route path="/share" element={<SharePage />} />
       <Route path="/oauth/kakao/callback" element={<KakaoCallbackPage />} />
       <Route path="/oauth/google/callback" element={<GoogleCallbackPage />} />
       <Route element={<PublicOnlyRoute />}>

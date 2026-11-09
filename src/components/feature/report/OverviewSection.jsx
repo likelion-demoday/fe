@@ -13,14 +13,14 @@ const OverviewSection = ({ report, onUnlockCharacter, onShareCharacter }) => {
           nicknameColor="#ff765b"
           character={speakers.me.character}
           onUnlock={onUnlockCharacter}
-          onShare={() => onShareCharacter?.(speakers.me.character)}
+          onShare={onShareCharacter && (() => onShareCharacter(speakers.me.character))}
         />
         <ReportCharacterCard
           nickname={speakers.partner.nickname}
           nicknameColor="#6d8cff"
           character={speakers.partner.character}
           onUnlock={onUnlockCharacter}
-          onShare={() => onShareCharacter?.(speakers.partner.character)}
+          onShare={onShareCharacter && (() => onShareCharacter(speakers.partner.character))}
         />
       </div>
 

@@ -78,11 +78,14 @@ export const resolveRoles = (speakers = []) => {
   return { me, partner };
 };
 
+// 공유 보고서처럼 화자 이름이 "나"이면 "나님"이 되지 않게
+const honorific = (name) => (name === "나" ? name : `${name}님`);
+
 const RHYTHM_SUMMARIES = {
-  "more-fast": { title: "말이 많고 빨라요", description: (p) => `${p}님보다 말을 많이, 빠르게 하는 편이에요.` },
-  "more-slow": { title: "말이 많고 차분해요", description: (p) => `${p}님보다 말을 많이 하지만 천천히 말하는 편이에요.` },
-  "less-fast": { title: "짧고 빠르게 받아줘요", description: (p) => `${p}님보다 말은 적지만 빠르게 반응하는 편이에요.` },
-  "less-slow": { title: "말이 적고 차분해요", description: (p) => `${p}님의 이야기를 천천히 들어주는 편이에요.` },
+  "more-fast": { title: "말이 많고 빨라요", description: (p) => `${honorific(p)}보다 말을 많이, 빠르게 하는 편이에요.` },
+  "more-slow": { title: "말이 많고 차분해요", description: (p) => `${honorific(p)}보다 말을 많이 하지만 천천히 말하는 편이에요.` },
+  "less-fast": { title: "짧고 빠르게 받아줘요", description: (p) => `${honorific(p)}보다 말은 적지만 빠르게 반응하는 편이에요.` },
+  "less-slow": { title: "말이 적고 차분해요", description: (p) => `${honorific(p)}의 이야기를 천천히 들어주는 편이에요.` },
 };
 
 const INTEREST_TITLES = {
@@ -397,6 +400,7 @@ const replaceRoleTokens = (value, nameOf, key) => {
     if (RAW_TEXT_KEYS.has(key) || ENUM_VALUE.test(value)) return value;
     return value.replace(ROLE_TOKEN, (_, role, particle) => {
       const name = nameOf(role);
+      if (name === "나" && particle === "가") return "내가";
       return name + (particle && hasBatchim(name) ? BATCHIM_PARTICLES[particle] : particle);
     });
   }
@@ -469,7 +473,9 @@ export const toReportView = (report) => {
     bySpeaker((role) => ({
       // 아래 애정 표현 항목들의 평균
       score: averagePercent(qualitative, role, COUPLE_DAILY_AFFECTION) ?? 0,
-      summary: scenarioSummary(qualitative, role, ["AFFECTION_EXPRESSION"]) ??
+      // 화자별 요약 우선. 기존 보고서는 빈 배열이라 아래 값으로 표시
+      summary: findByRole(qualitative.speakerAffectionSummaries, role) ??
+        scenarioSummary(qualitative, role, ["AFFECTION_EXPRESSION"]) ??
         pickByCategory(findByRole(qualitative.interestInsights, role)?.observations, ["AFFECTION_EXPRESSION"])[0] ?? {
           title: "",
           description: "",
@@ -598,3 +604,21 @@ export const toReportView = (report) => {
     parentConflict: parentConflict || null,
   };
 };
+
+// 공유 보고서는 화자 이름이 없어 역할 이름으로 표시
+const SHARED_ROLE_NAMES = { SELF: "나", PARTNER: "상대", FRIEND: "친구", PARENT: "부모", CHILD: "자녀" };
+
+// GET /api/v1/shared/analysis-report 응답의 result → 보고서 화면 데이터
+export const toSharedReportView = ({ scenario, durationMs, speakerRoles = [], quantitativeAnalysis, qualitativeAnalysis }) =>
+  toReportView({
+    recordingInfo: {
+      scenario,
+      durationMs,
+      speakers: speakerRoles.map((speakerRole) => ({
+        speakerRole,
+        speakerName: SHARED_ROLE_NAMES[speakerRole] ?? "상대",
+      })),
+    },
+    quantitativeAnalysis,
+    qualitativeAnalysis,
+  });
