@@ -469,7 +469,9 @@ export const toReportView = (report) => {
     bySpeaker((role) => ({
       // 아래 애정 표현 항목들의 평균
       score: averagePercent(qualitative, role, COUPLE_DAILY_AFFECTION) ?? 0,
-      summary: scenarioSummary(qualitative, role, ["AFFECTION_EXPRESSION"]) ??
+      // 화자별 요약 우선. 기존 보고서는 빈 배열이라 아래 값으로 표시
+      summary: findByRole(qualitative.speakerAffectionSummaries, role) ??
+        scenarioSummary(qualitative, role, ["AFFECTION_EXPRESSION"]) ??
         pickByCategory(findByRole(qualitative.interestInsights, role)?.observations, ["AFFECTION_EXPRESSION"])[0] ?? {
           title: "",
           description: "",
