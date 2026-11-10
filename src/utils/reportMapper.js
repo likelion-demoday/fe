@@ -6,6 +6,7 @@ import {
   REACTION_TYPES,
   SCENARIO_LABELS,
   SPICINESS_AXIS_CATEGORIES,
+  SENTENCE_SKILL_AXES,
   SPICINESS_CONTEXT_CATEGORIES,
 } from "../constants/report";
 
@@ -156,6 +157,11 @@ const toStyle = (role, partnerRole, partnerName, quantitative, qualitative) => {
       })),
     })).filter(({ items }) => items.length > 0),
     expressionSummary: insight.frequentExpressionSummary ?? { title: "", description: "" },
+    // 지표가 없는 이전 보고서는 빈 배열 → 섹션을 숨김
+    sentenceSkills: SENTENCE_SKILL_AXES.map(({ type, label, description }) => {
+      const metric = findMetric(qualitative, role, type, "PERCENT");
+      return metric && { label, value: Math.round(metric.value ?? 0), description };
+    }).filter(Boolean),
   };
 };
 
