@@ -7,6 +7,7 @@ import Home from "./pages/Home";
 import MyPage from "./pages/mypage/MyPage";
 import Profile from "./pages/mypage/Profile";
 import Notifications from "./pages/mypage/Notifications";
+import NotificationEmailSettings from "./pages/mypage/NotificationEmailSettings";
 import Payments from "./pages/mypage/Payments";
 import CreditCharge from "./pages/payments/CreditCharge";
 import CreditChargeSuccess from "./pages/payments/CreditChargeSuccess";
@@ -74,6 +75,7 @@ function App() {
         <Route path="/mypage/profile" element={<Profile />} />
 
         <Route path="/mypage/notifications" element={<Notifications />} />
+        <Route path="/mypage/notifications/email" element={<NotificationEmailSettings />} />
         <Route path="/mypage/payments" element={<Payments />} />
         <Route
           path="/mypage/payments/history"
