@@ -128,3 +128,11 @@ export const PARENT_CONFLICT_INFO_LABELS = {
   timeline: "갈등 타임라인",
   turns: "쟁점별 대화 턴 수",
 };
+
+// 문장 구사력: 모든 시나리오 공통 PERCENT 지표 (서버가 화자별 네 항목을 항상 내려줌). 설명은 디자인 문구 고정
+export const SENTENCE_SKILL_AXES = [
+  { type: "SENTENCE_COMPLETENESS", label: "완결성", description: "생각을 끝까지 문장으로 마무리하는 정도" },
+  { type: "ELABORATION", label: "확장성", description: "이유·조건·부연 등을 덧붙여 내용을 발전시키는 정도" },
+  { type: "CLARITY", label: "명료성", description: "문장의 의미와 대상이 분명하게 전달되는 정도" },
+  { type: "SENTENCE_VARIETY", label: "다양성", description: "여러 문장 구조와 전개 방식을 활용하는 정도" },
+];

@@ -11,7 +11,7 @@ import {
 import { SPEAKER_TONES } from "../../constants/report";
 
 
-const ExpressionAxis = ({ label, value, description, examples, tone }) => (
+export const ExpressionAxis = ({ label, value, description, examples, tone }) => (
   <div className="flex w-full flex-col items-start gap-[8px]">
     <div className="flex min-h-[26px] w-full items-start justify-between font-bold whitespace-nowrap">
       <p className="text-[16px] tracking-[-0.32px] text-[#262626]">{label}</p>

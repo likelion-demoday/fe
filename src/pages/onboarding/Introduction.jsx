@@ -20,10 +20,10 @@ import glowRight from "../../assets/images/introduction/glow-right.svg";
 import "./introduction.css";
 
 const SLIDES = [
-  ["말하는 사이\n우리 사이가 보인다", "둘이 나눈 대화를 AI가 분석해\n몰랐던 우리의 말하는 모습을 보여줘요"],
-  ["말투부터 반응까지\n대화로 보는 나", "어떤 말을 나누었는지보다\n어떻게 주고받았는지를 살펴봐요"],
-  ["궁금하다면\n먼저 살짝 둘러볼까요?", "실제 보고서에 어떤 내용이 담기는지\n예시를 통해 직접 확인해보세요"],
-  ["이제 진짜 내 대화를\n둘러볼 차례!", "사소한 말 한마디에서 시작되는\n우리 사이의 새로운 발견 :S"],
+  "말하는 사이\n우리 사이가 보인다",
+  "말투부터 반응까지\n대화로 보는 나",
+  "궁금하다면\n먼저 살짝 둘러볼까요?",
+  "이제 진짜 내 대화를\n둘러볼 차례!",
 ];
 const buttonClass = "flex w-full cursor-pointer items-center justify-center rounded-[16px] bg-[#262626] active:bg-[#595959] px-[26px] py-[16px] text-[20px] font-semibold tracking-[0.8px] text-white";
 
@@ -92,8 +92,7 @@ export default function Introduction() {
             </div>
           </header>
           <section className="intro-copy" aria-live="polite">
-            <h1 className="text-display whitespace-pre-line text-[#29272c]">{SLIDES[step][0]}</h1>
-            <p className="text-caption mt-[8px] whitespace-pre-line text-[#817c83]">{SLIDES[step][1]}</p>
+            <h1 className="text-display whitespace-pre-line text-[#29272c]">{SLIDES[step]}</h1>
           </section>
           {step === 2 && <IntroductionPreview />}
           {step === 1 && <MetricCards />}

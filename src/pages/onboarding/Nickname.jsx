@@ -4,12 +4,12 @@ import { useNavigate } from "react-router-dom";
 import useAuthStore from "../../store/authStore";
 
 import TextField from "../../components/common/TextField";
-import BackButton from "../../components/common/BackButton";
+import OnboardingHeader from "../../components/feature/onboarding/OnboardingHeader";
 import Button from "../../components/common/Button";
 import clearIcon from "../../assets/icons/clear.svg";
 
 const MIN_LENGTH = 2;
-const MAX_LENGTH = 8;
+const MAX_LENGTH = 7;
 
 const Nickname = () => {
   const savedNickname = useAuthStore((state) => state.nickname);
@@ -30,10 +30,8 @@ const Nickname = () => {
 
   return (
     <div className="mx-auto flex h-[min(844px,100dvh)] w-[390px] flex-col items-start bg-white">
-      <div className="no-scrollbar flex min-h-0 w-full flex-1 flex-col items-center gap-[80px] overflow-y-auto p-[16px]">
-        <div className="flex w-full flex-col items-start">
-          <BackButton onClick={handleBack} />
-        </div>
+      <div className="no-scrollbar flex min-h-0 w-full flex-1 flex-col items-center gap-[80px] overflow-y-auto px-[24px] py-[16px]">
+        <OnboardingHeader onBack={handleBack} />
 
         <div className="flex w-full flex-col items-start gap-[60px] px-[16px]">
           <div className="flex flex-col items-start gap-[6px] whitespace-nowrap">
@@ -71,7 +69,7 @@ const Nickname = () => {
       </div>
 
       <div className="flex w-full shrink-0 flex-col items-center justify-center gap-[24px] px-[16px] pt-[10px] pb-[30px]">
-        <div className="flex items-center justify-center gap-[12px]">
+        <div aria-label="온보딩 3단계 중 1단계" className="flex items-center justify-center gap-[12px]">
           <span className="size-[8px] rounded-[99px] bg-[#454545]" />
           <span className="size-[8px] rounded-[99px] bg-[#d9d9d9]" />
           <span className="size-[8px] rounded-[99px] bg-[#d9d9d9]" />
@@ -80,7 +78,7 @@ const Nickname = () => {
           text="다음"
           onClick={handleNext}
           disabled={!isValid}
-          className="flex h-[49px] w-full max-w-[358px] items-center justify-center rounded-[12px] bg-[#262626] px-[26px] py-[14px] font-['Pretendard',sans-serif] text-[18px] font-semibold tracking-[-0.36px] text-white disabled:bg-[#d9d9d9]"
+          className="flex w-full max-w-[358px] items-center justify-center rounded-[16px] bg-[#262626] px-[26px] py-[16px] text-[20px] font-semibold tracking-[0.8px] text-white disabled:bg-[#d9d9d9]"
         />
       </div>
     </div>
