@@ -66,12 +66,12 @@ const BottomSheet = ({
   );
 };
 
-export const SheetButton = ({ text, onClick, disabled = false }) => (
+export const SheetButton = ({ text, onClick, disabled = false, className = "" }) => (
   <button
     type="button"
     onClick={onClick}
     disabled={disabled}
-    className="flex min-w-px flex-1 items-center justify-center rounded-[16px] bg-[#262626] px-[26px] py-[16px] text-[20px] font-semibold tracking-[0.8px] whitespace-nowrap text-white disabled:bg-[#d9d9d9]"
+    className={`flex min-w-px flex-1 items-center justify-center rounded-[16px] bg-[#262626] px-[26px] py-[16px] text-[20px] font-semibold tracking-[0.8px] whitespace-nowrap text-white disabled:bg-[#d9d9d9] ${className}`}
   >
     {text}
   </button>

@@ -1,10 +1,16 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+import { saveChargeReturn } from "../../utils/chargeReturn";
+import { getCreditPrices } from "../../api/credit";
+import BottomSheet, { SheetButton } from "../../components/common/BottomSheet";
+import coinsIcon from "../../assets/icons/analysis-cost-coins.svg";
+
 import { uploadRecording } from "../../api/recording";
 
 import AppHeader from "../../components/common/AppHeader";
 import Button from "../../components/common/Button";
+import AnalysisCostDetails from "../../components/feature/analysis/AnalysisCostDetails";
 import ActionCard from "../../components/feature/analysis/ActionCard";
 import microphoneSpeakingIcon from "../../assets/icons/microphone-speaking.svg";
 import attachmentIcon from "../../assets/icons/attachment.svg";
@@ -12,7 +18,7 @@ import uploadFileIcon from "../../assets/icons/upload-file.svg";
 
 const NOTICES = [
   "친구와의 일상대화, 연인과의 일상/갈등 대화, 자녀와의 갈등대화를 분석할 수 있어요.",
-  "녹음된 음성은 대화 분석에 사용돼요.",
+  <><strong className="font-bold text-[#ff765b]">5분 이상, 30분미만 길이</strong>의 녹음을<br />분석 할 수 있어요.</>,
   "주변 소음이나 녹음 상태에 따라 분석 결과가 정확하지 않을 수 있어요.",
   "함께 대화하는 사람이 있다면 녹음 사실을 먼저 알려주세요.",
 ];
@@ -70,6 +76,17 @@ const AnalysisStart = () => {
   const abortRef = useRef(null);
   // { name, meta, progress, recordingId }
   const [upload, setUpload] = useState(null);
+  const [showPrices, setShowPrices] = useState(false);
+  const [prices, setPrices] = useState(null);
+  const [priceError, setPriceError] = useState("");
+
+  const openPrices = async () => {
+    setShowPrices(true);
+    setPrices(null);
+    setPriceError("");
+    try { setPrices(await getCreditPrices()); }
+    catch (error) { setPriceError(error.message || "분석 비용을 불러오지 못했어요."); }
+  };
 
   useEffect(() => () => abortRef.current?.abort(), []);
 
@@ -131,11 +148,11 @@ const AnalysisStart = () => {
     <main className="mx-auto flex h-[min(844px,100dvh)] w-[390px] flex-col gap-[30px] overflow-y-auto no-scrollbar bg-white px-[24px] py-[16px]">
       <AppHeader title="대화 분석" onBack={() => navigate(-1)} onLogoClick={() => navigate("/home")} />
 
-      <div className="flex w-full flex-col gap-[60px]">
+      <div className="flex w-full flex-col items-end gap-[20px]">
         <div className="flex w-full flex-col items-end gap-[8px]">
-          <ul className="text-label w-full list-disc space-y-[19px] rounded-[16px] border border-[#eee] bg-white py-[24px] pr-[24px] pl-[48px] text-black shadow-[0px_4px_11.7px_0px_rgba(0,0,0,0.05),0px_0px_49.1px_0px_rgba(0,0,0,0.1)]">
-            {NOTICES.map((notice) => (
-              <li key={notice}>{notice}</li>
+          <ul className="text-caption w-full list-disc space-y-[16px] rounded-[16px] border border-[#eee] bg-white py-[24px] pr-[24px] pl-[44px] text-black shadow-[0px_4px_11.7px_0px_rgba(0,0,0,0.05),0px_0px_49.1px_0px_rgba(0,0,0,0.1)]">
+            {NOTICES.map((notice, index) => (
+              <li key={index}>{notice}</li>
             ))}
           </ul>
           <button
@@ -147,6 +164,11 @@ const AnalysisStart = () => {
           </button>
         </div>
 
+        <button type="button" onClick={openPrices} className="cursor-pointer transition-colors active:bg-[#eee] flex items-center justify-center gap-[6px] rounded-[12px] border border-[#eee] bg-white px-[12px] py-[10px] shadow-[0px_4px_11.7px_rgba(0,0,0,0.05),0px_0px_49.1px_rgba(0,0,0,0.1)]">
+          <img src={coinsIcon} alt="" className="shrink-0" />
+          <span className="text-body text-black">분석 비용 확인하기</span>
+        </button>
+
         <div className="flex w-full flex-col gap-[24px]">
           <ActionCard
             icon={<img src={microphoneSpeakingIcon} alt="" className="size-[24px] shrink-0" />}
@@ -156,6 +178,7 @@ const AnalysisStart = () => {
           <ActionCard
             icon={<img src={attachmentIcon} alt="" className="size-[24px] shrink-0" />}
             label="대화 녹음 가져오기"
+            description="통화 녹음도 가능해요"
             onClick={() => fileInputRef.current?.click()}
           />
           <input
@@ -167,6 +190,19 @@ const AnalysisStart = () => {
           />
         </div>
       </div>
+      {showPrices && (
+        <BottomSheet title="분석 비용" contentGap="gap-[36px]" showCharacter={false} onClose={() => setShowPrices(false)} footer={<>
+          <SheetButton className="cursor-pointer transition-colors enabled:active:bg-[#595959]" text="크레딧 충전하기" onClick={() => { saveChargeReturn("/analysis"); navigate("/payments"); }} />
+          <SheetButton className="cursor-pointer transition-colors enabled:active:bg-[#595959]" text="완료" onClick={() => setShowPrices(false)} />
+        </>}>
+          {priceError ? <>
+            <p role="alert" className="text-body text-[#595959]">{priceError}</p>
+            <button type="button" onClick={openPrices} className="text-body underline">다시 시도</button>
+          </> : !prices ? <p role="status" className="text-body text-[#595959]">분석 비용을 불러오는 중...</p> : (
+            <AnalysisCostDetails prices={prices} />
+          )}
+        </BottomSheet>
+      )}
     </main>
   );
 };
