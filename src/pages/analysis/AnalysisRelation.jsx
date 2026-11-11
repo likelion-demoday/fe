@@ -73,6 +73,8 @@ const AnalysisRelation = () => {
   const [selected, setSelected] = useState(null);
   const [ownedCredit, setOwnedCredit] = useState(0);
   const [price, setPrice] = useState(0);
+  // 첫 분석 무료 대상이면 잔액과 상관없이 바로 결제 API 호출 (서버가 무료 처리)
+  const [isFree, setIsFree] = useState(false);
   const [paying, setPaying] = useState(false);
   // 결제 전 나가기 확인 시트에서 이동할 경로
   const [leaveTo, setLeaveTo] = useState(null);
@@ -81,8 +83,10 @@ const AnalysisRelation = () => {
     if (!config) return;
     Promise.all([getMyCredits(), getCreditPrices()])
       .then(([credits, prices]) => {
+        const free = Boolean(credits.analysisFreeAvailable);
         setOwnedCredit(credits.balance ?? 0);
-        setPrice(prices.analysis?.[PRICE_KEYS[state.type]] ?? 0);
+        setIsFree(free);
+        setPrice(free ? 0 : prices.analysis?.[PRICE_KEYS[state.type]] ?? 0);
       })
       .catch((e) => alert(e.message ?? "크레딧 정보를 불러오지 못했어요."));
   }, [config, state?.type]);
@@ -155,6 +159,8 @@ const AnalysisRelation = () => {
           productName={`${config.title}_${selected.productLabel}`}
           ownedCredit={ownedCredit}
           price={price}
+          freeLabel={isFree ? "첫 분석 무료" : undefined}
+          purchaseText={isFree ? "무료로 분석하기" : undefined}
           onClose={() => setSheet(null)}
           onPurchase={handlePurchase}
           onCharge={() => {
