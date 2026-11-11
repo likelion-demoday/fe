@@ -159,7 +159,7 @@ const AnalysisRelation = () => {
           productName={`${config.title}_${selected.productLabel}`}
           ownedCredit={ownedCredit}
           price={price}
-          freeLabel={isFree ? "첫 분석 무료" : undefined}
+          freeLabel={isFree ? "첫 분석은 무료예요!" : undefined}
           purchaseText={isFree ? "무료로 분석하기" : undefined}
           onClose={() => setSheet(null)}
           onPurchase={handlePurchase}
