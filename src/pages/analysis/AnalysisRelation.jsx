@@ -123,7 +123,9 @@ const AnalysisRelation = () => {
       await payRecording(state.recordingId);
       // 구매완료 시트에서 바로 나가도 홈에서 이어할 수 있게 결제 직후 저장 (로딩 화면에서도 다시 저장)
       savePendingAnalysis({ ...state, relation: selected.id, paid: true });
-      setSheet("complete");
+      // 첫 분석 무료면 구매완료 시트 없이 바로 진행
+      if (isFree) goToLoading();
+      else setSheet("complete");
     } catch (e) {
       alert(e.message ?? "요청에 실패했어요. 다시 시도해 주세요.");
     } finally {
