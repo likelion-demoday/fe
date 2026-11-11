@@ -11,9 +11,10 @@ const SHEET_IMAGES = {
 
 const formatCredit = (value) => value.toLocaleString("ko-KR");
 
-const PurchaseSheet = ({ productName, ownedCredit, price, purchaseText, onClose, onPurchase, onCharge }) => {
+// freeLabel: 무료 대상일 때 크레딧 내역 대신 보여줄 문구 (잔액 부족 판정도 안 함)
+const PurchaseSheet = ({ productName, ownedCredit, price, freeLabel, purchaseText, onClose, onPurchase, onCharge }) => {
   const remaining = ownedCredit - price;
-  const isShort = remaining < 0;
+  const isShort = !freeLabel && remaining < 0;
 
   return (
     <BottomSheet
@@ -30,18 +31,22 @@ const PurchaseSheet = ({ productName, ownedCredit, price, purchaseText, onClose,
     >
       <div className="flex w-full flex-col items-center gap-[21px]">
         <h3 className="text-heading whitespace-nowrap text-black">{productName}</h3>
-        <div className="text-label flex flex-col items-center gap-[8px] whitespace-nowrap text-[#595959]">
-          <div className="flex flex-col items-center gap-[4px]">
-            <p>보유 크레딧 {formatCredit(ownedCredit)}</p>
-            <p>사용 크레딧 {formatCredit(price)}</p>
+        {freeLabel ? (
+          <p className="text-label whitespace-nowrap text-[#595959]">{freeLabel}</p>
+        ) : (
+          <div className="text-label flex flex-col items-center gap-[8px] whitespace-nowrap text-[#595959]">
+            <div className="flex flex-col items-center gap-[4px]">
+              <p>보유 크레딧 {formatCredit(ownedCredit)}</p>
+              <p>사용 크레딧 {formatCredit(price)}</p>
+            </div>
+            {!isShort && (
+              <>
+                <img src={dividerIcon} alt="" className="block h-px w-full max-w-none" />
+                <p>구매 후 크레딧 {formatCredit(remaining)}</p>
+              </>
+            )}
           </div>
-          {!isShort && (
-            <>
-              <img src={dividerIcon} alt="" className="block h-px w-full max-w-none" />
-              <p>구매 후 크레딧 {formatCredit(remaining)}</p>
-            </>
-          )}
-        </div>
+        )}
       </div>
     </BottomSheet>
   );

@@ -164,4 +164,23 @@ const MOCK_EXTRAS = {
   },
 };
 
-export const buildMockReportExtras = (scenario) => MOCK_EXTRAS[scenario] ?? {};
+const sentenceSkills = (role, values) =>
+  [
+    ["SENTENCE_COMPLETENESS", "완결성"],
+    ["ELABORATION", "확장성"],
+    ["CLARITY", "명료성"],
+    ["SENTENCE_VARIETY", "다양성"],
+  ].map(([type, title], index) => metric(role, type, "PERCENT", values[index], title));
+
+// 문장 구사력은 모든 시나리오 공통
+export const buildMockReportExtras = (scenario) => {
+  const extras = MOCK_EXTRAS[scenario] ?? {};
+  return {
+    ...extras,
+    reportMetrics: [
+      ...(extras.reportMetrics ?? []),
+      ...sentenceSkills("SELF", [74, 68, 85, 61]),
+      ...sentenceSkills("PARTNER", [91, 88, 80, 72]),
+    ],
+  };
+};

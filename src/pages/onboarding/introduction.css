@@ -44,7 +44,7 @@
   mask-image: linear-gradient(to bottom, transparent, #000 40%);
 }
 .intro-footer > * { position: relative; }
-.intro-preview-art { position: relative; height: 894px; margin-top: 24px; pointer-events: none; }
+.intro-preview-art { position: relative; height: 894px; margin-top: 52px; pointer-events: none; }
 
 /* 개별 translate를 사용해 원래 이미지의 회전 각도를 유지합니다. */
 @keyframes intro-background-float {

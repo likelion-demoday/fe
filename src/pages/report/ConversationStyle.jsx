@@ -10,6 +10,7 @@ import {
   SummaryCard,
 } from "../../components/feature/report/ReportBlocks";
 import { SPEAKER_TONES } from "../../constants/report";
+import { ExpressionAxis } from "./BadLevel";
 
 const HIGHLIGHT_OVER = 5;
 
@@ -53,7 +54,7 @@ const ExpressionPill = ({ word, count }) => {
 
 const ConversationStyle = ({ report, expressionTitle = "자주 쓰는 표현" }) => {
   const [speaker, setSpeaker] = useState("me");
-  const { rhythm, rhythmSummary, expressions, expressionSummary } = report.style[speaker];
+  const { rhythm, rhythmSummary, expressions, expressionSummary, sentenceSkills = [] } = report.style[speaker];
   const tone = SPEAKER_TONES[speaker];
 
   return (
@@ -104,6 +105,20 @@ const ConversationStyle = ({ report, expressionTitle = "자주 쓰는 표현" })
             <SummaryCard {...expressionSummary} />
           </div>
         </ReportSection>
+
+        {sentenceSkills.length > 0 && (
+          <section className="flex w-full flex-col items-start gap-[14px]">
+            <h2 className="text-[24px] leading-[34px] font-bold tracking-[0.48px] whitespace-nowrap text-[#262626]">문장 구사력</h2>
+            <div className={`flex w-full flex-col items-start gap-[20px] rounded-[14px] border border-[#eee] bg-white p-[20px] ${CARD_SHADOW}`}>
+              {sentenceSkills.map((axis, index) => (
+                <Fragment key={axis.label}>
+                  {index > 0 && <div className="h-px w-full shrink-0" style={{ backgroundImage: DIVIDER_GRADIENT }} />}
+                  <ExpressionAxis {...axis} tone={tone} />
+                </Fragment>
+              ))}
+            </div>
+          </section>
+        )}
       </div>
     </div>
   );
