@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import { getSharedCharacterImage, getSharedReport } from "../../api/share";
 import AppHeader from "../../components/common/AppHeader";
@@ -24,6 +24,7 @@ const withImages = (report, images) => {
 
 // 공개 보고서 (/share#토큰). 토큰은 Authorization 헤더로만 보내고 저장하거나 로그에 남기지 않음
 const SharePage = () => {
+  const navigate = useNavigate();
   const token = useLocation().hash.slice(1);
   const [loaded, setLoaded] = useState({ token: null, report: null, images: {}, message: null });
 
@@ -73,7 +74,7 @@ const SharePage = () => {
   if (!report) {
     return (
       <main className="mx-auto flex h-[min(844px,100dvh)] w-[390px] flex-col bg-white px-[24px] py-[16px]">
-        <AppHeader showProfile={false} />
+        <AppHeader showProfile={false} onLogoClick={() => navigate("/home")} />
         <div className="flex flex-1 items-center justify-center">
           <p className="text-title-medium text-center whitespace-pre-line text-[#595959]">
             {message || "보고서를 불러오는 중이에요"}
@@ -86,7 +87,7 @@ const SharePage = () => {
   return (
     <main className="mx-auto flex h-[min(844px,100dvh)] w-[390px] flex-col bg-white">
       <div className="no-scrollbar flex min-h-0 flex-1 flex-col gap-[20px] overflow-x-hidden overflow-y-auto px-[24px] py-[16px]">
-        <AppHeader showProfile={false} />
+        <AppHeader showProfile={false} onLogoClick={() => navigate("/home")} />
         <ReportContent report={report} />
       </div>
     </main>

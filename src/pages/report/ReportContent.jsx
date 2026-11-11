@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 import ReportSectionTabs from "../../components/feature/report/ReportSectionTabs";
 import OverviewSection from "../../components/feature/report/OverviewSection";
@@ -134,16 +134,62 @@ const TagChip = ({ icon, label }) => (
 // 보고서 탭 + 본문. 내 보고서(ReportPage)와 공유 보고서(SharePage)에서 함께 사용
 const ReportContent = ({ report, onUnlockCharacter, onShareCharacter }) => {
   const [section, setSection] = useState("overview");
+  const contentRef = useRef(null);
+  const gesture = useRef(null);
   const sectionKeys = SCENARIO_SECTIONS[report.scenario] ?? SCENARIO_SECTIONS.FRIEND_DAILY;
   const sections = SECTIONS.filter(({ key }) => sectionKeys.includes(key));
   // 다른 시나리오 보고서로 넘어왔을 때 없는 탭이 선택돼 있으면 처음 탭으로
   const currentSection = sectionKeys.includes(section) ? section : "overview";
   const { Component: SectionContent, gap } = SECTION_CONTENT[currentSection];
 
+  const handleTouchStart = (event) => {
+    gesture.current = null;
+    // 입력 조작과 여러 손가락으로 확대하는 동작은 탭 전환에서 제외합니다.
+    if (event.touches.length !== 1 || event.target.closest("input, textarea, select, [contenteditable='true']")) return;
+    const touch = event.touches[0];
+    gesture.current = { id: touch.identifier, x: touch.clientX, y: touch.clientY, direction: null };
+  };
+
+  const handleTouchMove = (event) => {
+    const start = gesture.current;
+    if (!start) return;
+    if (event.touches.length !== 1) { gesture.current = null; return; }
+    const touch = event.touches[0];
+    const dx = Math.abs(touch.clientX - start.x);
+    const dy = Math.abs(touch.clientY - start.y);
+    if (!start.direction && Math.max(dx, dy) >= 10) {
+      start.direction = dx > dy * 1.5 ? "horizontal" : "vertical";
+    }
+  };
+
+  const handleTouchEnd = (event) => {
+    const start = gesture.current;
+    gesture.current = null;
+    if (!start || start.direction === "vertical") return;
+    const touch = Array.from(event.changedTouches).find(({ identifier }) => identifier === start.id);
+    if (!touch) return;
+    const dx = touch.clientX - start.x;
+    const dy = touch.clientY - start.y;
+    if (Math.abs(dx) < 50 || Math.abs(dx) <= Math.abs(dy) * 1.5) return;
+    const index = sections.findIndex(({ key }) => key === currentSection);
+    const next = sections[index + (dx < 0 ? 1 : -1)];
+    if (!next) return;
+    setSection(next.key);
+    // 깊이 스크롤한 상태에서도 새 섹션을 처음부터 보여줍니다.
+    contentRef.current?.parentElement?.scrollTo({ top: 0, behavior: "instant" });
+  };
+
   return (
-    <div className={`flex w-full flex-col items-start ${gap}`}>
+    <div ref={contentRef} className={`flex w-full flex-col items-start ${gap}`}>
       <ReportSectionTabs sections={sections} selected={currentSection} onSelect={setSection} />
 
+      <div
+        className={`flex w-full touch-pan-y touch-pinch-zoom flex-col items-start ${gap}`}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+        onTouchCancel={() => { gesture.current = null; }}
+      >
       {currentSection === "overview" && (
         <div className="flex items-center gap-[8px]">
           <p className="font-['SUIT',sans-serif] text-[13px] leading-[20px] font-semibold tracking-[-0.26px] whitespace-pre text-[#8c8c8c]">
@@ -171,6 +217,7 @@ const ReportContent = ({ report, onUnlockCharacter, onShareCharacter }) => {
       )}
 
       <SectionContent report={report} onUnlockCharacter={onUnlockCharacter} onShareCharacter={onShareCharacter} />
+      </div>
     </div>
   );
 };
