@@ -80,8 +80,8 @@ const NotificationEmail = () => {
         </section>
       </div>
       <footer className="flex shrink-0 flex-col items-center gap-[24px] px-[16px] pt-[10px] pb-[max(30px,env(safe-area-inset-bottom))]">
-        <div aria-label="온보딩 4단계 중 4단계" className="flex items-center justify-center gap-[12px]">
-          {[0, 1, 2, 3].map((step) => <span key={step} className="size-[8px] rounded-full bg-[#454545]" />)}
+        <div aria-label="온보딩 3단계 중 3단계" className="flex items-center justify-center gap-[12px]">
+          {[0, 1, 2].map((step) => <span key={step} className="size-[8px] rounded-full bg-[#454545]" />)}
         </div>
         <Button
           type="submit"
