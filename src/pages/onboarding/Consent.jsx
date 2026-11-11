@@ -5,7 +5,7 @@ import useAuthStore from "../../store/authStore";
 import { oauthSignUp, signUp } from "../../api/auth";
 import { getMe, updateMarketingAgreement } from "../../api/user";
 
-import BackButton from "../../components/common/BackButton";
+import OnboardingHeader from "../../components/feature/onboarding/OnboardingHeader";
 import Button from "../../components/common/Button";
 import circleIcon from "../../assets/icons/check-circle.svg";
 import chevronRightIcon from "../../assets/icons/chevron-right.svg";
@@ -168,11 +168,11 @@ const Consent = ({ accountMode = false }) => {
 
   return (
     <div className="mx-auto flex h-[min(844px,100dvh)] w-[390px] flex-col items-start bg-white">
-      <div className={`no-scrollbar flex min-h-0 w-full flex-1 flex-col items-center gap-[80px] overflow-y-auto ${accountMode ? "px-[24px] py-[16px]" : "p-[16px]"}`}>
+      <div className={`no-scrollbar flex min-h-0 w-full flex-1 flex-col items-center gap-[80px] overflow-y-auto px-[24px] py-[16px]`}>
         <div className="flex w-full flex-col items-start">
           {accountMode ? (
             <MyPageHeader title="개인정보 동의" titleClassName="text-heading" onBack={handleBack} />
-          ) : <BackButton onClick={handleBack} />}
+          ) : <OnboardingHeader onBack={handleBack} />}
         </div>
 
         <div className="flex w-full flex-col items-start gap-[60px] px-[16px]">
@@ -237,7 +237,7 @@ const Consent = ({ accountMode = false }) => {
       </div>
 
       <div className="flex w-full shrink-0 flex-col items-center justify-center gap-[24px] px-[16px] pt-[10px] pb-[30px]">
-        <div className="flex h-[8px] items-center justify-center gap-[12px]">
+        <div aria-label={accountMode ? undefined : "온보딩 3단계 중 2단계"} className="flex h-[8px] items-center justify-center gap-[12px]">
           {!accountMode && <>
             <span className="size-[8px] rounded-[99px] bg-[#454545]" />
             <span className="size-[8px] rounded-[99px] bg-[#454545]" />
@@ -256,7 +256,7 @@ const Consent = ({ accountMode = false }) => {
             disabled={accountMode ? !accountUser || isSaving : !requiredChecked}
             className={accountMode
               ? "flex w-full max-w-[358px] items-center justify-center rounded-[16px] bg-[#262626] px-[26px] py-[16px] text-[20px] font-semibold tracking-[0.8px] text-white"
-              : "flex h-[49px] w-full max-w-[358px] items-center justify-center rounded-[12px] bg-[#262626] px-[26px] py-[14px] font-['Pretendard',sans-serif] text-[18px] font-semibold tracking-[-0.36px] text-white disabled:bg-[#d9d9d9]"}
+              : "flex w-full max-w-[358px] items-center justify-center rounded-[16px] bg-[#262626] px-[26px] py-[16px] text-[20px] font-semibold tracking-[0.8px] text-white disabled:bg-[#d9d9d9]"}
           />
         </div>
       </div>
