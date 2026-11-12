@@ -5,7 +5,7 @@ const Contact = () => {
   const navigate = useNavigate();
 
   return (
-    <main className="mx-auto flex h-[844px] w-[390px] flex-col gap-[30px] overflow-y-auto bg-white px-[24px] py-[16px]">
+    <main className="mx-auto flex h-[min(844px,100dvh)] w-[390px] flex-col gap-[30px] overflow-y-auto no-scrollbar bg-white px-[24px] py-[16px]">
       <MyPageHeader title="문의하기" titleClassName="text-heading" onBack={() => navigate("/mypage/support")} />
       <section className="rounded-[20px] bg-white px-[24px] py-[36px] shadow-[0_2px_6px_rgba(0,0,0,0.05),0_0_11.4px_rgba(0,0,0,0.05)]">
         <p className="text-label text-[#262626]">

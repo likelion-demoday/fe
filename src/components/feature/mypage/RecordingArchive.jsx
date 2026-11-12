@@ -32,7 +32,7 @@ const RecordingArchive = ({
   }, [category, hasNext, loading, error, onLoadMore]);
 
   return (
-    <main className="mx-auto flex h-[844px] w-[390px] flex-col overflow-y-auto bg-white px-[24px] py-[16px]">
+    <main className="mx-auto flex h-[min(844px,100dvh)] w-[390px] flex-col overflow-y-auto no-scrollbar bg-white px-[24px] py-[16px]">
       <MyPageHeader
         title={title}
         titleClassName="text-heading"

@@ -36,13 +36,31 @@ const loadCharacter = async ({ recordingId }) => {
 };
 
 const SIDE_SCALE = 130 / 186;
-const POSITIONS = {
-  "-1": `translate(-76px, 49px) scale(${SIDE_SCALE})`,
-  0: "translate(0px, 0px) scale(1)",
-  1: `translate(141px, 53px) scale(${SIDE_SCALE})`,
+const POSITIONS = [
+  { x: -160, y: 51, scale: SIDE_SCALE * 0.8 },
+  { x: -76, y: 49, scale: SIDE_SCALE },
+  { x: 0, y: 0, scale: 1 },
+  { x: 141, y: 53, scale: SIDE_SCALE },
+  { x: 225, y: 51, scale: SIDE_SCALE * 0.8 },
+];
+const MOTION_EASING = "cubic-bezier(0.22, 1, 0.36, 1)";
+const MOTION_DURATION = 650;
+const DRAG_DISTANCE = 140;
+
+// 드래그 중에도 위치·크기·블러를 같은 진행률로 보간한다.
+const getCardAppearance = (offset) => {
+  const position = Math.max(0, Math.min(4, offset + 2));
+  const start = Math.floor(position);
+  const end = Math.min(4, start + 1);
+  const progress = position - start;
+  const interpolate = (key) =>
+    POSITIONS[start][key] + (POSITIONS[end][key] - POSITIONS[start][key]) * progress;
+  return {
+    transform: `translate(${interpolate("x")}px, ${interpolate("y")}px) scale(${interpolate("scale")})`,
+    distance: Math.min(1, Math.abs(offset)),
+    opacity: Math.max(0, Math.min(1, 2 - Math.abs(offset))),
+  };
 };
-const HIDDEN_POSITION = (offset) =>
-  `translate(${offset < 0 ? -160 : 225}px, 51px) scale(${SIDE_SCALE * 0.8})`;
 const SWIPE_THRESHOLD = 40;
 
 const CharacterCard = ({
@@ -54,28 +72,32 @@ const CharacterCard = ({
   onShare,
 }) => {
   const isActive = offset === 0;
+  const visualOffset = offset + dragX / DRAG_DISTANCE;
   const isVisible = Math.abs(offset) <= 1;
-  const baseTransform = isVisible ? POSITIONS[offset] : HIDDEN_POSITION(offset);
+  const appearance = getCardAppearance(visualOffset);
+  const transition = (properties) => isDragging ? "none" : properties
+    .map((property) => `${property} ${MOTION_DURATION}ms ${MOTION_EASING}`)
+    .join(", ");
 
   return (
     <article
       onClick={isActive ? onShare : onSelect}
       aria-hidden={!isVisible}
-      className={`absolute top-0 left-[76px] h-[229px] w-[186px] origin-top-left overflow-clip rounded-[16px] border-[0.893px] border-[#eee] shadow-[0px_3.574px_10.454px_0px_rgba(0,0,0,0.05),0px_0px_42.62px_0px_rgba(0,0,0,0.05)] ${
-        isDragging
-          ? ""
-          : "transition-[transform,opacity] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]"
-      } ${isActive ? "z-20" : "z-10"} cursor-pointer`}
+      className={`absolute top-0 left-[76px] h-[229px] w-[186px] origin-top-left overflow-clip rounded-[16px] border-[0.893px] border-[#eee] shadow-[0px_3.574px_10.454px_0px_rgba(0,0,0,0.05),0px_0px_42.62px_0px_rgba(0,0,0,0.05)] ${isActive ? "z-20" : "z-10"} cursor-pointer`}
       style={{
-        transform: `translateX(${dragX}px) ${baseTransform}`,
-        opacity: isVisible ? 1 : 0,
+        transform: appearance.transform,
+        opacity: appearance.opacity,
+        transition: transition(["transform", "opacity"]),
         pointerEvents: isVisible ? "auto" : "none",
         backgroundImage: character.background,
       }}
     >
       <div
-        className="absolute inset-0 transition-[filter] duration-500"
-        style={{ filter: isActive ? "blur(0px)" : "blur(2.56px)" }}
+        className="absolute inset-0"
+        style={{
+          filter: `blur(${appearance.distance * 2.56}px)`,
+          transition: transition(["filter"]),
+        }}
       >
         <div className="absolute top-[-1.12px] left-[-1px] h-[124px] w-[191px]">
           <img
@@ -94,8 +116,13 @@ const CharacterCard = ({
         <div className="relative flex w-full flex-col gap-[6px] px-[16px] pt-[14px]">
           {/* 이름·설명은 서버가 길이를 줄이지 않으므로 이름은 한 줄 말줄임, 설명은 두 줄까지 (캐릭터 이미지를 가리지 않게) */}
           <h3
-            className={`truncate font-bold transition-[font-size] duration-500 ${isActive ? "text-[16.083px] tracking-[0.6433px]" : "text-[18px] tracking-[0.72px]"}`}
-            style={{ color: character.titleColor }}
+            className="truncate font-bold"
+            style={{
+              color: character.titleColor,
+              fontSize: 16.083 + appearance.distance * (18 - 16.083),
+              letterSpacing: `${0.6433 + appearance.distance * (0.72 - 0.6433)}px`,
+              transition: transition(["font-size", "letter-spacing"]),
+            }}
           >
             {character.name}
           </h3>
@@ -106,7 +133,8 @@ const CharacterCard = ({
       </div>
 
       <div
-        className={`pointer-events-none absolute -inset-px bg-[rgba(255,255,255,0.3)] transition-opacity duration-500 ${isActive ? "opacity-0" : "opacity-100"}`}
+        className="pointer-events-none absolute -inset-px bg-[rgba(255,255,255,0.3)]"
+        style={{ opacity: appearance.distance, transition: transition(["opacity"]) }}
       />
     </article>
   );

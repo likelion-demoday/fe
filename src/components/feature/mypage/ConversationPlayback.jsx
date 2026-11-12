@@ -49,7 +49,7 @@ const ConversationPlayback = ({ conversation, onClose, loading = false, loadErro
   };
 
   return (
-    <main className="mx-auto flex h-[844px] w-[390px] flex-col justify-between bg-white">
+    <main className="mx-auto flex h-[min(844px,100dvh)] w-[390px] flex-col justify-between bg-white">
       <div className="flex min-h-0 flex-1 flex-col items-center justify-between pb-[50px]">
         <div className="w-full px-[24px] py-[16px]">
           <MyPageHeader title="대화 보관함" titleClassName="text-heading" onBack={onClose} />

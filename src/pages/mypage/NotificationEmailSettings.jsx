@@ -46,7 +46,7 @@ const NotificationEmailSettings = () => {
 
   return (
     <form onSubmit={submit} noValidate className="mx-auto flex h-[min(844px,100dvh)] w-full max-w-[390px] flex-col bg-white">
-      <div className="flex min-h-0 flex-1 flex-col gap-[160px] overflow-y-auto px-[24px] py-[16px]">
+      <div className="flex min-h-0 flex-1 flex-col gap-[160px] overflow-y-auto no-scrollbar px-[24px] py-[16px]">
         <MyPageHeader title="개인정보 동의" titleClassName="text-heading" onBack={goBack} />
         <section className="flex flex-col gap-[16px] pl-[16px]">
           <fieldset disabled={loading || isSaving}>

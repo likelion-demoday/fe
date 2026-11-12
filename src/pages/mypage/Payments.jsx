@@ -35,7 +35,7 @@ const Payments = ({ onHistory, onPurchase }) => {
   };
 
   return (
-    <main className="mx-auto flex h-[844px] w-[390px] flex-col gap-[30px] overflow-y-auto bg-white px-[24px] py-[16px]">
+    <main className="mx-auto flex h-[min(844px,100dvh)] w-[390px] flex-col gap-[30px] overflow-y-auto no-scrollbar bg-white px-[24px] py-[16px]">
       <MyPageHeader title="이용권 • 결제" onBack={handleBack} />
       <div className="flex flex-col gap-[12px]">
         {error ? <p role="alert" className="text-body py-[12px] text-[#595959]">{error}</p>

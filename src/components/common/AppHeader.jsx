@@ -9,9 +9,9 @@ const AppHeader = ({ title, onBack, onLogoClick, onLeave, titleClassName = "text
   const Logo = onLogoClick ? "button" : "p";
 
   return (
-    <header className="flex w-full flex-col gap-[20px]">
-      <div className="flex h-[40px] items-center justify-between">
-        <Logo type={onLogoClick ? "button" : undefined} onClick={onLogoClick} className={`${onLogoClick ? "cursor-pointer " : ""}font-['SUIT',sans-serif] text-[20px] leading-normal font-extrabold tracking-[-0.8px] whitespace-nowrap text-black`}>
+    <header className="flex w-full shrink-0 flex-col gap-[20px]">
+      <div className="flex h-[40px] shrink-0 items-center justify-between">
+        <Logo type={onLogoClick ? "button" : undefined} onClick={onLogoClick} className={`${onLogoClick ? "cursor-pointer " : ""}flex h-[40px] shrink-0 items-center font-['SUIT',sans-serif] text-[20px] leading-normal font-extrabold tracking-[-0.8px] whitespace-nowrap text-black`}>
           <span>RE</span>
           <span className="text-[#ff765b]">:S</span>
           <span className="tracking-[-1.28px]">AY</span>
@@ -21,7 +21,7 @@ const AppHeader = ({ title, onBack, onLogoClick, onLeave, titleClassName = "text
             type="button"
             onClick={() => (onLeave ? onLeave("/mypage") : navigate("/mypage"))}
             aria-label="마이페이지"
-            className="relative size-[40px] shrink-0"
+            className="relative size-[40px] shrink-0 cursor-pointer"
           >
             <img src={profileIcon} alt="" className="absolute -top-[10px] -left-[10px] max-w-none" />
           </button>
