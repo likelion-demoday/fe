@@ -11,7 +11,7 @@ import archiveEmptyImage from "../../../assets/images/archive-empty.png";
 const RecordingArchive = ({
   title,
   items,
-  initialCategory = "친구관계",
+  initialCategory = "전체",
   emptyMessage = "아직 저장된 대화가 없어요",
   onSelect,
   loading = false,
@@ -21,7 +21,7 @@ const RecordingArchive = ({
   onRetry,
 }) => {
   const navigate = useNavigate();
-  const [category, setCategory] = useState(ARCHIVE_CATEGORIES.includes(initialCategory) ? initialCategory : "친구관계");
+  const [category, setCategory] = useState(ARCHIVE_CATEGORIES.includes(initialCategory) ? initialCategory : "전체");
   const filteredConversations = items.filter(
     (item) => matchesArchiveCategory(item, category),
   );
