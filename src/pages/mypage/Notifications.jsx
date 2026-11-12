@@ -66,7 +66,7 @@ const Notifications = () => {
   });
 
   return (
-    <main className="mx-auto h-[min(844px,100dvh)] w-full max-w-[390px] overflow-y-auto bg-white">
+    <main className="mx-auto h-[min(844px,100dvh)] w-full max-w-[390px] overflow-y-auto no-scrollbar bg-white">
       <div className="flex flex-col gap-[30px] px-[24px] py-[16px]">
         <MyPageHeader title="알림" onBack={() => navigate("/mypage")} />
         {!settings && !error && <p role="status">알림 설정을 불러오는 중...</p>}
