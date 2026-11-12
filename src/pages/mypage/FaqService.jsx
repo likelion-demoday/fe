@@ -34,7 +34,7 @@ const FaqService = () => {
   }, [hash]);
 
   return (
-    <main className="mx-auto flex h-[844px] w-[390px] flex-col overflow-y-auto bg-white">
+    <main className="mx-auto flex h-[min(844px,100dvh)] w-[390px] flex-col overflow-y-auto no-scrollbar bg-white">
       <div className="shrink-0 px-[24px] py-[16px]">
         <MyPageHeader title="서비스 이용" onBack={() => navigate("/mypage/support/faq")} />
       </div>

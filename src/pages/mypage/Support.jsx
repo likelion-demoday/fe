@@ -6,7 +6,7 @@ const Support = ({ onFaq, onContact, onPolicies }) => {
   const navigate = useNavigate();
 
   return (
-    <main className="mx-auto flex h-[844px] w-[390px] flex-col gap-[36px] overflow-y-auto bg-white px-[24px] py-[16px]">
+    <main className="mx-auto flex h-[min(844px,100dvh)] w-[390px] flex-col gap-[36px] overflow-y-auto no-scrollbar bg-white px-[24px] py-[16px]">
       <MyPageHeader title="고객지원" onBack={() => navigate("/mypage")} />
       <div className="flex flex-col gap-[12px]">
         <PurchaseHistory label="자주 묻는 질문" to={onFaq ? undefined : "/mypage/support/faq"} onClick={onFaq} />

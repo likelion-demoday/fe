@@ -106,6 +106,7 @@ const Home = () => {
       <div className="absolute bottom-0 left-0 z-10 flex w-full bg-gradient-to-b from-[rgba(255,255,255,0)] to-white to-[15.614%] px-[24px] pt-[20px] pb-[30px]">
         <SheetButton
           text="분석 시작하기"
+          className="cursor-pointer transition-colors enabled:active:bg-[#595959]"
           onClick={() => navigate("/analysis")}
         />
       </div>
