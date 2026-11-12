@@ -18,7 +18,7 @@ import uploadFileIcon from "../../assets/icons/upload-file.svg";
 
 const NOTICES = [
   "친구와의 일상대화, 연인과의 일상/갈등 대화, 자녀와의 갈등대화를 분석할 수 있어요.",
-  <><strong className="font-bold text-[#ff765b]">5분 이상, 30분미만 길이</strong>의 녹음을<br />분석 할 수 있어요.</>,
+  <><strong className="font-bold text-[#ff765b]">5분 이상, 30분 미만 길이</strong>의 녹음을<br />분석 할 수 있어요.</>,
   "주변 소음이나 녹음 상태에 따라 분석 결과가 정확하지 않을 수 있어요.",
   "함께 대화하는 사람이 있다면 녹음 사실을 먼저 알려주세요.",
 ];
