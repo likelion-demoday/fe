@@ -7,7 +7,7 @@ import BottomSheet from "../components/common/BottomSheet";
 import HabitSummaryCarousel from "../components/feature/home/HabitSummaryCarousel";
 import CharacterCarousel from "../components/feature/home/CharacterCarousel";
 import { SheetButton } from "../components/feature/analysis/RecordEndSheet";
-import { daysUntilDeleted, getPendingAnalyses, removePendingAnalysis } from "../utils/pendingAnalysis";
+import { hoursUntilDeleted, getPendingAnalyses, removePendingAnalysis } from "../utils/pendingAnalysis";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -141,7 +141,7 @@ const Home = () => {
           }
         >
           <p className="text-label text-center whitespace-pre-line text-[#595959]">
-            {`분석 유형을 고르고 결제하면 분석이 시작돼요\n결제하지 않으면 ${daysUntilDeleted(resumeSheet.item)}일 뒤 녹음이 삭제돼요`}
+            {`분석 유형을 고르고 결제하면 분석이 시작돼요\n결제하지 않으면 최대 ${hoursUntilDeleted(resumeSheet.item)}시간 이내에 녹음이 삭제돼요`}
           </p>
         </BottomSheet>
       )}
