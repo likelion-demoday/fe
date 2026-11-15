@@ -14,7 +14,6 @@ import CreditChargeSuccess from "./pages/payments/CreditChargeSuccess";
 import CreditChargeFailure from "./pages/payments/CreditChargeFailure";
 import PurchaseHistoryPage from "./pages/mypage/PurchaseHistoryPage";
 import Recordings from "./pages/mypage/Recordings";
-import SavedConversations from "./pages/mypage/SavedConversations";
 import ReportArchive from "./pages/mypage/ReportArchive";
 import Account from "./pages/mypage/Account";
 import Support from "./pages/mypage/Support";
@@ -84,7 +83,7 @@ function App() {
         <Route path="/mypage/recordings" element={<Recordings />} />
         <Route
           path="/mypage/recordings/conversations"
-          element={<SavedConversations />}
+          element={<Navigate to="/mypage/recordings" replace />}
         />
         <Route path="/recordings/reports" element={<ReportArchive />} />
         <Route
