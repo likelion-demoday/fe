@@ -4,8 +4,8 @@
 const PENDING_ANALYSES_KEY = "pendingAnalyses";
 const LEGACY_KEY = "pendingAnalysis"; // 예전 단일 저장 키
 
-// 백엔드는 결제하지 않은 녹음을 3일 뒤 삭제함
-export const UNPAID_RETENTION_MS = 3 * 24 * 60 * 60 * 1000;
+// 백엔드는 결제하지 않은 녹음을 3시간 뒤 삭제함
+export const UNPAID_RETENTION_MS = 3 * 60 * 60 * 1000;
 
 const read = () => {
   try {
@@ -30,7 +30,7 @@ const write = (list) => {
   }
 };
 
-const isExpired = (item, now) => !item.paid && now - (item.savedAt ?? 0) > UNPAID_RETENTION_MS;
+const isExpired = (item, now) => !item.paid && now - (item.savedAt ?? 0) >= UNPAID_RETENTION_MS;
 
 // 같은 녹음이면 기존 정보에 덮어씀 (처음 저장 시각과 결제 여부는 유지)
 export const savePendingAnalysis = (entry) => {
@@ -46,7 +46,7 @@ export const savePendingAnalysis = (entry) => {
   write([...list.filter((item) => item.recordingId !== entry.recordingId), next]);
 };
 
-// 보관 기간(3일)이 지난 미결제 녹음은 빼고 반환
+// 보관 기간(3시간)이 지난 미결제 녹음은 빼고 반환
 export const getPendingAnalyses = () => {
   const now = Date.now();
   const list = read();
@@ -59,6 +59,6 @@ export const removePendingAnalysis = (recordingId) => {
   write(read().filter((item) => item.recordingId !== recordingId));
 };
 
-// 미결제 녹음이 삭제되기까지 남은 일수 (올림)
-export const daysUntilDeleted = (item) =>
-  Math.max(1, Math.ceil(((item.savedAt ?? Date.now()) + UNPAID_RETENTION_MS - Date.now()) / (24 * 60 * 60 * 1000)));
+// 미결제 녹음이 삭제되기까지 남은 시간 (올림)
+export const hoursUntilDeleted = (item) =>
+  Math.max(1, Math.ceil(((item.savedAt ?? Date.now()) + UNPAID_RETENTION_MS - Date.now()) / (60 * 60 * 1000)));

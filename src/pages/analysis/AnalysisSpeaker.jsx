@@ -150,7 +150,7 @@ const AnalysisSpeaker = () => {
     getSpeakerSamples(recordingId)
       .then((result) => {
         setSpeakers(toSpeakers(result.speakers ?? []));
-        setAudioUrl(result.audioUrl);
+        setAudioUrl(result.audioUrl ?? null);
       })
       .catch((e) => alert(e.message ?? "화자 정보를 불러오지 못했어요."));
   }, [recordingId]);
