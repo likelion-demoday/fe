@@ -12,7 +12,7 @@ const RecordingArchive = ({
   title,
   items,
   initialCategory = "전체",
-  emptyMessage = "아직 저장된 대화가 없어요",
+  emptyMessage = "아직 분석 내역이 없어요",
   onSelect,
   loading = false,
   error = "",
