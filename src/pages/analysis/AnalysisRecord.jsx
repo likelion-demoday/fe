@@ -363,7 +363,7 @@ const AnalysisRecord = () => {
         <RecordEndSheet
           elapsed={elapsed}
           title="이 녹음으로 분석을 진행할게요"
-          description="분석일 기준 3일이 지나면 녹음은 자동 삭제돼요"
+          description="분석 성공 또는 최종 실패 후 원본 음성과 전체 전사문은 즉시 삭제돼요"
           image={SHEET_IMAGES.archive}
           onClose={() => setSheet(null)}
         >
