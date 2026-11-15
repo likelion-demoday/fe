@@ -362,7 +362,7 @@ const AnalysisRecord = () => {
       {sheet === "save" && (
         <RecordEndSheet
           elapsed={elapsed}
-          title="녹음은 3일간 보관함에 저장돼요"
+          title="이 녹음으로 분석을 진행할게요"
           description="분석일 기준 3일이 지나면 녹음은 자동 삭제돼요"
           image={SHEET_IMAGES.archive}
           onClose={() => setSheet(null)}
