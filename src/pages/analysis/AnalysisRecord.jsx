@@ -210,7 +210,7 @@ const AnalysisRecord = () => {
   try {
     const { recordingId } = await uploadRecording(file);
     const nextState = { partner: state?.partner, elapsed, recordingId };
-    // 결제 전에 나가도 홈에서 이어서 결제할 수 있게 저장 (미결제 녹음은 3일 보관)
+    // 결제 전에 나가도 홈에서 이어서 결제할 수 있게 저장 (미결제 녹음은 업로드 후 3시간 보관)
     savePendingAnalysis({ ...nextState, paid: false });
 
     navigate("/analysis/type", { replace: true, state: nextState });
