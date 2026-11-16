@@ -8,6 +8,8 @@ import {
   SPICINESS_AXIS_CATEGORIES,
   SENTENCE_SKILL_AXES,
   SPICINESS_CONTEXT_CATEGORIES,
+  SPEED_REFERENCE_SYLLABLES_PER_SECOND,
+  rebaseSpeedDiff,
 } from "../constants/report";
 
 const QUESTION_PATTERNS = ["FOLLOW_UP_QUESTION", "EMOTION_QUESTION"];
@@ -106,13 +108,13 @@ const toCharacter = (insight, key) => ({
   description: [insight?.description ?? ""],
 });
 
-// 한국어 평균 발화 속도 대비 차이(%). 음수: 느림, 양수: 빠름. 필드가 없는 기존 보고서는 직접 계산
-const KOREAN_AVERAGE_SYLLABLES_PER_SECOND = 5.79;
+// 한국어 평균 발화 속도 대비 차이(%). 음수: 느림, 양수: 빠름. 서버 % 대신 프론트 기준으로 재계산
 const speedDiffOf = (speaker) => {
-  if (speaker.speakingSpeedDifferencePercent != null) return speaker.speakingSpeedDifferencePercent;
-  if (!speaker.syllablesPerSecond) return 0;
-  const reference = speaker.referenceSyllablesPerSecond || KOREAN_AVERAGE_SYLLABLES_PER_SECOND;
-  return (speaker.syllablesPerSecond / reference - 1) * 100;
+  if (speaker.syllablesPerSecond) {
+    return (speaker.syllablesPerSecond / SPEED_REFERENCE_SYLLABLES_PER_SECOND - 1) * 100;
+  }
+  if (speaker.speakingSpeedDifferencePercent != null) return rebaseSpeedDiff(speaker.speakingSpeedDifferencePercent);
+  return 0;
 };
 
 // 한국어 평균 대비 차이를 부호 있는 %로 (예: -8%, +12%)

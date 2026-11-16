@@ -7,6 +7,7 @@ import ProfanityRateCard from "./ProfanityRateCard";
 import HabitHistoryCard from "./HabitHistoryCard";
 
 import { getAnalysisSummary } from "../../../api/analysis";
+import { rebaseSpeedDiff } from "../../../constants/report";
 
 // 카드 그림자(blur 49px)보다 넓게 둬서 옆 카드 그림자가 보이는 카드 위에 겹치지 않게 함
 const SLIDE_GAP = 56;
@@ -28,7 +29,11 @@ const SLIDES = [
       <SpeakingSpeedCard
         active={active}
         count={summary.analysisCount}
-        diffPercent={summary.speakingSpeed?.differencePercent ?? 0}
+        diffPercent={
+          summary.speakingSpeed?.differencePercent != null
+            ? rebaseSpeedDiff(summary.speakingSpeed.differencePercent)
+            : 0
+        }
       />
     ),
   },
