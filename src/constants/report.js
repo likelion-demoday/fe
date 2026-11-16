@@ -136,3 +136,12 @@ export const SENTENCE_SKILL_AXES = [
   { type: "CLARITY", label: "명료성", description: "문장의 의미와 대상이 분명하게 전달되는 정도" },
   { type: "SENTENCE_VARIETY", label: "다양성", description: "여러 문장 구조와 전개 방식을 활용하는 정도" },
 ];
+
+// 발화 속도 비교 기준 (초당 음절). 서버 기준(5.79)이 높아 느리게 나와서 프론트에서 낮춘 기준으로 재계산
+// 서버가 기준값을 바꿔 배포하면 재계산 제거하고 서버 값 그대로 사용
+export const SERVER_REFERENCE_SYLLABLES_PER_SECOND = 5.79;
+export const SPEED_REFERENCE_SYLLABLES_PER_SECOND = 4.5;
+
+// 서버 기준 차이(%) → 프론트 기준 차이(%)
+export const rebaseSpeedDiff = (serverDiffPercent) =>
+  ((1 + serverDiffPercent / 100) * SERVER_REFERENCE_SYLLABLES_PER_SECOND) / SPEED_REFERENCE_SYLLABLES_PER_SECOND * 100 - 100;
