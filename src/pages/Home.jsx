@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { getRecordingStatus } from "../api/recording";
+import chevronRightIcon from "../assets/icons/chevron-right.svg";
 import AppHeader from "../components/common/AppHeader";
 import BottomSheet from "../components/common/BottomSheet";
 import HabitSummaryCarousel from "../components/feature/home/HabitSummaryCarousel";
@@ -97,7 +98,19 @@ const Home = () => {
           </section>
 
           <section className="flex w-full flex-col gap-[12px]">
-            <h2 className="text-heading text-black">나의 캐릭터</h2>
+            <div className="flex w-full items-center justify-between">
+              <h2 className="text-heading text-black">나의 캐릭터</h2>
+              <button
+                type="button"
+                onClick={() => navigate("/recordings/reports")}
+                // relative: 습관 요약 캐러셀의 그림자용 여백(-my-56px)이 이 버튼을 덮어 터치를 가로채지 않게 위로 올림
+                // 터치 영역은 위아래 여백으로 넓히고 음수 마진으로 위치는 그대로 유지
+                className="text-caption relative -my-[12px] flex items-center gap-[2px] rounded-[6px] px-[6px] py-[12px] text-[#8c8c8c]"
+              >
+                보고서 보관함
+                <img src={chevronRightIcon} alt="" className="h-[11px] w-[7px] shrink-0" />
+              </button>
+            </div>
             <CharacterCarousel />
           </section>
         </div>
