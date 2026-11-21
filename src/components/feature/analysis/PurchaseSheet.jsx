@@ -12,7 +12,7 @@ const SHEET_IMAGES = {
 const formatCredit = (value) => value.toLocaleString("ko-KR");
 
 // freeLabel: 무료 대상일 때 크레딧 내역 대신 보여줄 문구 (잔액 부족 판정도 안 함)
-const PurchaseSheet = ({ productName, ownedCredit, price, freeLabel, purchaseText, onClose, onPurchase, onCharge }) => {
+const PurchaseSheet = ({ productName, ownedCredit, price, freeLabel, purchaseText, purchasing = false, onClose, onPurchase, onCharge }) => {
   const remaining = ownedCredit - price;
   const isShort = !freeLabel && remaining < 0;
 
@@ -25,7 +25,7 @@ const PurchaseSheet = ({ productName, ownedCredit, price, freeLabel, purchaseTex
         isShort ? (
           <SheetButton text="크레딧 충전하러 가기" onClick={onCharge} />
         ) : (
-          <SheetButton text={purchaseText ?? `${formatCredit(price)}크레딧 결제하기`} onClick={onPurchase} />
+          <SheetButton text={purchaseText ?? `${formatCredit(price)}크레딧 결제하기`} onClick={onPurchase} disabled={purchasing} />
         )
       }
     >

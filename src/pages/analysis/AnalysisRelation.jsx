@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Navigate, useLocation, useNavigate } from "react-router-dom";
 
 import { payRecording, selectRecordingType } from "../../api/recording";
@@ -76,6 +76,8 @@ const AnalysisRelation = () => {
   // 첫 분석 무료 대상이면 잔액과 상관없이 바로 결제 API 호출 (서버가 무료 처리)
   const [isFree, setIsFree] = useState(false);
   const [paying, setPaying] = useState(false);
+  // 연타 시 state 반영 전에 들어오는 중복 요청 방지
+  const payingRef = useRef(false);
   // 결제 전 나가기 확인 시트에서 이동할 경로
   const [leaveTo, setLeaveTo] = useState(null);
 
@@ -114,9 +116,10 @@ const AnalysisRelation = () => {
   };
 
   const handlePurchase = async () => {
-    if (paying) return;
+    if (payingRef.current) return;
     const relationshipType = RELATIONSHIP_TYPES[state.type][selected.id];
 
+    payingRef.current = true;
     setPaying(true);
     try {
       await selectRecordingType(state.recordingId, relationshipType);
@@ -128,7 +131,8 @@ const AnalysisRelation = () => {
       else setSheet("complete");
     } catch (e) {
       alert(e.message ?? "요청에 실패했어요. 다시 시도해 주세요.");
-    } finally {
+      // 실패했을 때만 다시 누를 수 있게 함 (성공 시에는 화면 이동까지 잠금 유지)
+      payingRef.current = false;
       setPaying(false);
     }
   };
@@ -165,6 +169,7 @@ const AnalysisRelation = () => {
           purchaseText={isFree ? "무료로 분석하기" : undefined}
           onClose={() => setSheet(null)}
           onPurchase={handlePurchase}
+          purchasing={paying}
           onCharge={() => {
             saveChargeReturn("/analysis/relation", state);
             navigate("/mypage/payments");
