@@ -132,6 +132,8 @@ const AnalysisSpeaker = () => {
   const [playedClips, setPlayedClips] = useState({});
   const [audioUrl, setAudioUrl] = useState(null);
   const [submitting, setSubmitting] = useState(false);
+  // 연타·Enter 중복으로 state 반영 전에 들어오는 중복 요청 방지
+  const submittingRef = useRef(false);
   const [nickname, setNickname] = useState("");
   const userName = nickname || FALLBACK_NAME;
 
@@ -220,8 +222,9 @@ const AnalysisSpeaker = () => {
 
   const handleSubmit = async () => {
     const selected = speakers.find(({ id }) => id === speakerId);
-    if (!selected || submitting) return;
+    if (!selected || submittingRef.current) return;
 
+    submittingRef.current = true;
     setSubmitting(true);
     try {
       await mapSpeakers(recordingId, {
@@ -235,6 +238,7 @@ const AnalysisSpeaker = () => {
       });
     } catch (e) {
       alert(e.message ?? "요청에 실패했어요. 다시 시도해 주세요.");
+      submittingRef.current = false;
       setSubmitting(false);
     }
   };
@@ -336,7 +340,7 @@ const AnalysisSpeaker = () => {
           footer={
             <>
               <SheetButton text="입력하기" onClick={handleStartEditing} />
-              <SheetButton text="확인" onClick={handleSubmit} disabled={!partnerName.trim()} />
+              <SheetButton text="확인" onClick={handleSubmit} disabled={!partnerName.trim() || submitting} />
             </>
           }
         >
