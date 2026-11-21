@@ -21,7 +21,7 @@ import RecordingWaveform from "../../components/feature/analysis/RecordingWavefo
 import RecordingControl from "../../components/feature/analysis/RecordingControl";
 
 const MAX_SECONDS = 30 * 60;
-const MIN_SECONDS = 5 * 60; // 5분 이상 녹음해야 녹음 끝내기 가능
+const MIN_SECONDS = 2 * 60; // 2분 이상 녹음해야 녹음 끝내기 가능
 
 
 const ERROR_MESSAGES = {
@@ -65,9 +65,12 @@ const AnalysisRecord = () => {
   const [audioDuration, setAudioDuration] = useState(0);
   const [permissionDismissed, setPermissionDismissed] = useState(false);
   const [interruptDismissed, setInterruptDismissed] = useState(false);
+  const [saving, setSaving] = useState(false);
 
   const recordingRef = useRef(null);
   const endingRef = useRef(false);
+  // 업로드 중 연타로 같은 녹음이 여러 번 올라가는 것 방지
+  const savingRef = useRef(false);
   const audioRef = useRef(null);
 
   const { status, error, interrupted, levels, head, start, pause, resume, stop, snapShot } =
@@ -203,7 +206,9 @@ const AnalysisRecord = () => {
 
   const handleSave = async () => {
   const recording = recordingRef.current;
-  if (!recording) return;
+  if (!recording || savingRef.current) return;
+  savingRef.current = true;
+  setSaving(true);
 
   const file = new File([recording.blob], "recording.m4a", { type: "audio/mp4" });
 
@@ -216,6 +221,8 @@ const AnalysisRecord = () => {
     navigate("/analysis/type", { replace: true, state: nextState });
   } catch (e) {
     alert(e.message ?? "업로드에 실패했어요. 다시 시도해 주세요.");
+    savingRef.current = false;
+    setSaving(false);
   }
 };
 
@@ -311,7 +318,7 @@ const AnalysisRecord = () => {
               {isIdle ? (
                 <p className="text-body text-[#6b6b6b]">녹음 중에는 화면이 꺼지지 않아요</p>
               ) : (
-                <p className="text-body text-[#6b6b6b]">흥미로운 분석을 위해 5분 이상 녹음해주세요</p>
+                <p className="text-body text-[#6b6b6b]">흥미로운 분석을 위해 2분 이상 녹음해주세요</p>
               )}
               <p className="text-heading w-full text-black">
                 {formatTime(elapsed)} / {formatTime(MAX_SECONDS)}
@@ -367,7 +374,7 @@ const AnalysisRecord = () => {
           image={SHEET_IMAGES.archive}
           onClose={() => setSheet(null)}
         >
-          <SheetButton text="다음" onClick={() => handleSave(true)} />
+          <SheetButton text="다음" onClick={handleSave} disabled={saving} />
         </RecordEndSheet>
       )}
       {showInterruptedSheet && (
